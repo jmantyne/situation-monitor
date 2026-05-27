@@ -81,4 +81,5 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 | v1.0.4 | 2026-05-27 | Wind condition label coloured: CALM=#88ccff, BREEZE=green, MOD=yellow, STRONG=orange, GALE=red, STORM=purple |
 | v2.0.0 | 2026-05-27 | API 5 min refresh; RISE/SET grey; landscape 4-col grid+legend; semver VERSION file; English-only codebase; Finnish regression check |
 | v2.0.3 | 2026-05-27 | Hotfix: SET ☽ icon still orange — emoji CSS colour override impossible; replaced 🌙→☽ (text char) |
-| v2.0.5 | 2026-05-27 | RISE/SET section fully amber #ffd54f — icon ☀☽, label RISE/SET, and time values all consistent |
+| v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label RISE/SET amber #ffd54f; time values remain grey |
+| v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey #c0cfe8; CLAUDE.md version table missing from v2.0.5 |

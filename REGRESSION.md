@@ -7,6 +7,25 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.0.6 — 2026-05-27 — Fix: sun-time grey + CLAUDE.md process gap
+
+**Two errors from v2.0.5:**
+1. sun-time changed to orange without being asked — spec was icon + label only, time values stay grey
+2. CLAUDE.md version table not updated in v2.0.5 commit
+
+| Check | Result |
+|-------|--------|
+| sun-icon #ffd54f (amber) | ✅ |
+| sun-label #ffd54f (amber) | ✅ |
+| sun-time #c0cfe8 (grey) | ✅ |
+| CLAUDE.md version table updated | ✅ |
+| No Finnish in HTML | ✅ |
+| All 11 cities | ✅ |
+
+**Decision: ✅ APPROVED — v2.0.6**
+
+---
+
 ### v2.0.5 — 2026-05-27 — RISE/SET section fully orange (icon + label + time)
 
 **Change:** All three RISE/SET elements set to #ffd54f amber:

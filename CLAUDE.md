@@ -48,6 +48,8 @@ wc -c < $FILE
 | v1.0.3 | 2026-05-27 | windLabel function: CALM/BREEZE/MOD/STRONG/GALE/STORM after wind speed; data-row gap 4→2px |
 | v1.0.4 | 2026-05-27 | windLabel returns {text,cls}; wind-calm #88ccff CSS; coloured wind condition labels |
 | v2.0.0 | 2026-05-27 | API 5 min refresh; RISE/SET grey; landscape 4-col grid+legend; semver VERSION file; English-only; Finnish regression check |
+| v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label amber #ffd54f; time values remain grey #c0cfe8 |
+| v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey; CLAUDE.md version table added (missed in v2.0.5) |
 
 ---
 
@@ -59,6 +61,8 @@ wc -c < $FILE
 | v1.0.2 | 2026-05-27 | Pre-commit hook not executable | Fixed chmod +x in separate commit |
 | v2.0.0 | 2026-05-27 | Change 5 (Finnish→English) applied to .md files but no explicit audit shown for situation-monitor.html — hook check #9 passed but process was opaque | Fixed: full line-by-line audit run post-commit, all clean, documented in REGRESSION.md v2.0.1 |
 | v2.0.0 | 2026-05-27 | SET icon 🌙 remained orange after colour change — emoji colour cannot be overridden by CSS `color` property | Fixed v2.0.3: replaced 🌙 with ☽ (text char U+263D); added color:#c0cfe8 to .sun-icon |
+| v2.0.5 | 2026-05-27 | sun-time (time values) changed to orange without being asked — spec was icon+label only | Fixed v2.0.6: sun-time reverted to #c0cfe8 grey |
+| v2.0.5 | 2026-05-27 | CLAUDE.md version table not updated — skipped in hotfix commit | Fixed v2.0.6: version table updated |
 
 ---
 
