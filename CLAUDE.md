@@ -52,6 +52,7 @@ wc -c < $FILE
 | v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey; CLAUDE.md version table added (missed in v2.0.5) |
 | v2.1.0 | 2026-05-27 | Security release: SRI, CSP, XSS audit, secret scanning, HTTPS docs, RELEASE_LEVEL hook |
 | v2.1.1 | 2026-05-27 | Hotfix: JS SRI hash corrected (training data had wrong value; user verified via curl on Mac) |
+| v2.2.0 | 2026-05-27 | Documentation: ADR-001–004 added to docs/; README updated with ADR table and version history |
 
 ---
 

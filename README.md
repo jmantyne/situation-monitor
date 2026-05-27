@@ -3,6 +3,17 @@
 Real-time environmental dashboard for 11 cities across the world.
 Built as a single self-contained HTML file — no build step, no server required.
 
+## Architecture Decision Records
+
+Design rationale and trade-offs are documented in [`docs/`](docs/):
+
+| ADR | Decision |
+|-----|----------|
+| [ADR-001](docs/ADR-001.md) | Single-file HTML on iOS / cloud-native dev stack |
+| [ADR-002](docs/ADR-002.md) | API selection — free, key-free, real-time data |
+| [ADR-003](docs/ADR-003.md) | Automated regression testing — pre-commit hook + semver |
+| [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
+
 ## How to open
 
 Download `situation-monitor.html` and open it in any modern browser (Safari, Chrome, Firefox).
@@ -111,3 +122,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label RISE/SET amber #ffd54f; time values remain grey |
 | v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey #c0cfe8; CLAUDE.md version table missing from v2.0.5 |
 | v2.1.1 | 2026-05-27 | Hotfix: JS SRI hash corrected — wrong hash broke Leaflet load; correct hash verified via curl |
+| v2.2.0 | 2026-05-27 | Documentation: 4 Architecture Decision Records (ADR-001–004) added to docs/ |
