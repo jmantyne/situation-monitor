@@ -139,3 +139,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.2.0 | 2026-05-27 | Documentation: 4 Architecture Decision Records (ADR-001–004) added to docs/ |
 | v2.3.2 | 2026-05-27 | Product backlog added to docs/BACKLOG.md — roadmap v2.4 through v3.0+ |
 | v2.3.4 | 2026-05-27 | Project reflection added to docs/REFLECTION.md |
+| v2.4.4 | 2026-05-27 | Smoke test 13/13 verified on physical Mac hardware (Node.js v18.20.8) |

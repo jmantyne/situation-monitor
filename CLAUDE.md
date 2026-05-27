@@ -55,6 +55,7 @@ wc -c < $FILE
 | v2.2.0 | 2026-05-27 | Documentation: ADR-001–004 added to docs/; README updated with ADR table and version history |
 | v2.3.2 | 2026-05-27 | Product backlog added to docs/BACKLOG.md; README + CLAUDE.md updated |
 | v2.3.4 | 2026-05-27 | Project reflection added to docs/REFLECTION.md; README + CLAUDE.md updated |
+| v2.4.4 | 2026-05-27 | Smoke test 13/13 verified on physical Mac hardware; REGRESSION.md updated |
 
 ---
 
