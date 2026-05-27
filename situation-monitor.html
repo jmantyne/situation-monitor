@@ -442,7 +442,7 @@
       flex: 1;
     }
 
-    .sun-icon { font-size: 0.65rem; }
+    .sun-icon { font-size: 0.65rem; color: #c0cfe8; }
     .sun-label { font-size: 0.48rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); text-transform: uppercase; }
     .sun-time  { font-size: 0.58rem; color: #c0cfe8; letter-spacing: 0.05em; }
 
@@ -896,7 +896,7 @@ CITIES.forEach(city => {
           <span class="sun-time" id="rise-${city.id}">—</span>
         </div>
         <div class="sun-item">
-          <span class="sun-icon">🌙</span>
+          <span class="sun-icon">☽</span>
           <span class="sun-label" data-tip="set">SET</span>
           <span class="sun-time" id="set-${city.id}">—</span>
         </div>
@@ -1293,7 +1293,7 @@ const TIPS = {
     ranges: []
   },
   set: {
-    title: 'Sunset — 🌙 Last Light',
+    title: 'Sunset — ☽ Last Light',
     desc: 'The moment the upper edge of the sun drops below the horizon in the evening. Shown in local city time (24 h). Source: Sunrise-Sunset.org.',
     ranges: []
   },

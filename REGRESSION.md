@@ -7,6 +7,31 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.0.3 — 2026-05-27 — Hotfix: SET moon icon still orange after v2.0.0 colour change
+
+**Root cause:** `🌙` (U+1F319) is an OS-rendered emoji — CSS `color` cannot override it.
+`☀` (U+2600) is a text-renderable Unicode glyph and was already colorable.
+Regression check did not catch this because it is a visual/rendering bug, not a text match.
+
+**Fix:**
+- Replaced `🌙` → `☽` (U+263D FIRST QUARTER MOON, text character, CSS-colorable)
+- Added `color: #c0cfe8` to `.sun-icon` to enforce grey on both RISE and SET symbols
+- Updated tooltip title reference from 🌙 to ☽
+
+**Fail log entry added to CLAUDE.md:** ✅
+
+| Check | Result |
+|-------|--------|
+| SET symbol now text character ☽ | ✅ |
+| .sun-icon color: #c0cfe8 | ✅ |
+| No Finnish in HTML | ✅ |
+| File size | ✅ |
+| All 11 cities | ✅ |
+
+**Decision: ✅ APPROVED — v2.0.3**
+
+---
+
 ### v2.0.1 — 2026-05-27 — Process fix: explicit Finnish audit of situation-monitor.html
 
 **Trigger:** User identified process gap — Change 5 (Finnish→English) was applied to .md files
