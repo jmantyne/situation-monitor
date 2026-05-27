@@ -54,6 +54,7 @@ wc -c < $FILE
 | v2.1.1 | 2026-05-27 | Hotfix: JS SRI hash corrected (training data had wrong value; user verified via curl on Mac) |
 | v2.2.0 | 2026-05-27 | Documentation: ADR-001–004 added to docs/; README updated with ADR table and version history |
 | v2.3.2 | 2026-05-27 | Product backlog added to docs/BACKLOG.md; README + CLAUDE.md updated |
+| v2.3.4 | 2026-05-27 | Project reflection added to docs/REFLECTION.md; README + CLAUDE.md updated |
 
 ---
 
