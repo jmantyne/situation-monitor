@@ -16,6 +16,18 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [BACKLOG](docs/BACKLOG.md) | Product roadmap — v2.4 interactive map, v2.5 configurable cities, v3.0 native app |
 | [REFLECTION](docs/REFLECTION.md) | What I learned — from VIC-20 to Holodeck in 4 days |
 
+## Tests
+
+```bash
+# Playwright (requires browser — run on Mac/Linux with Node.js)
+npm install
+npx playwright install chromium
+npx playwright test
+
+# Structural smoke test (no browser needed)
+node -e "$(cat tests/smoke.js)"
+```
+
 ## How to open
 
 Download `situation-monitor.html` and open it in any modern browser (Safari, Chrome, Firefox).
