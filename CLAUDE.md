@@ -51,8 +51,7 @@ wc -c < $FILE
 | v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label amber #ffd54f; time values remain grey #c0cfe8 |
 | v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey; CLAUDE.md version table added (missed in v2.0.5) |
 | v2.1.0 | 2026-05-27 | Security release: SRI, CSP, XSS audit, secret scanning, HTTPS docs, RELEASE_LEVEL hook |
-| v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label amber #ffd54f; time values remain grey #c0cfe8 |
-| v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey; CLAUDE.md version table added (missed in v2.0.5) |
+| v2.1.1 | 2026-05-27 | Hotfix: JS SRI hash corrected (training data had wrong value; user verified via curl on Mac) |
 
 ---
 
@@ -66,6 +65,7 @@ wc -c < $FILE
 | v2.0.0 | 2026-05-27 | SET icon 🌙 remained orange after colour change — emoji colour cannot be overridden by CSS `color` property | Fixed v2.0.3: replaced 🌙 with ☽ (text char U+263D); added color:#c0cfe8 to .sun-icon |
 | v2.0.5 | 2026-05-27 | sun-time (time values) changed to orange without being asked — spec was icon+label only | Fixed v2.0.6: sun-time reverted to #c0cfe8 grey |
 | v2.0.5 | 2026-05-27 | CLAUDE.md version table not updated — skipped in hotfix commit | Fixed v2.0.6: version table updated |
+| v2.1.0 | 2026-05-27 | JS SRI hash wrong — sourced from training data, not verified against live CDN; site broken | Fixed v2.1.1: correct hash from user curl verification on Mac |
 
 ---
 

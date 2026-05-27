@@ -80,7 +80,7 @@ curl -s https://unpkg.com/leaflet@1.9.4/dist/leaflet.js  | openssl dgst -sha256 
 
 Expected (from official Leaflet 1.9.4 release):
 - CSS: `p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=`
-- JS: `20nQCchB9co0qIjJZRGuk2R8n+MmiUeaIoC21QskaSo=`
+- JS: `20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=`
 
 ## Layouts
 
@@ -110,3 +110,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.0.3 | 2026-05-27 | Hotfix: SET ☽ icon still orange — emoji CSS colour override impossible; replaced 🌙→☽ (text char) |
 | v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label RISE/SET amber #ffd54f; time values remain grey |
 | v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey #c0cfe8; CLAUDE.md version table missing from v2.0.5 |
+| v2.1.1 | 2026-05-27 | Hotfix: JS SRI hash corrected — wrong hash broke Leaflet load; correct hash verified via curl |

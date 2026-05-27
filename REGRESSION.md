@@ -7,6 +7,26 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.1.1 — 2026-05-27 — Hotfix: correct JS SRI hash
+
+**Change:** JS SRI hash was wrong (sourced from training data). User verified on Mac
+with curl. Correct hash: `sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=`.
+CSS hash confirmed unchanged: `sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| JS SRI hash corrected | ✅ | Verified via curl on Mac by user |
+| CSS SRI hash unchanged | ✅ | p4NxAoJBhIIN+... — confirmed same |
+| README expected hashes updated | ✅ | |
+| Site loads in browser | ✅ | Leaflet JS no longer blocked |
+| No Finnish in HTML | ✅ | |
+| All 11 cities | ✅ | |
+| File size | ✅ | |
+
+**Decision: ✅ APPROVED — v2.1.1**
+
+---
+
 ### v2.1.0 — 2026-05-27 — Security release
 
 **Changes:**
