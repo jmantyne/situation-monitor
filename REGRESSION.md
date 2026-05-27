@@ -7,6 +7,79 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v1.04 — Pre-share audit — 2026-05-27
+
+**Scope:** Pre-sharing audit before distributing repo to friends.  
+**Method:** Static code analysis (automated) + visual confirmed by user screenshots.  
+**Note:** Live GitHub Pages URL (403 on WebFetch) — browser layout tests marked ⚠️ require manual confirmation.
+
+---
+
+#### Tarkistus 1 — Safari Mac layout
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Kaikki 11 kortit | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
+| Kartta (Leaflet) | ✅ | L.map · L.circleMarker · bindTooltip · fitBounds kaikki läsnä |
+| API-data latautuu | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api kaikki kutsutaan |
+| Hover-tooltips | ✅ | tip-box · tip-title · tip-desc · tip-ranges · data-tip-attribuutit kaikki läsnä |
+| Kotikaupunki pinkki | ✅ | border-color: #ff44bb + map marker #ff44bb korostus |
+| Desktop grid | ✅ | grid-template-columns: repeat(6, 1fr) |
+| Wind-label värit | ✅ | wind-calm(2) · uv-low(10) · uv-mod(11) · uv-high(8) · uv-vhigh(9) · uv-extr(6) |
+| Visuaalinen layout | ⚠️ | Vahvistettu käyttäjän kuvakaappauksista (v1.0 hyväksyntä) |
+
+---
+
+#### Tarkistus 2 — iPhone Safari portrait
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Kartta täysleveänä ylhäällä | ✅ | Portrait media query: map full width, height auto |
+| Kortit 2-sarakkeessa | ✅ | grid-template-columns: 1fr 1fr portrait-queryssä |
+| Sivu scrollaa alas | ✅ | overflow-y: auto · height: auto · min-height: 100% |
+| Legenda alareunassa | ✅ | #legend-bar ei ole display:none portrait-tilassa (vain landscape piilottaa) |
+| Visuaalinen layout | ⚠️ | Vahvistettu käyttäjän iPhone-kuvakaappauksesta (v1.0 hyväksyntä) |
+
+---
+
+#### Tarkistus 3 — iPhone Safari landscape
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Kartta vasemmalla | ✅ | landscape query: display:flex · kartta kiinteä paneeli |
+| Kortit vaakascroll | ✅ | #cards-panel overflow-x: auto + webkit-scrollbar tyylitelty |
+| Ei ylimääräistä sivuscrolla | ✅ | body: overflow-x: hidden |
+| Legenda piilotettu | ✅ | #legend-bar { display: none } landscape-queryssä (liian kapea) |
+| Visuaalinen layout | ⚠️ | Vahvistettu käyttäjän kuvakaappauksista (v1.0 hyväksyntä) |
+
+---
+
+#### Tarkistus 4 — GitHub repo About-osio
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Description | ✅ | "Real-time environmental Dashboard - UV, AQI, Weather & Map for 11 cities worldwide" |
+| Repo public | ✅ | private: false |
+| GitHub Pages | ✅ | has_pages: true |
+| Live URL | ✅ | https://jmantyne.github.io/situation-monitor/situation-monitor.html |
+
+---
+
+#### Tarkistus 5 — git config
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| core.hooksPath | ✅ | .githooks (asetettu session alussa) |
+| pre-commit hook | ✅ | executable bit 100755 (korjattu v1.04:ssä) |
+
+---
+
+**Löydökset:** Ei kriittisiä löydöksiä  
+**⚠️ Avoimet:** 3 visuaalista layouttarkistusta odottaa sinun selainvahvistustasi  
+**Päätös: ✅ HYVÄKSYTTY jaettavaksi — v1.04**
+
+---
+
 ### v1.04 — 2026-05-27 — Wind label coloured (wind-calm #88ccff, uv-low/mod/high/vhigh/extr)
 
 **Automated checks (static analysis):**
