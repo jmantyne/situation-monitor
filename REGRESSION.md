@@ -7,6 +7,43 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.0.1 — 2026-05-27 — Process fix: explicit Finnish audit of situation-monitor.html
+
+**Trigger:** User identified process gap — Change 5 (Finnish→English) was applied to .md files
+but no explicit audit of situation-monitor.html was shown before committing. Hook check #9
+confirmed clean during commit, but the audit trail was missing.
+
+**Audit: situation-monitor.html — Finnish language check**
+
+| Area | Method | Result |
+|------|--------|--------|
+| ä/ö characters | python3 UTF-8 character scan | ✅ CLEAN — 0 occurrences |
+| Finnish words in JS comments | grep for 40+ Finnish keywords | ✅ CLEAN — none found |
+| HTML comments | manual review of all `<!--` lines | ✅ CLEAN — all English |
+| JS section headers | review of all `//` lines | ✅ CLEAN — all English |
+| Visible UI text (legend, labels) | content review | ✅ CLEAN — all English |
+
+**HTML comments found (all English):**
+- `<!-- Zulu bar -->`
+- `<!-- Content: 6-column grid. Map is cell 1 (top-left)... -->`
+- `<!-- Legend — 3 rows -->`
+- `<!-- Row 1: MAP PIN | UV INDEX | AQI -->`
+- `<!-- Row 2: HUM | PRESSURE | PM2.5 | NO₂ -->`
+- `<!-- Row 3: WIND — each category same color... -->`
+- `<!-- Hover tooltip -->`
+
+**JS comments found (all English):** Map header, City data, State, Helpers, Status scoring,
+Build DOM, Leaflet map, Clock tick, Data rendering, Data fetching, Home detection, Tooltip definitions, Start
+
+**Conclusion:** situation-monitor.html was already fully in English before v2.0.0.
+No translation was needed. Process gap was the missing explicit audit step.
+
+**Fail log entry added to CLAUDE.md:** ✅
+
+**Decision: ✅ APPROVED — v2.0.1 (process fix, no code changes)**
+
+---
+
 ### v2.0.0 — 2026-05-27 — Major release: 6 changes
 
 **Changes in this release:**

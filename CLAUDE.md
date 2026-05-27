@@ -57,6 +57,7 @@ wc -c < $FILE
 |---------|------|------|-----|
 | v1.0.1 | 2026-05-27 | Regression checks skipped before commit | Run retroactively, separate commit |
 | v1.0.2 | 2026-05-27 | Pre-commit hook not executable | Fixed chmod +x in separate commit |
+| v2.0.0 | 2026-05-27 | Change 5 (Finnish→English) applied to .md files but no explicit audit shown for situation-monitor.html — hook check #9 passed but process was opaque | Fixed: full line-by-line audit run post-commit, all clean, documented in REGRESSION.md v2.0.1 |
 
 ---
 
