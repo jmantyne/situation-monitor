@@ -68,6 +68,8 @@ wc -c < $FILE
 | v2.0.5 | 2026-05-27 | sun-time (time values) changed to orange without being asked — spec was icon+label only | Fixed v2.0.6: sun-time reverted to #c0cfe8 grey |
 | v2.0.5 | 2026-05-27 | CLAUDE.md version table not updated — skipped in hotfix commit | Fixed v2.0.6: version table updated |
 | v2.1.0 | 2026-05-27 | JS SRI hash wrong — sourced from training data, not verified against live CDN; site broken | Fixed v2.1.1: correct hash from user curl verification on Mac |
+| v2.2.0 | 2026-05-27 | README and CLAUDE.md not updated when ADR-001–004 were added to docs/ — user had to point it out | Fixed v2.2.1: README ADR table and version history updated |
+| v2.3.1 | 2026-05-27 | README and CLAUDE.md not updated when BACKLOG.md was added — same process error repeated | Fixed v2.3.3: BACKLOG added to README docs table and version history; fail log updated |
 
 ---
 
