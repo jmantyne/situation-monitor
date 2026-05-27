@@ -13,6 +13,7 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-002](docs/ADR-002.md) | API selection — free, key-free, real-time data |
 | [ADR-003](docs/ADR-003.md) | Automated regression testing — pre-commit hook + semver |
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
+| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v2.4 interactive map, v2.5 configurable cities, v3.0 native app |
 
 ## How to open
 
@@ -123,3 +124,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey #c0cfe8; CLAUDE.md version table missing from v2.0.5 |
 | v2.1.1 | 2026-05-27 | Hotfix: JS SRI hash corrected — wrong hash broke Leaflet load; correct hash verified via curl |
 | v2.2.0 | 2026-05-27 | Documentation: 4 Architecture Decision Records (ADR-001–004) added to docs/ |
+| v2.3.2 | 2026-05-27 | Product backlog added to docs/BACKLOG.md — roadmap v2.4 through v3.0+ |
