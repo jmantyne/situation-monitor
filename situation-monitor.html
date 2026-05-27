@@ -416,6 +416,7 @@
     .uv-high  { color: #ff6600; }
     .uv-vhigh { color: #ff3355; }
     .uv-extr  { color: #cc44ff; }
+    .wind-calm { color: #88ccff; }
 
     /* AQI colors */
     .aqi-good { color: #00ff88; }
@@ -777,13 +778,13 @@ function windScore(kmh) {
 }
 
 function windLabel(kmh) {
-  if (kmh === null || kmh === undefined) return '';
-  if (kmh <= 5)  return 'CALM';
-  if (kmh <= 20) return 'BREEZE';
-  if (kmh <= 40) return 'MOD';
-  if (kmh <= 60) return 'STRONG';
-  if (kmh <= 90) return 'GALE';
-  return 'STORM';
+  if (kmh === null || kmh === undefined) return { text: '', cls: '' };
+  if (kmh <= 5)  return { text: 'CALM',   cls: 'wind-calm'   };
+  if (kmh <= 20) return { text: 'BREEZE', cls: 'uv-low'      };
+  if (kmh <= 40) return { text: 'MOD',    cls: 'uv-mod'      };
+  if (kmh <= 60) return { text: 'STRONG', cls: 'uv-high'     };
+  if (kmh <= 90) return { text: 'GALE',   cls: 'uv-vhigh'    };
+  return               { text: 'STORM',   cls: 'uv-extr'     };
 }
 
 function scoreToStatus(score) {
@@ -1055,7 +1056,8 @@ function renderCityData(city) {
     if (spd !== null && spd !== undefined) {
       const mph = Math.round(spd * 0.6214);
       const kts = Math.round(spd * 0.5400);
-      windEl.textContent = `${degToCompass(dir)} ${mph}mph·${Math.round(spd)}km/h·${kts}kts ${windLabel(spd)}`;
+      const wl = windLabel(spd);
+      windEl.innerHTML = `${degToCompass(dir)} ${mph}mph·${Math.round(spd)}km/h·${kts}kts <span class="${wl.cls}">${wl.text}</span>`;
     } else { windEl.textContent = '—'; }
   }
 

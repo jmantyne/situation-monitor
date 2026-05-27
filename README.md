@@ -78,3 +78,4 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 | v1.01 | 2026-05-27 | Turku → Nairobi (Kenya), HUM dry colour #88ccff |
 | v1.02 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
 | v1.03 | 2026-05-27 | Wind condition label after speed value (CALM/BREEZE/MOD/STRONG/GALE/STORM) |
+| v1.04 | 2026-05-27 | Wind condition label coloured: CALM=#88ccff, BREEZE=green, MOD=yellow, STRONG=orange, GALE=red, STORM=purple |

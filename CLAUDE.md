@@ -46,6 +46,7 @@ wc -c < $FILE
 | v1.01 | 2026-05-27 | Turku → Nairobi (Kenya, UTC+3 no DST), HUM dry colour #88ccff |
 | v1.02 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
 | v1.03 | 2026-05-27 | windLabel function: CALM/BREEZE/MOD/STRONG/GALE/STORM after wind speed; data-row gap 4→2px |
+| v1.04 | 2026-05-27 | windLabel returns {text,cls}; wind-calm #88ccff CSS; BREEZE=uv-low, MOD=uv-mod, STRONG=uv-high, GALE=uv-vhigh, STORM=uv-extr |
 
 ---
 

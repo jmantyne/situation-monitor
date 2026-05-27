@@ -7,6 +7,26 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v1.04 — 2026-05-27 — Wind label coloured (wind-calm #88ccff, uv-low/mod/high/vhigh/extr)
+
+**Automated checks (static analysis):**
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| 11 cities in CITIES array | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
+| API endpoints present | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api |
+| Score functions | ✅ | uvScore · aqiScore · windScore · degToCompass |
+| windLabel function | ✅ | returns {text, cls} — CALM·BREEZE·MOD·STRONG·GALE·STORM |
+| wind-calm CSS class | ✅ | color: #88ccff |
+| Media queries | ✅ | portrait (≤500px) + landscape (≤900px) |
+| File size | ✅ | 47 115 bytes (limit 200 000) |
+| Duplicate city IDs | ✅ | None found |
+
+**Findings:** None  
+**Decision: ✅ APPROVED — v1.04**
+
+---
+
 ### v1.03 — 2026-05-27 — Wind condition label (CALM/BREEZE/MOD/STRONG/GALE/STORM) + gap 4→2px
 
 **Automated checks (static analysis):**
