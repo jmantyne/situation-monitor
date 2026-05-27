@@ -7,6 +7,33 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.4.3 — 2026-05-27 — Smoke test verified on physical Mac hardware
+
+**Change:** Node.js v18.20.8 installed on MacBook Pro. Smoke test (`tests/smoke.js`)
+run locally against downloaded ZIP of the repository.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Page title | ✅ | |
+| 11 cities in CITIES array | ✅ | |
+| Zulu clock element | ✅ | |
+| Map element | ✅ | |
+| Legend bar | ✅ | |
+| Leaflet SRI CSS | ✅ | hash present |
+| Leaflet SRI JS | ✅ | hash present |
+| CSP meta tag | ✅ | |
+| uvScore function | ✅ | |
+| windLabel function | ✅ | |
+| 5-minute API refresh | ✅ | |
+| Portrait media query | ✅ | |
+| No Finnish characters | ✅ | |
+
+**Result: 13/13 tests passed on physical Mac hardware (MacBook Pro, Node.js v18.20.8)**
+
+**Decision: ✅ APPROVED — v2.4.3**
+
+---
+
 ### v2.1.1 — 2026-05-27 — Hotfix: correct JS SRI hash
 
 **Change:** JS SRI hash was wrong (sourced from training data). User verified on Mac
