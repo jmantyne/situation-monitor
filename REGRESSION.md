@@ -7,6 +7,26 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.0.5 — 2026-05-27 — RISE/SET section fully orange (icon + label + time)
+
+**Change:** All three RISE/SET elements set to #ffd54f amber:
+- `.sun-icon` color: #ffd54f (☀ and ☽)
+- `.sun-label` color: #ffd54f (RISE / SET text)
+- `.sun-time` color: #ffd54f (time values)
+
+| Check | Result |
+|-------|--------|
+| sun-icon #ffd54f | ✅ |
+| sun-label #ffd54f | ✅ |
+| sun-time #ffd54f | ✅ |
+| No Finnish in HTML | ✅ |
+| All 11 cities | ✅ |
+| File size | ✅ |
+
+**Decision: ✅ APPROVED — v2.0.5**
+
+---
+
 ### v2.0.3 — 2026-05-27 — Hotfix: SET moon icon still orange after v2.0.0 colour change
 
 **Root cause:** `🌙` (U+1F319) is an OS-rendered emoji — CSS `color` cannot override it.
