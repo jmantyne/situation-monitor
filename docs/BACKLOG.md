@@ -63,7 +63,7 @@ The current stack uses free APIs exclusively. A paid tier could unlock:
 
 The 11 cities are deliberately chosen and fixed. The layout was designed and tested specifically for a 15-inch MacBook Pro screen and an iPhone display — 11 cards fill the grid correctly on both. The author is personally interested in exactly these 11 locations.
 
-Increasing the city count would break the 6-column desktop grid, require responsive layout rework, and dilute the focused, curated feel of the dashboard. This constraint is a design decision, not a limitation.
+Increasing the city count would break the 6-column desktop grid (currently 11 city cards + 1 map = 12 cells), require responsive layout rework, and dilute the focused, curated feel of the dashboard. This constraint is a design decision, not a limitation.
 
 ---
 
@@ -122,4 +122,4 @@ Nykyinen stack käyttää yksinomaan ilmaisia APItä. Maksullinen taso voisi ava
 
 11 kaupunkia on tarkoituksella valittu ja kiinnitetty. Layout on suunniteltu ja testattu nimenomaan 15" MacBook Pro -näytölle ja iPhone-näytölle — 11 korttia täyttää gridin oikein molemmissa. Minua kiinnostavat henkilökohtaisesti juuri nämä 11 paikkaa.
 
-Kaupunkien määrän kasvattaminen rikkoisi 6-sarakkeen desktop-gridin, vaatisi responsiivisen layoutin uudelleensuunnittelun ja hajottaisi dashboardin harkitun, kuratoidun ilmeen. Tämä on designpäätös, ei rajoitus.
+Kaupunkien määrän kasvattaminen rikkoisi 6-sarakkeen desktop-gridin (tällä hetkellä 11 kaupunkikorttia + 1 kartta = 12 solua), vaatisi responsiivisen layoutin uudelleensuunnittelun ja hajottaisi dashboardin harkitun, kuratoidun ilmeen. Tämä on designpäätös, ei rajoitus.
