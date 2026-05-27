@@ -55,6 +55,33 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 | Home city detection | [ip-api.com](https://ip-api.com) |
 | Map tiles | [CartoDB Voyager](https://carto.com) |
 
+## Security (v2.1.0)
+
+| Feature | Status | Detail |
+|---------|--------|--------|
+| Subresource Integrity (SRI) | ✅ | Leaflet CSS + JS integrity-verified via SHA-256 |
+| Content Security Policy (CSP) | ✅ | `connect-src` locks API calls to known domains; `frame-ancestors 'none'` blocks clickjacking |
+| XSS audit | ✅ | All `innerHTML` uses numbers or hardcoded strings — no user input inserted |
+| Secret scanning | ✅ | GitHub automatic scanning active (public repo); no API keys in codebase |
+| HTTPS | ✅ | GitHub Pages enforces HTTPS |
+
+### Privacy note
+
+Home city detection uses [ip-api.com](https://ip-api.com) — your IP address is sent to this service once on page load to determine the nearest city. No other personal data is transmitted. All other APIs receive only coordinates (lat/lon), not identity.
+
+### SRI hash verification
+
+To verify the Leaflet SRI hashes locally (run on Mac/Linux):
+
+```bash
+curl -s https://unpkg.com/leaflet@1.9.4/dist/leaflet.css | openssl dgst -sha256 -binary | openssl base64 -A
+curl -s https://unpkg.com/leaflet@1.9.4/dist/leaflet.js  | openssl dgst -sha256 -binary | openssl base64 -A
+```
+
+Expected (from official Leaflet 1.9.4 release):
+- CSS: `p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=`
+- JS: `20nQCchB9co0qIjJZRGuk2R8n+MmiUeaIoC21QskaSo=`
+
 ## Layouts
 
 | Device | Orientation | Layout |

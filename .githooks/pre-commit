@@ -13,10 +13,17 @@ if [ -f "$VERSION_FILE" ]; then
   MINOR=$(echo "$CURRENT" | cut -d. -f2)
   PATCH=$(echo "$CURRENT" | cut -d. -f3)
 
-  # Count staged non-doc files — more than 1 means a minor release
+  # RELEASE_LEVEL env variable overrides auto-detection
+  # Usage: RELEASE_LEVEL=minor git commit / RELEASE_LEVEL=major git commit
   STAGED=$(git diff --cached --name-only | grep -v "^VERSION$" | grep -v "^REGRESSION" | grep -v "^CLAUDE" | grep -v "^README" | wc -l | tr -d ' ')
 
-  if [ "$STAGED" -gt 1 ]; then
+  if [ "${RELEASE_LEVEL:-}" = "major" ]; then
+    NEW_VERSION="$((MAJOR + 1)).0.0"
+    echo "📦 RELEASE_LEVEL=major: ${CURRENT} → ${NEW_VERSION}"
+  elif [ "${RELEASE_LEVEL:-}" = "minor" ]; then
+    NEW_VERSION="${MAJOR}.$((MINOR + 1)).0"
+    echo "📦 RELEASE_LEVEL=minor: ${CURRENT} → ${NEW_VERSION}"
+  elif [ "$STAGED" -gt 1 ]; then
     NEW_VERSION="${MAJOR}.$((MINOR + 1)).0"
     echo "📦 Multiple changes (${STAGED} files) — minor release: ${CURRENT} → ${NEW_VERSION}"
   else

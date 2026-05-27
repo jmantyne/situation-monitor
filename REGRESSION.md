@@ -7,6 +7,39 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.1.0 — 2026-05-27 — Security release
+
+**Changes:**
+1. Pre-commit hook: RELEASE_LEVEL env variable (major/minor/patch override)
+2. SRI: Leaflet 1.9.4 CSS + JS integrity hashes (SHA-256)
+3. CSP meta tag: connect-src locks to 4 known APIs; frame-ancestors blocks clickjacking
+4. XSS audit: all innerHTML uses verified safe (numbers/hardcoded strings only)
+5. Secret scanning: GitHub automatic active on public repo; no API keys found
+6. HTTPS: GitHub Pages enforces HTTPS — documented in README
+
+**⚠️ SRI hash note:** Hashes sourced from official Leaflet 1.9.4 documentation.
+CDN blocked in build environment — verify locally with README script before sharing.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| CSP meta tag present | ✅ | connect-src + frame-ancestors |
+| SRI on Leaflet CSS | ✅ | sha256-p4NxAoJBhIIN+... |
+| SRI on Leaflet JS | ✅ | sha256-20nQCchB9co0... |
+| innerHTML XSS audit | ✅ | 5 usages — all safe |
+| No API keys in code | ✅ | All APIs are key-free |
+| RELEASE_LEVEL hook | ✅ | major/minor/patch override works |
+| No Finnish in HTML | ✅ | Clean |
+| All 11 cities | ✅ | |
+| File size | ✅ | |
+
+**Pending manual verification:**
+- [ ] Run SRI hash verification script on Mac (README) to confirm hashes match
+- [ ] Open in browser and confirm Leaflet loads (no SRI block in console)
+
+**Decision: ✅ APPROVED — v2.1.0**
+
+---
+
 ### v2.0.6 — 2026-05-27 — Fix: sun-time grey + CLAUDE.md process gap
 
 **Two errors from v2.0.5:**

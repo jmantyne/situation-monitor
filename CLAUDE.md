@@ -50,6 +50,9 @@ wc -c < $FILE
 | v2.0.0 | 2026-05-27 | API 5 min refresh; RISE/SET grey; landscape 4-col grid+legend; semver VERSION file; English-only; Finnish regression check |
 | v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label amber #ffd54f; time values remain grey #c0cfe8 |
 | v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey; CLAUDE.md version table added (missed in v2.0.5) |
+| v2.1.0 | 2026-05-27 | Security release: SRI, CSP, XSS audit, secret scanning, HTTPS docs, RELEASE_LEVEL hook |
+| v2.0.5 | 2026-05-27 | RISE/SET icon ☀☽ and label amber #ffd54f; time values remain grey #c0cfe8 |
+| v2.0.6 | 2026-05-27 | Fix: sun-time reverted to grey; CLAUDE.md version table added (missed in v2.0.5) |
 
 ---
 
