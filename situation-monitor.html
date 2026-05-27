@@ -379,7 +379,7 @@
     .data-row {
       display: flex;
       align-items: baseline;
-      gap: 4px;
+      gap: 2px;
     }
 
     .data-label {
@@ -776,6 +776,16 @@ function windScore(kmh) {
   return 4;                  // storm
 }
 
+function windLabel(kmh) {
+  if (kmh === null || kmh === undefined) return '';
+  if (kmh <= 5)  return 'CALM';
+  if (kmh <= 20) return 'BREEZE';
+  if (kmh <= 40) return 'MOD';
+  if (kmh <= 60) return 'STRONG';
+  if (kmh <= 90) return 'GALE';
+  return 'STORM';
+}
+
 function scoreToStatus(score) {
   if (score === null) return 'green';
   if (score < 0.5)  return 'green';
@@ -1045,7 +1055,7 @@ function renderCityData(city) {
     if (spd !== null && spd !== undefined) {
       const mph = Math.round(spd * 0.6214);
       const kts = Math.round(spd * 0.5400);
-      windEl.textContent = `${degToCompass(dir)} ${mph}mph·${Math.round(spd)}km/h·${kts}kts`;
+      windEl.textContent = `${degToCompass(dir)} ${mph}mph·${Math.round(spd)}km/h·${kts}kts ${windLabel(spd)}`;
     } else { windEl.textContent = '—'; }
   }
 
