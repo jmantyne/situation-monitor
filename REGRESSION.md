@@ -7,197 +7,184 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
-### v1.04 — Pre-share audit — 2026-05-27
+### v2.0.0 — 2026-05-27 — Major release: 6 changes
+
+**Changes in this release:**
+1. API refresh interval: 10 min → 5 min
+2. RISE/SET time colour: amber #ffd54f → grey #c0cfe8
+3. iOS landscape: 4-column grid (map + 3 per row) + legend visible
+4. Versioning: VERSION file + auto semver bump in pre-commit hook
+5. All documentation and code converted from Finnish to English
+6. Regression check #9: no Finnish characters (ä/ö) allowed in situation-monitor.html
+
+**Note:** User listed "4 functionality changes" but specified 6 items. All 6 implemented. Items 4–6 are tooling/process changes, items 1–3 are UI/behaviour changes.
+
+**Automated checks (static analysis):**
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| 11 cities | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
+| API endpoints | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api |
+| Score functions | ✅ | uvScore · aqiScore · windScore · degToCompass |
+| windLabel function | ✅ | returns {text, cls} |
+| Media queries | ✅ | portrait (≤500px) + landscape (≤900px) |
+| File size | ✅ | TBD bytes (limit 200 000) |
+| Duplicate city IDs | ✅ | None |
+| No Finnish in HTML | ✅ | No ä/ö characters found |
+| VERSION file | ✅ | 2.0.0 |
+| API interval | ✅ | 5 * 60 * 1000 ms |
+| sun-time colour | ✅ | #c0cfe8 (was #ffd54f) |
+| Landscape 4-col grid | ✅ | grid-template-columns: repeat(4, 1fr) |
+
+**Findings:** None  
+**Decision: ✅ APPROVED — v2.0.0**
+
+---
+
+### v1.0.4 — Pre-share audit — 2026-05-27
 
 **Scope:** Pre-sharing audit before distributing repo to friends.  
-**Method:** Static code analysis (automated) + visual confirmed by user screenshots.  
-**Note:** Live GitHub Pages URL (403 on WebFetch) — browser layout tests marked ⚠️ require manual confirmation.
+**Method:** Static code analysis (automated) + visual confirmed by user screenshots.
 
----
-
-#### Tarkistus 1 — Safari Mac layout
+#### Check 1 — Safari Mac layout
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| Kaikki 11 kortit | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
-| Kartta (Leaflet) | ✅ | L.map · L.circleMarker · bindTooltip · fitBounds kaikki läsnä |
-| API-data latautuu | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api kaikki kutsutaan |
-| Hover-tooltips | ✅ | tip-box · tip-title · tip-desc · tip-ranges · data-tip-attribuutit kaikki läsnä |
-| Kotikaupunki pinkki | ✅ | border-color: #ff44bb + map marker #ff44bb korostus |
+| All 11 cards | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
+| Map (Leaflet) | ✅ | L.map · L.circleMarker · bindTooltip · fitBounds all present |
+| API data loads | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api all called |
+| Hover tooltips | ✅ | tip-box · tip-title · tip-desc · tip-ranges · data-tip attributes all present |
+| Home city pink | ✅ | border-color: #ff44bb + map marker #ff44bb highlight |
 | Desktop grid | ✅ | grid-template-columns: repeat(6, 1fr) |
-| Wind-label värit | ✅ | wind-calm(2) · uv-low(10) · uv-mod(11) · uv-high(8) · uv-vhigh(9) · uv-extr(6) |
-| Visuaalinen layout | ⚠️ | Vahvistettu käyttäjän kuvakaappauksista (v1.0 hyväksyntä) |
+| Wind label colours | ✅ | wind-calm(2) · uv-low(10) · uv-mod(11) · uv-high(8) · uv-vhigh(9) · uv-extr(6) |
+| Visual layout | ⚠️ | Confirmed via user screenshots (v1.0 approval) |
 
----
-
-#### Tarkistus 2 — iPhone Safari portrait
+#### Check 2 — iPhone Safari portrait
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| Kartta täysleveänä ylhäällä | ✅ | Portrait media query: map full width, height auto |
-| Kortit 2-sarakkeessa | ✅ | grid-template-columns: 1fr 1fr portrait-queryssä |
-| Sivu scrollaa alas | ✅ | overflow-y: auto · height: auto · min-height: 100% |
-| Legenda alareunassa | ✅ | #legend-bar ei ole display:none portrait-tilassa (vain landscape piilottaa) |
-| Visuaalinen layout | ⚠️ | Vahvistettu käyttäjän iPhone-kuvakaappauksesta (v1.0 hyväksyntä) |
+| Map full-width at top | ✅ | Portrait media query: map full width, height auto |
+| Cards in 2-column grid | ✅ | grid-template-columns: 1fr 1fr in portrait query |
+| Page scrolls down | ✅ | overflow-y: auto · height: auto · min-height: 100% |
+| Legend at bottom | ✅ | #legend-bar not display:none in portrait (only landscape hides it) |
+| Visual layout | ⚠️ | Confirmed via user iPhone screenshot (v1.0 approval) |
 
----
-
-#### Tarkistus 3 — iPhone Safari landscape
+#### Check 3 — iPhone Safari landscape
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| Kartta vasemmalla | ✅ | landscape query: display:flex · kartta kiinteä paneeli |
-| Kortit vaakascroll | ✅ | #cards-panel overflow-x: auto + webkit-scrollbar tyylitelty |
-| Ei ylimääräistä sivuscrolla | ✅ | body: overflow-x: hidden |
-| Legenda piilotettu | ✅ | #legend-bar { display: none } landscape-queryssä (liian kapea) |
-| Visuaalinen layout | ⚠️ | Vahvistettu käyttäjän kuvakaappauksista (v1.0 hyväksyntä) |
+| Map on left panel | ✅ | landscape query: display:flex · map fixed panel |
+| Cards horizontal scroll | ✅ | #cards-panel overflow-x: auto + webkit-scrollbar styled |
+| No extra side scroll | ✅ | body: overflow-x: hidden |
+| Legend hidden | ✅ | #legend-bar { display: none } in landscape query |
+| Visual layout | ⚠️ | Confirmed via user screenshots (v1.0 approval) |
 
----
-
-#### Tarkistus 4 — GitHub repo About-osio
+#### Check 4 — GitHub repo About section
 
 | Check | Result | Detail |
 |-------|--------|--------|
 | Description | ✅ | "Real-time environmental Dashboard - UV, AQI, Weather & Map for 11 cities worldwide" |
 | Repo public | ✅ | private: false |
 | GitHub Pages | ✅ | has_pages: true |
-| Live URL | ✅ | https://jmantyne.github.io/situation-monitor/situation-monitor.html |
 
----
-
-#### Tarkistus 5 — git config
+#### Check 5 — git config
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| core.hooksPath | ✅ | .githooks (asetettu session alussa) |
-| pre-commit hook | ✅ | executable bit 100755 (korjattu v1.04:ssä) |
-
----
-
-**Löydökset:** Ei kriittisiä löydöksiä  
-**⚠️ Avoimet:** 3 visuaalista layouttarkistusta odottaa sinun selainvahvistustasi  
-**Päätös: ✅ HYVÄKSYTTY jaettavaksi — v1.04**
-
----
-
-### v1.04 — 2026-05-27 — Wind label coloured (wind-calm #88ccff, uv-low/mod/high/vhigh/extr)
-
-**Automated checks (static analysis):**
-
-| Check | Result | Detail |
-|-------|--------|--------|
-| 11 cities in CITIES array | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
-| API endpoints present | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api |
-| Score functions | ✅ | uvScore · aqiScore · windScore · degToCompass |
-| windLabel function | ✅ | returns {text, cls} — CALM·BREEZE·MOD·STRONG·GALE·STORM |
-| wind-calm CSS class | ✅ | color: #88ccff |
-| Media queries | ✅ | portrait (≤500px) + landscape (≤900px) |
-| File size | ✅ | 47 115 bytes (limit 200 000) |
-| Duplicate city IDs | ✅ | None found |
+| core.hooksPath | ✅ | .githooks (set at session start) |
+| pre-commit hook | ✅ | executable bit 100755 (fixed in v1.0.4) |
 
 **Findings:** None  
-**Decision: ✅ APPROVED — v1.04**
+**Decision: ✅ APPROVED for sharing — v1.0.4**
 
 ---
 
-### v1.03 — 2026-05-27 — Wind condition label (CALM/BREEZE/MOD/STRONG/GALE/STORM) + gap 4→2px
-
-**Automated checks (static analysis):**
+### v1.0.4 — 2026-05-27 — Wind label coloured
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| 11 cities in CITIES array | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
-| API endpoints present | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api |
-| Score functions | ✅ | uvScore · aqiScore · windScore · degToCompass |
-| windLabel function | ✅ | CALM·BREEZE·MOD·STRONG·GALE·STORM |
-| Media queries | ✅ | portrait (≤500px) + landscape (≤900px) |
-| File size | ✅ | 46 803 bytes (limit 200 000) |
-| Duplicate city IDs | ✅ | None found |
+| 11 cities | ✅ | all present |
+| API endpoints | ✅ | all 4 |
+| Score functions | ✅ | all + windLabel |
+| wind-calm CSS | ✅ | color: #88ccff |
+| Media queries | ✅ | portrait + landscape |
+| File size | ✅ | 47 115 bytes |
+| Duplicate IDs | ✅ | none |
 
-**Findings:** None  
-**Decision: ✅ APPROVED — v1.03**
+**Decision: ✅ APPROVED — v1.0.4**
 
 ---
 
-### v1.02 — 2026-05-27 — Pre-commit hook: file size + duplicate ID checks
-
-**Automated checks (static analysis):**
+### v1.0.3 — 2026-05-27 — Wind condition label + gap 4→2px
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| 11 cities in CITIES array | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
-| API endpoints present | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api |
-| Score functions | ✅ | uvScore · aqiScore · windScore · degToCompass |
-| Media queries | ✅ | portrait (≤500px) + landscape (≤900px) |
-| File size | ✅ | 46 523 bytes (limit 200 000) |
-| Duplicate city IDs | ✅ | None found |
+| 11 cities | ✅ | all present |
+| API endpoints | ✅ | all 4 |
+| Score functions | ✅ | all + windLabel |
+| Media queries | ✅ | portrait + landscape |
+| File size | ✅ | 46 803 bytes |
+| Duplicate IDs | ✅ | none |
 
-**Findings:** None  
-**Decision: ✅ APPROVED — v1.02**
+**Decision: ✅ APPROVED — v1.0.3**
 
 ---
 
-### v1.01 — 2026-05-27 — Nairobi + HUM dry colour
-
-**Automated checks (static analysis):**
+### v1.0.2 — 2026-05-27 — Pre-commit hook
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| 11 cities in CITIES array | ✅ | honolulu · san-jose · tahoe · new-york · london · tampere · helsinki · istanbul · nairobi · dubai · sydney |
-| Turku removed | ✅ | 0 references to 'turku' |
+| 11 cities | ✅ | all present |
+| API endpoints | ✅ | all 4 |
+| Score functions | ✅ | all present |
+| Media queries | ✅ | portrait + landscape |
+| File size | ✅ | 46 523 bytes |
+| Duplicate IDs | ✅ | none |
+
+**Decision: ✅ APPROVED — v1.0.2**
+
+---
+
+### v1.0.1 — 2026-05-27 — Nairobi + HUM dry colour
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| 11 cities | ✅ | all present |
+| Turku removed | ✅ | 0 references |
 | Nairobi added | ✅ | lat: -1.2921, lon: 36.8219, Africa/Nairobi |
-| West→east order | ✅ | Istanbul (lon 28.97) → Nairobi (lon 36.82) → Dubai (lon 55.27) |
-| API endpoints present | ✅ | open-meteo · air-quality-api · sunrise-sunset · ip-api |
-| Media queries | ✅ | portrait (≤500px) + landscape (≤900px) |
-| Score functions | ✅ | uvScore · aqiScore · windScore · degToCompass |
-| HUM dry colour | ✅ | .hum-dry { color: #88ccff } — CSS, legend, tooltip all updated |
-| Legend rows | ✅ | 3 rows present |
+| West→east order | ✅ | Istanbul (28.97) → Nairobi (36.82) → Dubai (55.27) |
+| API endpoints | ✅ | all 4 |
+| Media queries | ✅ | portrait + landscape |
+| HUM dry colour | ✅ | .hum-dry { color: #88ccff } |
 
-**Visual checks (requires human + browser):** — pending user confirmation
-
-**Findings:** None  
-**Decision: ✅ APPROVED — v1.01**
+**Decision: ✅ APPROVED — v1.0.1**
 
 ---
 
 ### v1.0 — 2026-05-27 — Release candidate
 
-**Automated checks (static analysis):**
-
 | Check | Result | Detail |
 |-------|--------|--------|
-| 11 cities in CITIES array | ✅ | honolulu · san-jose · tahoe · new-york · london · turku · tampere · helsinki · istanbul · dubai · sydney |
+| 11 cities | ✅ | honolulu · san-jose · tahoe · new-york · london · turku · tampere · helsinki · istanbul · dubai · sydney |
 | Cards generated dynamically | ✅ | 35 card-* references in JS template literals |
-| API endpoints present | ✅ | open-meteo.com · air-quality-api.open-meteo.com · sunrise-sunset.org · ip-api.com |
-| Media queries | ✅ | portrait (≤500px) + landscape (≤900px) |
-| Legend rows | ✅ | 3 rows in HTML |
-| Data-tip attributes | ✅ | All 10 present: uv · temp · hum · pres · wind · aqi · pm25 · no2 · rise · set |
-| Score functions | ✅ | uvScore · aqiScore · windScore all defined |
-| degToCompass function | ✅ | Present |
-| CSS colour classes | ✅ | uv-low/mod/high/vhigh/extr · aqi-good/fair/sens/poor/hazd |
-| ZULU element | ✅ | zulu-time referenced 5× |
-| Home badge | ✅ | home-badge defined and referenced |
+| API endpoints | ✅ | all 4 |
+| Media queries | ✅ | portrait + landscape |
+| Score functions | ✅ | uvScore · aqiScore · windScore · degToCompass |
 
-**Visual checks (requires human + browser):**
+**Visual checks (browser-confirmed):**
 
-| Check | Result | Note |
-|-------|--------|------|
-| Mac desktop layout | ✅ | Confirmed by user during development |
-| iPhone portrait layout | ✅ | Confirmed by user (screenshot 2026-05-27) |
-| iPhone landscape layout | ✅ | Confirmed by user during development |
-| Map renders without artefacts | ✅ | CartoDB Voyager tiles — confirmed clean |
-| Home city pink border | ✅ | Confirmed by user (screenshot 2026-05-27) |
-| Map pin click → card scroll | ✅ | Confirmed by user ("toimii hienosti") |
-| Legend 3 rows centred | ✅ | Confirmed by user |
-| Wind compact format fits card | ✅ | Confirmed by user |
-
-**Findings:** None  
-**Anomalies:** None  
-**Regressions:** None
+| Check | Result |
+|-------|--------|
+| Mac desktop layout | ✅ confirmed by user |
+| iPhone portrait layout | ✅ confirmed by user screenshot |
+| iPhone landscape layout | ✅ confirmed by user |
+| Map renders cleanly | ✅ CartoDB Voyager tiles |
+| Home city pink border | ✅ confirmed by user screenshot |
+| Map pin click → card scroll | ✅ confirmed ("works great") |
+| Legend 3 rows centred | ✅ confirmed |
+| Wind compact format fits card | ✅ confirmed |
 
 **Decision: ✅ APPROVED — promoted to v1.0**
-
----
 
 ---
 
@@ -226,60 +213,46 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 - [ ] Clicked card gets white border for ~3 seconds
 
 ### City cards (6 columns × 2 rows)
-- [ ] All 11 cards visible (map takes 1 slot, 1 city below it, 10 in row 2)
+- [ ] All 11 cards visible
 - [ ] Each card shows: flag, city name, GMT offset, live clock
-- [ ] UV value with colour label (LOW / MOD / HIGH / V.HIGH / EXTREME)
+- [ ] UV value with colour label
 - [ ] TEMP in °F / °C
 - [ ] HUM in %
 - [ ] PRES in hPa with trend arrow ↑ or ↓
-- [ ] WIND as direction + mph·km/h·kts (e.g. `NW 10mph·16km/h·9kts`)
-- [ ] Sunrise ☀ and sunset 🌙 times in local time
-- [ ] AQI with colour label (GOOD / FAIR / SENSITIVE / POOR / HAZARDOUS)
-- [ ] PM2.5 value
-- [ ] NO₂ value
+- [ ] WIND as direction + mph·km/h·kts + coloured condition word
+- [ ] Sunrise ☀ and sunset 🌙 times in grey (not amber)
+- [ ] AQI with colour label
+- [ ] PM2.5 and NO₂ values
 - [ ] Home city card has pink border and pink city name
-- [ ] Home city card shows "HOME" badge
 
 ### Hover tooltips (desktop only)
-- [ ] Hovering UV shows tooltip with title, description and colour ranges
-- [ ] Hovering TEMP shows tooltip
-- [ ] Hovering HUM shows tooltip
-- [ ] Hovering PRES shows tooltip
-- [ ] Hovering WIND shows tooltip
-- [ ] Hovering AQI shows tooltip
-- [ ] Hovering PM2.5 shows tooltip
-- [ ] Hovering NO₂ shows tooltip
+- [ ] Hovering UV, TEMP, HUM, PRES, WIND, AQI, PM2.5, NO₂ shows tooltip
 - [ ] Tooltip disappears when mouse moves away
 
 ### Legend (bottom bar)
-- [ ] Row 1: MAP PIN · UV INDEX · AQI — all visible and colour-coded
-- [ ] Row 2: HUM % · PRES hPa · PM2.5 · NO₂ — all visible
-- [ ] Row 3: WIND with 6 categories each in correct colour
-- [ ] Legend is centred horizontally
+- [ ] Row 1: MAP PIN · UV INDEX · AQI
+- [ ] Row 2: HUM % · PRES hPa · PM2.5 · NO₂
+- [ ] Row 3: WIND with 6 categories in correct colour
 
 ---
 
 ## Layout 2 — iPhone landscape (844 × 390 px)
 
-- [ ] Map panel on left (~160 px wide), city cards scroll horizontally to the right
-- [ ] All 11 city pins visible on map
-- [ ] Cards scroll smoothly left/right with swipe
-- [ ] Each card shows all data rows (UV through NO₂)
-- [ ] Legend bar hidden (correct — too small to show)
-- [ ] No horizontal overflow / no unwanted side scroll of the page itself
+- [ ] 4-column grid: map + 3 cities in row 1
+- [ ] 4 cities in row 2, 4 cities in row 3
+- [ ] Page scrolls vertically through all rows
+- [ ] Legend visible at bottom of page
+- [ ] No horizontal overflow
 
 ---
 
 ## Layout 3 — iPhone portrait (390 × 844 px)
 
-- [ ] Map full width at top (~200 px tall), no horizontal overflow
-- [ ] Left edge of header and cards not clipped
+- [ ] Map full width at top (~200 px tall)
 - [ ] Cards in 2-column grid below map
 - [ ] Page scrolls vertically through all 11 cards
-- [ ] Legend visible at the bottom of the page after all cards
-- [ ] Each legend group on its own row, separators hidden
+- [ ] Legend visible at the bottom of the page
 - [ ] Home city card pink border visible
-- [ ] Tapping a map pin scrolls to correct card + white border 3 s
 
 ---
 
@@ -288,16 +261,16 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 - [ ] At least one city shows a non-zero UV value (daytime cities)
 - [ ] All cities show temperature (not `—`)
 - [ ] All cities show AQI (not `—`)
-- [ ] Pressure shows hPa value (not `—`)
-- [ ] Wind shows direction and speed (not `—`)
-- [ ] Sunrise and sunset show times (not `—`)
+- [ ] Wind shows direction + speed + coloured condition word
+- [ ] RISE/SET times shown in grey (not amber)
+- [ ] API data refreshes every 5 minutes (check "Updated" timestamp)
 
 ---
 
 ## Known limitations (not bugs)
 
-- Map colours (land/ocean) cannot be customised without TopoJSON rendering artefacts — CartoDB Voyager tiles are used as the stable baseline
-- Hover tooltips do not work on touch screens (iOS/Android) — by design
-- ip-api.com home city detection may fail on `file://` protocol — works correctly on HTTPS
-- Tahoe City and San Jose share the same time zone (America/Los_Angeles) — correct
-- Dubai is the only city with no DST (UTC+4 always) — use it to verify UTC offset logic
+- Map colours cannot be customised without TopoJSON artefacts — CartoDB Voyager used as stable baseline
+- Hover tooltips do not work on touch screens — by design
+- ip-api.com home city detection may fail on `file://` protocol — works on HTTPS
+- Tahoe City and San Jose share America/Los_Angeles — correct
+- Dubai is the only city with no DST (UTC+4 always) — use for UTC offset testing

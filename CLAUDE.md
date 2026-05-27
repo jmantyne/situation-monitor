@@ -1,32 +1,32 @@
 # CLAUDE.md — Situation Monitor
 
-Tämä tiedosto on Claude Coden automaattinen muistio.
-Lue tämä aina session alussa. Älä koskaan poista vanhoja versioita tai merkintöjä.
+This file is Claude Code's automatic session memory.
+Read this at the start of every session. Never delete old entries.
 
 ---
 
-## 🔧 ASENNUS — tee tämä heti kloonauksen jälkeen
+## Setup — run this immediately after cloning
 
 ```bash
 git config core.hooksPath .githooks
 ```
 
-Hook on `.githooks/pre-commit` — se siirtyy gitin mukana mutta aktivointi pitää tehdä käsin.
+The hook lives in `.githooks/pre-commit` — it travels with the repo but must be activated manually.
 
 ---
 
-## ⛔ PAKOLLINEN PROSESSI — ENNEN JOKAISTA COMMITIA
+## Mandatory process — before every commit
 
-**Järjestys on aina tämä. Ei poikkeuksia.**
+**Always follow this order. No exceptions.**
 
-1. Tee koodimuutokset
-2. **Aja regressiotestit** (alla olevat bash-komennot)
-3. Kirjaa tulokset `REGRESSION.md`:ään uutena versioentriana
-4. Päivitä `README.md` versiohistoria
-5. Päivitä `CLAUDE.md` versiotaulukko
-6. Commitoi kaikki yhdessä — hook tarkistaa automaattisesti
+1. Make code changes
+2. **Run regression checks** (bash commands below)
+3. Record results in `REGRESSION.md` as a new version entry
+4. Update `README.md` version history
+5. Update `CLAUDE.md` version table
+6. Commit everything together — hook validates automatically
 
-**Regression automaattiset tarkistukset:**
+**Regression automated checks:**
 ```bash
 FILE=situation-monitor.html
 grep -o "{ id: '[^']*'" $FILE | wc -l
@@ -38,32 +38,34 @@ wc -c < $FILE
 
 ---
 
-## Versionhallinta
+## Version history
 
-| Versio | Päivämäärä | Muutos |
-|--------|------------|--------|
+| Version | Date | Change |
+|---------|------|--------|
 | v1.0 | 2026-05-27 | Initial release — 11 cities, Leaflet map, all APIs, responsive layouts |
-| v1.01 | 2026-05-27 | Turku → Nairobi (Kenya, UTC+3 no DST), HUM dry colour #88ccff |
-| v1.02 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
-| v1.03 | 2026-05-27 | windLabel function: CALM/BREEZE/MOD/STRONG/GALE/STORM after wind speed; data-row gap 4→2px |
-| v1.04 | 2026-05-27 | windLabel returns {text,cls}; wind-calm #88ccff CSS; BREEZE=uv-low, MOD=uv-mod, STRONG=uv-high, GALE=uv-vhigh, STORM=uv-extr |
+| v1.0.1 | 2026-05-27 | Turku → Nairobi (Kenya, UTC+3 no DST), HUM dry colour #88ccff |
+| v1.0.2 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
+| v1.0.3 | 2026-05-27 | windLabel function: CALM/BREEZE/MOD/STRONG/GALE/STORM after wind speed; data-row gap 4→2px |
+| v1.0.4 | 2026-05-27 | windLabel returns {text,cls}; wind-calm #88ccff CSS; coloured wind condition labels |
+| v2.0.0 | 2026-05-27 | API 5 min refresh; RISE/SET grey; landscape 4-col grid+legend; semver VERSION file; English-only; Finnish regression check |
 
 ---
 
-## Fail-loki — virheet ja korjaukset
+## Fail log — errors and fixes
 
-| Versio | Päivämäärä | Fail | Korjaus |
-|--------|------------|------|---------|
-| v1.01 | 2026-05-27 | Regressiotestit unohdettiin ajaa ennen commitia | Ajettiin jälkikäteen, erillinen commit |
+| Version | Date | Fail | Fix |
+|---------|------|------|-----|
+| v1.0.1 | 2026-05-27 | Regression checks skipped before commit | Run retroactively, separate commit |
+| v1.0.2 | 2026-05-27 | Pre-commit hook not executable | Fixed chmod +x in separate commit |
 
 ---
 
-## Kaupungit — odotettu tila (v1.02+)
+## Cities — expected state (v1.0.2+)
 
-Järjestys länsi → itä. 11 kaupunkia.
+Order: west → east. 11 cities.
 
-| id | Nimi | Aikavyöhyke | lon |
-|----|------|-------------|-----|
+| id | Name | Timezone | lon |
+|----|------|----------|-----|
 | honolulu | Honolulu 🇺🇸 | Pacific/Honolulu | -157.86 |
 | san-jose | San Jose 🇺🇸 | America/Los_Angeles | -121.89 |
 | tahoe | Tahoe City 🇺🇸 | America/Los_Angeles | -120.15 |
@@ -76,27 +78,29 @@ Järjestys länsi → itä. 11 kaupunkia.
 | dubai | Dubai 🇦🇪 | Asia/Dubai | 55.27 |
 | sydney | Sydney 🇦🇺 | Australia/Sydney | 151.21 |
 
-**Huomiot:**
-- Dubai: ainoa kaupunki ilman kesäaikaa (UTC+4 aina) — käytä UTC-logiikan testaukseen
-- Nairobi: ei DST (UTC+3 aina) — sama offset kuin Istanbul mutta eri manner
-- Honolulu on aina ensimmäinen (läntisin)
+**Notes:**
+- Dubai: only city with no DST (UTC+4 always) — use for UTC offset logic testing
+- Nairobi: no DST (UTC+3 always) — same offset as Istanbul but different continent
+- Honolulu is always first (westernmost)
 
 ---
 
-## Pre-commit hook — mitä tarkistaa
+## Pre-commit hook — what it checks
 
-Hook sijaitsee `.githooks/pre-commit`. Ajaa kun `situation-monitor.html` on stagessa.
+Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is staged.
 
-| # | Tarkistus | Arvo |
-|---|-----------|------|
-| 1 | Kaupunkien määrä | täsmälleen 11 |
-| 2 | Kaikki id:t läsnä | ks. lista yllä |
-| 3 | API-endpointit | open-meteo · air-quality-api · sunrise-sunset · ip-api |
-| 4 | Score-funktiot | uvScore · aqiScore · windScore · degToCompass |
-| 5 | Media queryt | portrait + landscape |
-| 6 | REGRESSION.md stagessa | pakollinen |
-| 7 | Tiedostokoko | < 200 000 bytes |
-| 8 | Ei duplikaatti-id:tä | — |
+| # | Check | Value |
+|---|-------|-------|
+| 0 | Version bump | reads VERSION file, minor bump if >1 file changed, patch if 1 |
+| 1 | City count | exactly 11 |
+| 2 | All IDs present | see list above |
+| 3 | API endpoints | open-meteo · air-quality-api · sunrise-sunset · ip-api |
+| 4 | Score functions | uvScore · aqiScore · windScore · degToCompass |
+| 5 | Media queries | portrait + landscape |
+| 6 | REGRESSION.md staged | required |
+| 7 | File size | < 200 000 bytes |
+| 8 | No duplicate IDs | — |
+| 9 | No Finnish (ä/ö) in HTML | public repo must be English only |
 
 ---
 
@@ -104,30 +108,38 @@ Hook sijaitsee `.githooks/pre-commit`. Ajaa kun `situation-monitor.html` on stag
 
 | Data | API |
 |------|-----|
-| Sää, UV, tuuli, paine | api.open-meteo.com |
-| AQI, PM2.5, NO₂ | air-quality-api.open-meteo.com |
-| Aurinko nousu/lasku | api.sunrise-sunset.org |
-| Kotikaupunki (IP) | ip-api.com |
-| Karttapohjat | CartoDB Voyager (Leaflet) |
+| Weather, UV, wind, pressure | api.open-meteo.com |
+| AQI, PM2.5, NO2 | air-quality-api.open-meteo.com |
+| Sunrise / sunset | api.sunrise-sunset.org |
+| Home city (IP) | ip-api.com |
+| Map tiles | CartoDB Voyager (Leaflet) |
 
 ---
 
-## Opitut virheet — älä toista
+## Lessons learned — do not repeat
 
-### Tiedoston sisältö menee pieleen nimeämisessä
-- Kun nimeät tiedoston GitHubissa web-editorilla, tarkista RAW-sisältö ennen julkaisua
-- Käytä aina: `https://raw.githubusercontent.com/jmantyne/situation-monitor/main/situation-monitor.html`
+### File content gets corrupted on GitHub web editor rename
+- Always verify RAW content before publishing when renaming in GitHub web UI
+- Use: `https://raw.githubusercontent.com/jmantyne/situation-monitor/main/situation-monitor.html`
 
-### Duplikaatti CITIES-määrittely
-- Älä koskaan määrittele CITIES-arrayta kahdesti — JS käyttää jälkimmäistä hiljaa
+### Duplicate CITIES definition
+- Never define the CITIES array twice — JS silently uses the second one
 
 ### GitHub Pages URL
-- Live-osoite: `https://jmantyne.github.io/situation-monitor/situation-monitor.html`
-- Pages konfiguroitu: branch `main` / `/(root)`
+- Live URL: `https://jmantyne.github.io/situation-monitor/situation-monitor.html`
+- Pages configured: branch `main` / `/(root)`
+
+### Versioning scheme (from v2.0.0 onwards)
+- Use semantic versioning: MAJOR.MINOR.PATCH stored in VERSION file
+- Single change committed → patch bump (x.y.Z)
+- Multiple changes committed together → minor bump (x.Y.0)
+- Major bump (X.0.0) → manual edit of VERSION for breaking changes
+- Version managed by pre-commit hook, independent of GitHub
 
 ---
 
-## Muistiinpanot
+## Notes
 
-- 2026-05-27: Repo luotu — siirretty Harjoittelu/docs/ -kansiosta omaksi julkiseksi repoksi
-- 2026-05-27: index.html kokeilu epäonnistui (väärä sisältö) — palattiin situation-monitor.html nimeen
+- 2026-05-27: Repo created — migrated from Harjoittelu/docs/ to standalone public repo
+- 2026-05-27: index.html experiment failed (wrong content) — reverted to situation-monitor.html
+- 2026-05-27: v2.0.0 — all documentation converted from Finnish to English; semver introduced

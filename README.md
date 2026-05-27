@@ -16,7 +16,7 @@ Each city card displays:
 - Temperature °F / °C
 - Relative humidity %
 - Barometric pressure hPa with trend arrow ↑↓
-- Wind direction and speed (mph · km/h · kts)
+- Wind direction, speed (mph · km/h · kts) and condition label (CALM / BREEZE / MOD / STRONG / GALE / STORM)
 - Sunrise and sunset times (local)
 - AQI (US), PM2.5 and NO₂
 
@@ -77,5 +77,6 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 | **v1.0** | **2026-05-27** | **First production release — regression tested, no findings** |
 | v1.01 | 2026-05-27 | Turku → Nairobi (Kenya), HUM dry colour #88ccff |
 | v1.02 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
-| v1.03 | 2026-05-27 | Wind condition label after speed value (CALM/BREEZE/MOD/STRONG/GALE/STORM) |
-| v1.04 | 2026-05-27 | Wind condition label coloured: CALM=#88ccff, BREEZE=green, MOD=yellow, STRONG=orange, GALE=red, STORM=purple |
+| v1.0.3 | 2026-05-27 | Wind condition label after speed value (CALM/BREEZE/MOD/STRONG/GALE/STORM) |
+| v1.0.4 | 2026-05-27 | Wind condition label coloured: CALM=#88ccff, BREEZE=green, MOD=yellow, STRONG=orange, GALE=red, STORM=purple |
+| v2.0.0 | 2026-05-27 | API 5 min refresh; RISE/SET grey; landscape 4-col grid+legend; semver VERSION file; English-only codebase; Finnish regression check |

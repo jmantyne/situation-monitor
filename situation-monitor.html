@@ -444,7 +444,7 @@
 
     .sun-icon { font-size: 0.65rem; }
     .sun-label { font-size: 0.48rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); text-transform: uppercase; }
-    .sun-time  { font-size: 0.58rem; color: #ffd54f; letter-spacing: 0.05em; }
+    .sun-time  { font-size: 0.58rem; color: #c0cfe8; letter-spacing: 0.05em; }
 
     /* loading state */
     .loading-text {
@@ -516,41 +516,54 @@
 
     /* ── Mobile landscape (iPhone) ── */
     @media (max-width: 900px) and (orientation: landscape) {
+      /* Page scrolls vertically — same pattern as portrait */
+      html, body { overflow-y: auto; overflow-x: hidden; height: auto; min-height: 100%; }
+      #app { height: auto; min-height: 100vh; width: 100%; overflow-x: hidden; }
+
       #zulu-bar { height: 36px; padding: 0 10px; gap: 7px; }
       #app-title { font-size: 0.52rem; letter-spacing: 0.18em; }
       #zulu-time { font-size: 0.75rem; }
       #zulu-label { font-size: 0.44rem; }
-      #refresh-info { display: none; }
 
-      /* Switch to side-panel + horizontal scroll layout on mobile */
-      #grid { display: flex; padding: 0; gap: 0; }
-      #map-cell {
-        width: 160px;
-        flex-shrink: 0;
-        border-radius: 0;
-        border: none;
-        border-right: 1px solid #1a1a3a;
-      }
-      #cards-wrap {
-        display: flex;
-        flex: 1;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding: 6px 5px;
+      /* 4-column grid: map + 3 cities on row 1, 4+4 on rows 2–3 */
+      #grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: auto;
         gap: 5px;
-        align-items: stretch;
+        padding: 5px;
+        overflow: visible;
+        flex: none;
       }
-      #cards-wrap::-webkit-scrollbar { height: 3px; }
-      #cards-wrap::-webkit-scrollbar-track { background: #080816; }
-      #cards-wrap::-webkit-scrollbar-thumb { background: #2a2a5a; border-radius: 2px; }
-      .city-card { flex: 0 0 118px; min-width: 118px; max-width: 118px; }
-      .card-clock { font-size: 0.95rem; }
-      .card-name { font-size: 0.44rem; }
-      .card-flag { font-size: 1rem; }
-      .data-label { font-size: 0.38rem; width: 30px; }
-      .data-value { font-size: 0.45rem; }
-      .sun-time { font-size: 0.42rem; }
-      #legend-bar { display: none; }
+      #cards-wrap { display: contents; }
+      #map-cell {
+        height: 195px;
+        border-radius: 6px;
+      }
+      .city-card { min-width: 0; }
+
+      /* Font sizes */
+      .card-clock { font-size: 0.90rem; }
+      .card-name  { font-size: 0.42rem; }
+      .card-flag  { font-size: 0.95rem; }
+      .data-label { font-size: 0.37rem; width: 28px; }
+      .data-value { font-size: 0.42rem; }
+      .sun-time   { font-size: 0.40rem; }
+
+      /* Legend visible like portrait */
+      #legend-bar {
+        display: flex;
+        padding: 8px 10px;
+        gap: 5px;
+      }
+      .leg-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 4px;
+      }
+      .leg-sep { display: none; }
+      .leg-group { justify-content: center; flex-wrap: wrap; gap: 5px; }
     }
 
     /* Leaflet overrides — ocean = card dark bg, land = accent blue */
@@ -1386,7 +1399,7 @@ tick();
 setInterval(tick, 1000);
 
 fetchAllCities();
-setInterval(fetchAllCities, 10 * 60 * 1000); // every 10 minutes
+setInterval(fetchAllCities, 5 * 60 * 1000); // every 5 minutes
 
 tryGPS();
 </script>

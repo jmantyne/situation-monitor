@@ -1,97 +1,127 @@
 #!/bin/bash
-# Situation Monitor — pre-commit regression checks
-# Finds situation-monitor.html automatically anywhere in the repo.
-
+# Situation Monitor — pre-commit checks + automatic version management
 set -e
 
 FILE=$(git diff --cached --name-only | grep "situation-monitor.html" | head -1)
+VERSION_FILE="VERSION"
+FAIL=0
 
+# ── Version management (runs on every commit) ─────────────────────────────
+if [ -f "$VERSION_FILE" ]; then
+  CURRENT=$(cat "$VERSION_FILE" | tr -d '[:space:]')
+  MAJOR=$(echo "$CURRENT" | cut -d. -f1)
+  MINOR=$(echo "$CURRENT" | cut -d. -f2)
+  PATCH=$(echo "$CURRENT" | cut -d. -f3)
+
+  # Count staged non-doc files — more than 1 means a minor release
+  STAGED=$(git diff --cached --name-only | grep -v "^VERSION$" | grep -v "^REGRESSION" | grep -v "^CLAUDE" | grep -v "^README" | wc -l | tr -d ' ')
+
+  if [ "$STAGED" -gt 1 ]; then
+    NEW_VERSION="${MAJOR}.$((MINOR + 1)).0"
+    echo "📦 Multiple changes (${STAGED} files) — minor release: ${CURRENT} → ${NEW_VERSION}"
+  else
+    NEW_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+    echo "📦 Single change — patch release: ${CURRENT} → ${NEW_VERSION}"
+  fi
+
+  echo "$NEW_VERSION" > "$VERSION_FILE"
+  git add "$VERSION_FILE"
+fi
+
+# ── Regression checks (only when situation-monitor.html is staged) ────────
 if [ -z "$FILE" ]; then
+  echo ""
+  echo "✅ No HTML changes — version bump only."
   exit 0
 fi
 
 echo "🔍 Running regression checks on $FILE..."
-FAIL=0
 
-# ── 1. Count cities ──────────────────────────────────────────────────────────
+# 1. City count
 CITY_COUNT=$(grep -o "{ id: '[^']*'" "$FILE" | wc -l | tr -d ' ')
 if [ "$CITY_COUNT" -ne 11 ]; then
-  echo "❌ CITIES: expected 11, found $CITY_COUNT"
-  FAIL=1
+  echo "❌ CITIES: expected 11, found $CITY_COUNT"; FAIL=1
 else
   echo "✅ CITIES: 11 found"
 fi
 
-# ── 2. Required cities present ───────────────────────────────────────────────
+# 2. Required cities present
 for CITY in honolulu san-jose tahoe new-york london tampere helsinki istanbul nairobi dubai sydney; do
   if ! grep -q "id: '${CITY}'" "$FILE"; then
-    echo "❌ Missing city: $CITY"
-    FAIL=1
+    echo "❌ Missing city: $CITY"; FAIL=1
   fi
 done
 [ $FAIL -eq 0 ] && echo "✅ All required cities present"
 
-# ── 3. API endpoints ─────────────────────────────────────────────────────────
+# 3. API endpoints
 for EP in "api.open-meteo.com" "air-quality-api.open-meteo.com" "sunrise-sunset.org" "ip-api.com"; do
   if ! grep -q "$EP" "$FILE"; then
-    echo "❌ Missing API endpoint: $EP"
-    FAIL=1
+    echo "❌ Missing API: $EP"; FAIL=1
   fi
 done
 [ $FAIL -eq 0 ] && echo "✅ API endpoints present"
 
-# ── 4. Score functions ───────────────────────────────────────────────────────
+# 4. Score functions
 for FN in "function uvScore" "function aqiScore" "function windScore" "function degToCompass"; do
   if ! grep -q "$FN" "$FILE"; then
-    echo "❌ Missing function: $FN"
-    FAIL=1
+    echo "❌ Missing function: $FN"; FAIL=1
   fi
 done
 [ $FAIL -eq 0 ] && echo "✅ Score functions present"
 
-# ── 5. Media queries ─────────────────────────────────────────────────────────
+# 5. Media queries
 if ! grep -q "max-width.*orientation: portrait" "$FILE"; then
-  echo "❌ Missing portrait media query"
-  FAIL=1
+  echo "❌ Missing portrait media query"; FAIL=1
 else
   echo "✅ Media queries present"
 fi
 
-# ── 6. REGRESSION.md updated in this commit ─────────────────────────────────
+# 6. REGRESSION.md staged
 REG=$(git diff --cached --name-only | grep "REGRESSION" || true)
 if [ -z "$REG" ]; then
-  echo "❌ REGRESSION.md not staged — regression must be documented before commit"
-  FAIL=1
+  echo "❌ REGRESSION.md not staged"; FAIL=1
 else
   echo "✅ REGRESSION.md staged"
 fi
 
-# ── 7. File size ─────────────────────────────────────────────────────────────
+# 7. File size
 FILESIZE=$(wc -c < "$FILE" | tr -d ' ')
-LIMIT=200000
-if [ "$FILESIZE" -gt "$LIMIT" ]; then
-  echo "❌ File size ${FILESIZE} bytes exceeds limit of ${LIMIT} bytes"
-  FAIL=1
+if [ "$FILESIZE" -gt 200000 ]; then
+  echo "❌ File size ${FILESIZE} bytes exceeds 200 000 byte limit"; FAIL=1
 else
-  echo "✅ File size: ${FILESIZE} bytes (limit ${LIMIT})"
+  echo "✅ File size: ${FILESIZE} bytes (limit 200 000)"
 fi
 
-# ── 8. Duplicate city IDs ─────────────────────────────────────────────────────
+# 8. Duplicate city IDs
 DUPES=$(grep -o "{ id: '[^']*'" "$FILE" | sort | uniq -d)
 if [ -n "$DUPES" ]; then
-  echo "❌ Duplicate city IDs found: $DUPES"
-  FAIL=1
+  echo "❌ Duplicate city IDs: $DUPES"; FAIL=1
 else
   echo "✅ No duplicate city IDs"
 fi
 
-# ── Result ───────────────────────────────────────────────────────────────────
-if [ $FAIL -ne 0 ]; then
-  echo ""
-  echo "🚫 Pre-commit checks FAILED — commit blocked."
-  echo "   Fix the issues above, update REGRESSION.md, then commit again."
-  exit 1
+# 9. No Finnish characters (ä/ö) in situation-monitor.html — public repo must be English only
+FINNISH_HITS=$(python3 -c "
+import sys
+found = []
+with open('$FILE', encoding='utf-8') as f:
+    for i, line in enumerate(f, 1):
+        if any(c in line for c in 'äöÄÖ'):
+            found.append(str(i) + ': ' + line.rstrip()[:100])
+print('\n'.join(found[:5]))
+" 2>/dev/null || true)
+if [ -n "$FINNISH_HITS" ]; then
+  echo "❌ Finnish characters (ä/ö) found in $FILE — public repo must be English only"
+  echo "$FINNISH_HITS"
+  FAIL=1
+else
+  echo "✅ No Finnish characters in HTML"
 fi
 
+# ── Result ────────────────────────────────────────────────────────────────
 echo ""
+if [ $FAIL -ne 0 ]; then
+  echo "🚫 Pre-commit checks FAILED — commit blocked."
+  exit 1
+fi
 echo "✅ All pre-commit checks passed."
