@@ -1,0 +1,97 @@
+#!/bin/bash
+# Situation Monitor — pre-commit regression checks
+# Finds situation-monitor.html automatically anywhere in the repo.
+
+set -e
+
+FILE=$(git diff --cached --name-only | grep "situation-monitor.html" | head -1)
+
+if [ -z "$FILE" ]; then
+  exit 0
+fi
+
+echo "🔍 Running regression checks on $FILE..."
+FAIL=0
+
+# ── 1. Count cities ──────────────────────────────────────────────────────────
+CITY_COUNT=$(grep -o "{ id: '[^']*'" "$FILE" | wc -l | tr -d ' ')
+if [ "$CITY_COUNT" -ne 11 ]; then
+  echo "❌ CITIES: expected 11, found $CITY_COUNT"
+  FAIL=1
+else
+  echo "✅ CITIES: 11 found"
+fi
+
+# ── 2. Required cities present ───────────────────────────────────────────────
+for CITY in honolulu san-jose tahoe new-york london tampere helsinki istanbul nairobi dubai sydney; do
+  if ! grep -q "id: '${CITY}'" "$FILE"; then
+    echo "❌ Missing city: $CITY"
+    FAIL=1
+  fi
+done
+[ $FAIL -eq 0 ] && echo "✅ All required cities present"
+
+# ── 3. API endpoints ─────────────────────────────────────────────────────────
+for EP in "api.open-meteo.com" "air-quality-api.open-meteo.com" "sunrise-sunset.org" "ip-api.com"; do
+  if ! grep -q "$EP" "$FILE"; then
+    echo "❌ Missing API endpoint: $EP"
+    FAIL=1
+  fi
+done
+[ $FAIL -eq 0 ] && echo "✅ API endpoints present"
+
+# ── 4. Score functions ───────────────────────────────────────────────────────
+for FN in "function uvScore" "function aqiScore" "function windScore" "function degToCompass"; do
+  if ! grep -q "$FN" "$FILE"; then
+    echo "❌ Missing function: $FN"
+    FAIL=1
+  fi
+done
+[ $FAIL -eq 0 ] && echo "✅ Score functions present"
+
+# ── 5. Media queries ─────────────────────────────────────────────────────────
+if ! grep -q "max-width.*orientation: portrait" "$FILE"; then
+  echo "❌ Missing portrait media query"
+  FAIL=1
+else
+  echo "✅ Media queries present"
+fi
+
+# ── 6. REGRESSION.md updated in this commit ─────────────────────────────────
+REG=$(git diff --cached --name-only | grep "REGRESSION" || true)
+if [ -z "$REG" ]; then
+  echo "❌ REGRESSION.md not staged — regression must be documented before commit"
+  FAIL=1
+else
+  echo "✅ REGRESSION.md staged"
+fi
+
+# ── 7. File size ─────────────────────────────────────────────────────────────
+FILESIZE=$(wc -c < "$FILE" | tr -d ' ')
+LIMIT=200000
+if [ "$FILESIZE" -gt "$LIMIT" ]; then
+  echo "❌ File size ${FILESIZE} bytes exceeds limit of ${LIMIT} bytes"
+  FAIL=1
+else
+  echo "✅ File size: ${FILESIZE} bytes (limit ${LIMIT})"
+fi
+
+# ── 8. Duplicate city IDs ─────────────────────────────────────────────────────
+DUPES=$(grep -o "{ id: '[^']*'" "$FILE" | sort | uniq -d)
+if [ -n "$DUPES" ]; then
+  echo "❌ Duplicate city IDs found: $DUPES"
+  FAIL=1
+else
+  echo "✅ No duplicate city IDs"
+fi
+
+# ── Result ───────────────────────────────────────────────────────────────────
+if [ $FAIL -ne 0 ]; then
+  echo ""
+  echo "🚫 Pre-commit checks FAILED — commit blocked."
+  echo "   Fix the issues above, update REGRESSION.md, then commit again."
+  exit 1
+fi
+
+echo ""
+echo "✅ All pre-commit checks passed."
