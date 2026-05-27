@@ -15,7 +15,7 @@ if [ -f "$VERSION_FILE" ]; then
 
   # RELEASE_LEVEL env variable overrides auto-detection
   # Usage: RELEASE_LEVEL=minor git commit / RELEASE_LEVEL=major git commit
-  STAGED=$(git diff --cached --name-only | grep -v "^VERSION$" | grep -v "^REGRESSION" | grep -v "^CLAUDE" | grep -v "^README" | wc -l | tr -d ' ')
+  STAGED=$(git diff --cached --name-only | grep -v "^VERSION$" | grep -v "^REGRESSION" | grep -v "^AI-WORKFLOW" | grep -v "^README" | wc -l | tr -d ' ')
 
   if [ "${RELEASE_LEVEL:-}" = "major" ]; then
     NEW_VERSION="$((MAJOR + 1)).0.0"

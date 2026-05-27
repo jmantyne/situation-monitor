@@ -1,7 +1,7 @@
-# CLAUDE.md — Situation Monitor
+# AI-WORKFLOW.md — Situation Monitor
 
-This file is Claude Code's automatic session memory.
-Read this at the start of every session. Never delete old entries.
+This file documents the AI-assisted development workflow, session memory,
+version history, and process decisions for the Situation Monitor project.
 
 ---
 
