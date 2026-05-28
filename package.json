@@ -1,13 +1,13 @@
 {
   "name": "situation-monitor",
-  "version": "1.0.0",
+  "version": "2.4.6",
   "description": "Real-time environmental dashboard for 11 cities across the world. Built as a single self-contained HTML file — no build step, no server required.",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/smoke.js && npx playwright test"
   },
   "repository": {
     "type": "git",

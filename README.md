@@ -141,3 +141,5 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.3.4 | 2026-05-27 | Project reflection added to docs/REFLECTION.md |
 | v2.4.4 | 2026-05-27 | Smoke test 13/13 verified on physical Mac hardware (Node.js v18.20.8) |
 | v2.4.5 | 2026-05-27 | CLAUDE.md renamed to AI-WORKFLOW.md for clarity |
+| v2.4.6 | 2026-05-27 | Pre-commit hook updated for AI-WORKFLOW.md filename |
+| **v2.5.0** | **2026-05-28** | **Fix: r.ok check before r.json(); npm test wired to real tests; package.json version synced** |
