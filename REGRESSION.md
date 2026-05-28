@@ -7,7 +7,7 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
-### v2.5.0 — 2026-05-28 — NVIDIA Sr. Director review fixes
+### v2.5.0 — 2026-05-28 — Three fixes from 3rd party code review
 
 **Change:** Three fixes from external code review: (1) `r.ok` check before `r.json()` in
 `fetchCityData`, (2) `package.json` test script wired to real tests, (3) `package.json`
