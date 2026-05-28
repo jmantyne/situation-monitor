@@ -143,3 +143,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.4.5 | 2026-05-27 | CLAUDE.md renamed to AI-WORKFLOW.md for clarity |
 | v2.4.6 | 2026-05-27 | Pre-commit hook updated for AI-WORKFLOW.md filename |
 | **v2.5.0** | **2026-05-28** | **Fix: r.ok check before r.json(); npm test wired to real tests; package.json version synced** |
+| v2.5.1 | 2026-05-28 | Fix: vendor name removed from REGRESSION.md heading |

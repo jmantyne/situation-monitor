@@ -58,6 +58,7 @@ wc -c < $FILE
 | v2.4.4 | 2026-05-27 | Smoke test 13/13 verified on physical Mac hardware; REGRESSION.md updated |
 | v2.4.5 | 2026-05-27 | CLAUDE.md renamed to AI-WORKFLOW.md; pre-commit hook reference updated |
 | v2.5.0 | 2026-05-28 | Fix: r.ok check before r.json() in fetchCityData; npm test wired to real tests; package.json version synced |
+| v2.5.1 | 2026-05-28 | Fix: vendor name removed from REGRESSION.md v2.5.0 heading |
 
 ---
 
