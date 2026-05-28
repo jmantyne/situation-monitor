@@ -7,6 +7,32 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.5.0 — 2026-05-28 — NVIDIA Sr. Director review fixes
+
+**Change:** Three fixes from external code review: (1) `r.ok` check before `r.json()` in
+`fetchCityData`, (2) `package.json` test script wired to real tests, (3) `package.json`
+version synced to match VERSION file.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| r.ok check added — weather | ✅ | throws `Error("weather <status>")` on non-2xx |
+| r.ok check added — air quality | ✅ | throws `Error("air <status>")` on non-2xx |
+| r.ok check added — sunrise/sunset | ✅ | throws `Error("sun <status>")` on non-2xx |
+| Promise.allSettled still wraps all three | ✅ | rejected status handled by existing null-guard |
+| npm test script runs node tests/smoke.js | ✅ | was "no test specified" |
+| npm test script runs npx playwright test | ✅ | |
+| package.json version = 2.5.0 | ✅ | was 1.0.0 |
+| VERSION file = 2.5.0 | ✅ | bumped by pre-commit hook |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+| File size under 200 000 bytes | ✅ | |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v2.5.0**
+
+---
+
 ### v2.4.3 — 2026-05-27 — Smoke test verified on physical Mac hardware
 
 **Change:** Node.js v18.20.8 installed on MacBook Pro. Smoke test (`tests/smoke.js`)

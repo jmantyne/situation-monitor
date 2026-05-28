@@ -1127,9 +1127,9 @@ async function fetchCityData(city) {
   const sunUrl     = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0`;
 
   const [weatherRes, airRes, sunRes] = await Promise.allSettled([
-    fetch(weatherUrl).then(r => r.json()),
-    fetch(airUrl).then(r => r.json()),
-    fetch(sunUrl).then(r => r.json())
+    fetch(weatherUrl).then(r => { if (!r.ok) throw new Error(`weather ${r.status}`); return r.json(); }),
+    fetch(airUrl).then(r => { if (!r.ok) throw new Error(`air ${r.status}`); return r.json(); }),
+    fetch(sunUrl).then(r => { if (!r.ok) throw new Error(`sun ${r.status}`); return r.json(); })
   ]);
 
   // Parse weather
