@@ -88,8 +88,8 @@ The threat model, options considered, and implementation decisions are documente
 
 | Limitation | Detail |
 |------------|--------|
-| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.1 |
-| No historical data | Only shows current conditions; trend charts planned for v3.0+ |
+| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.2 |
+| No historical data | Only shows current conditions; trend charts planned for v3.1+ |
 | Free API rate limits | Open-Meteo allows ~10 000 calls/day — sufficient for personal use |
 | No offline mode | Requires internet connection for map tiles, weather data, and fonts |
 | IP geolocation accuracy | Home city detection uses IP location, which can be imprecise for VPN users |

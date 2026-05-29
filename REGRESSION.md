@@ -7,6 +7,31 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v3.0.0 — 2026-05-29 — Major release: harness example
+
+**Change:** Major release milestone. Formalizes the project as a documented AI workflow
+harness example. BACKLOG.md restructured: v3.0 = this release (delivered), v3.1 = interactive
+map, v3.2 = configurable cities, v4.0+ = native app. Version references updated across
+README.md, STAKEHOLDER-SUMMARY.md. No changes to `situation-monitor.html`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| VERSION = 3.0.0 | ✅ | Bumped by pre-commit hook (RELEASE_LEVEL=major) |
+| package.json = 3.0.0 | ✅ | Synced by hook |
+| BACKLOG.md — Delivered v3.0 section added | ✅ | |
+| BACKLOG.md — v3.0→v3.1, v3.1→v3.2 (EN + FI) | ✅ | |
+| README.md — roadmap references updated | ✅ | v3.1 map, v3.2 cities |
+| STAKEHOLDER-SUMMARY.md — limitations updated | ✅ | v3.2, v3.1+ |
+| Smoke test 13/13 | ✅ | No HTML changes |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v3.0.0**
+
+---
+
 ### v2.14.1 — 2026-05-29 — Version audit
 
 **Change:** Docs-only. Version audit: v2.11.1–v2.14.0 entries added to README.md, AI-WORKFLOW.md,
