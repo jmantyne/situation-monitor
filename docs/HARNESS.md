@@ -1,14 +1,13 @@
 # Show Me Your Harness — How I Built One
 
-This document describes the harness built around Situation Monitor.
-It references and illustrates the framework from Sami Ruokoselkä's article
-"Näytä harnessisi" (isoratas.fi, May 2026).
+This document describes the harness built around Situation Monitor
+and how it illustrates the harness engineering framework emerging in 2026.
 
 ---
 
 ## What Is a Harness?
 
-Ruokoselkä's article defines a key distinction:
+Martin Fowler formalized the key distinction in April 2026:
 
 > **Agent = Model + Harness**
 
@@ -17,6 +16,14 @@ prompts, rules, verification steps, error history, and recovery paths.
 
 Without a harness, an AI model is a capable tool that can fail silently.
 With a harness, it becomes a reliable component in a sustained workflow.
+
+This framing has since been adopted across the industry — LangChain, academic
+research, and independent engineering blogs including the Finnish-language
+"Näytä harnessisi" (isoratas.fi, May 2026), which brought it to this project's attention.
+
+**Further reading:**
+- Martin Fowler: [Harness engineering for coding agent users](https://martinfowler.com/articles/harness-engineering.html)
+- arXiv: [AI Harness Engineering: A Runtime Substrate for Foundation-Model Software Agents](https://arxiv.org/html/2605.13357v1)
 
 ---
 
@@ -168,12 +175,14 @@ The model is powerful. The harness is why it is dependable.
 
 ### Mikä on harness?
 
-Ruokoselkä kirjoittaa:
+Martin Fowler formalisoi kaavan huhtikuussa 2026:
 
 > **Agent = Model + Harness**
 
 Malli on tekoäly (Claude). Harness on kaikki mallin ympärille rakennettu:
 promptit, säännöt, tarkistukset, virhehistoria ja palautumisreitit.
+Suomenkielinen artikkeli "Näytä harnessisi" (isoratas.fi, toukokuu 2026)
+toi tämän ajattelutavan tämän projektin kontekstiin.
 
 Ilman harnessea malli on tehokas mutta epäluotettava työkalu.
 Harnessilla siitä tulee luotettava osa pidempää työnkulkua.

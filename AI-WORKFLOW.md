@@ -60,6 +60,16 @@ wc -c < $FILE
 | v2.5.0 | 2026-05-28 | Fix: r.ok check before r.json() in fetchCityData; npm test wired to real tests; package.json version synced |
 | v2.5.1 | 2026-05-28 | Fix: vendor name removed from REGRESSION.md v2.5.0 heading |
 | **v2.6.0** | **2026-05-29** | **Fix: playwright.config.js; pre-commit hook syncs package.json; ip-api.com → ipapi.co (HTTPS); docs/HARNESS.md; docs/STAKEHOLDER-SUMMARY.md; Known Limitations in README** |
+| v2.7.0 | 2026-05-29 | Style: author name standardized to "Jussi Mantynen (jmantyne)" in package.json and STAKEHOLDER-SUMMARY.md |
+| v2.8.0 | 2026-05-29 | Style: (jmantyne) handle removed from internal docs |
+| v2.8.1 | 2026-05-29 | Docs: HARNESS.md upgraded — Martin Fowler as primary source, isoratas.fi secondary |
+| **v2.9.0** | **2026-05-29** | **Docs: backlog reversion — v3.0/v3.1/v4.0+; README and STAKEHOLDER-SUMMARY updated** |
+| v2.9.1 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md |
+| **v2.10.0** | **2026-05-29** | **Feat: GitHub Actions CI (.github/workflows/ci.yml) + docs/ARCHITECTURE.md (3 Mermaid diagrams)** |
+| v2.10.1 | 2026-05-29 | Docs: Security section added to STAKEHOLDER-SUMMARY.md |
+| v2.10.2 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.9.1–v2.10.1) |
+| v2.10.3 | 2026-05-29 | Docs: full version audit — v2.10.2 entries added to all history files; BACKLOG.md current version corrected; REGRESSION.md catches up v2.7.0–v2.10.3 |
+| **v2.11.0** | **2026-05-29** | **Milestone: 3rd party code review complete — 7 people (5 USA, 2 EU) + 4 AI analyzers; all findings fixed or documented; Gemini hallucinations recorded in fail log** |
 
 ---
 
@@ -79,6 +89,10 @@ wc -c < $FILE
 | v2.5.x | 2026-05-29 | npm test broken: Playwright ReferenceError: require is not defined in ES module scope | Fixed v2.6.0: added playwright.config.js with explicit testDir/testMatch; split npm test from npm run test:e2e |
 | v2.5.x | 2026-05-29 | package.json version (2.4.6) out of sync with VERSION (2.5.2) | Fixed v2.6.0: pre-commit hook now syncs package.json automatically |
 | v2.5.x | 2026-05-29 | ip-api.com returns HTTP 403 on HTTPS — free plan doesn't support SSL | Fixed v2.6.0: replaced with ipapi.co (free, HTTPS, returns latitude/longitude/timezone) |
+| v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): hallucinated "Primer components used" — no framework exists, single HTML file by design (ADR-001) | NOT a bug. Architecture documented in ADR-001. Lesson: AI code review assumes standard patterns; without ADR context it hallucinates dependencies. |
+| v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): hallucinated "API keys exposure risk" — no API keys exist in codebase | NOT a bug. Zero-key design is explicit (ADR-002). Lesson: AI scanner found a risk that cannot exist because of an architectural decision it did not have access to. |
+| v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): recommended "backend proxy for API calls" — no server in this architecture | NOT applicable. ADR-001 documents the no-server decision. Lesson: AI gives generic security advice without reading architectural constraints. |
+| v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): valid finding — security controls not visible in stakeholder docs | Fixed v2.10.1: explicit Security section added to STAKEHOLDER-SUMMARY.md. One real finding among three hallucinations. |
 
 ---
 
@@ -150,6 +164,15 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 ### GitHub Pages URL
 - Live URL: `https://jmantyne.github.io/situation-monitor/situation-monitor.html`
 - Pages configured: branch `main` / `/(root)`
+
+### AI code review requires architectural context — do not treat findings as ground truth
+- At v2.11.0, Gemini AI reviewed the codebase and produced 3 hallucinations out of 4 findings
+- Hallucination 1: "Primer components used" — no framework exists (ADR-001: single HTML file)
+- Hallucination 2: "API keys exposure risk" — no API keys exist by design (ADR-002)
+- Hallucination 3: "Add backend proxy" — no server in this architecture (ADR-001)
+- Valid finding: security controls not described in stakeholder docs — fixed in v2.10.1
+- Root cause: AI analysis matched generic web app patterns; ADRs were not in context
+- Rule: Always cross-reference AI review findings against ADRs before acting on them
 
 ### Versioning scheme (from v2.0.0 onwards)
 - Use semantic versioning: MAJOR.MINOR.PATCH stored in VERSION file

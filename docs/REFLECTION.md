@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-27
 **Version:** v2.3.4
-**Author:** Jussi Mäntynен
+**Author:** Jussi Mantynen
 
 ---
 

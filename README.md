@@ -13,8 +13,9 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-002](docs/ADR-002.md) | API selection — free, key-free, real-time data |
 | [ADR-003](docs/ADR-003.md) | Automated regression testing — pre-commit hook + semver |
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
+| [ARCHITECTURE](docs/ARCHITECTURE.md) | Agentic workflow diagram + runtime data architecture (Mermaid) |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
-| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v2.4 interactive map, v2.5 configurable cities, v3.0 native app |
+| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.0 interactive map, v3.1 configurable cities, v4.0+ native app |
 | [REFLECTION](docs/REFLECTION.md) | What I learned — from VIC-20 to Holodeck in 4 days |
 | [STAKEHOLDER-SUMMARY](docs/STAKEHOLDER-SUMMARY.md) | Non-technical project summary |
 
@@ -157,3 +158,13 @@ Expected (from official Leaflet 1.9.4 release):
 | **v2.5.0** | **2026-05-28** | **Fix: r.ok check before r.json(); npm test wired to real tests; package.json version synced** |
 | v2.5.1 | 2026-05-28 | Fix: vendor name removed from REGRESSION.md heading |
 | **v2.6.0** | **2026-05-29** | **Fix: Playwright config, package.json sync in hook, ip-api.com → ipapi.co; docs: HARNESS.md, STAKEHOLDER-SUMMARY.md, Known Limitations** |
+| v2.7.0 | 2026-05-29 | Style: author name standardized to "Jussi Mantynen (jmantyne)" in package.json and STAKEHOLDER-SUMMARY.md |
+| v2.8.0 | 2026-05-29 | Style: (jmantyne) handle removed from internal docs BACKLOG.md and REFLECTION.md |
+| v2.8.1 | 2026-05-29 | Docs: HARNESS.md references upgraded — Martin Fowler primary, isoratas.fi secondary |
+| **v2.9.0** | **2026-05-29** | **Docs: backlog reversion — v3.0 interactive map, v3.1 configurable cities, v4.0+ native app** |
+| v2.9.1 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.7.0–v2.9.0) |
+| **v2.10.0** | **2026-05-29** | **Feat: GitHub Actions CI (smoke test on every push/PR) + docs/ARCHITECTURE.md (3 Mermaid diagrams)** |
+| v2.10.1 | 2026-05-29 | Docs: Security section added to STAKEHOLDER-SUMMARY.md — no API keys, CSP, SRI, XSS, HTTPS |
+| v2.10.2 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.9.1–v2.10.1) |
+| v2.10.3 | 2026-05-29 | Docs: full version audit — v2.10.2 entries added to all history files; BACKLOG.md current version corrected; REGRESSION.md catches up v2.7.0–v2.10.3 |
+| **v2.11.0** | **2026-05-29** | **Milestone: 3rd party code review complete — 7 people (5 USA, 2 EU) + 4 AI analyzers incl. Sulo; all findings fixed or documented; Gemini hallucinations recorded in fail log** |

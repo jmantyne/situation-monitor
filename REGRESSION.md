@@ -7,6 +7,139 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.11.0 — 2026-05-29 — 3rd party code review milestone
+
+**Change:** Minor release milestone. Full external review completed by 7 people (5 USA, 2 EU)
+and 4 AI analyzers including Sulo (Finnish AI agent). All findings reviewed, fixed, or
+documented with rationale. No changes to `situation-monitor.html`.
+
+**Review findings and disposition:**
+
+| Finding | Source | Disposition |
+|---------|--------|-------------|
+| npm test broken — Playwright ESM error | Code review | ✅ Fixed v2.6.0 |
+| package.json version out of sync with VERSION | Code review | ✅ Fixed v2.6.0: hook auto-syncs |
+| ip-api.com returns HTTP 403 over HTTPS | Code review | ✅ Fixed v2.6.0: replaced with ipapi.co |
+| Backlog version numbers wrong (v2.4/v2.5 vs v3.0/v3.1) | Reviewer feedback | ✅ Fixed v2.9.0 |
+| Security controls not described in stakeholder docs | Gemini AI (valid) | ✅ Fixed v2.10.1: Security section added |
+| "Primer components used" | Gemini AI — **hallucination** | ❌ No framework exists. ADR-001: single HTML file, no build step |
+| "API keys exposure risk" | Gemini AI — **hallucination** | ❌ No API keys by design. ADR-002: all APIs free and key-free |
+| "Add backend proxy for API calls" | Gemini AI — **hallucination** | ❌ No server in this architecture. ADR-001: no server |
+
+**Gemini hallucination analysis:**
+Gemini produced 3 hallucinations from 4 findings (75% error rate on security review).
+Root cause: AI analysis matched generic web app patterns without access to ADRs.
+It assumed frameworks, API keys, and a server — none of which exist in this project.
+The one valid finding (missing security docs) was acted on immediately.
+This is documented as a harness lesson: AI code review requires architectural context.
+Raw code analysis is insufficient — the ADRs must be in context for findings to be valid.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| All code review findings actioned | ✅ | Fixed or documented with rationale |
+| Gemini hallucinations documented in fail log | ✅ | AI-WORKFLOW.md fail log — 4 entries |
+| Gemini hallucinations documented in lessons learned | ✅ | AI-WORKFLOW.md lessons section |
+| Smoke test 13/13 | ✅ | No HTML changes |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: All findings resolved. Review cycle closed.**
+
+**Decision: ✅ APPROVED — v2.11.0**
+
+---
+
+### v2.10.3 — 2026-05-29 — Full version audit
+
+**Change:** Docs-only. Full cross-file version number audit: v2.10.2 entries added to all history
+files (AI-WORKFLOW.md, README.md, REGRESSION.md); BACKLOG.md current version corrected from v2.8.1
+to v2.10.3; REGRESSION.md catches up v2.7.0–v2.10.3 with brief docs-only entries.
+No changes to `situation-monitor.html`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| VERSION = 2.10.3 | ✅ | Bumped by pre-commit hook (BACKLOG.md = 1 counted file → patch) |
+| package.json = 2.10.3 | ✅ | Synced by pre-commit hook |
+| AI-WORKFLOW.md has v2.10.2 and v2.10.3 entries | ✅ | |
+| README.md has v2.10.2 and v2.10.3 entries | ✅ | |
+| REGRESSION.md has entries through v2.10.3 | ✅ | |
+| BACKLOG.md current version = v2.10.3 | ✅ | Was v2.8.1 |
+| Smoke test 13/13 | ✅ | No HTML changes |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v2.10.3**
+
+---
+
+### v2.10.2 — 2026-05-29 — Docs only
+
+**Change:** Version history synced across README.md and AI-WORKFLOW.md (v2.9.1–v2.10.1 entries).
+No changes to `situation-monitor.html`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test 13/13 | ✅ | No HTML changes |
+| VERSION = 2.10.2 | ✅ | |
+| package.json = 2.10.2 | ✅ | |
+
+**Result: All checks passed — docs only**
+
+---
+
+### v2.10.1 — 2026-05-29 — Docs only
+
+**Change:** Security section added to `docs/STAKEHOLDER-SUMMARY.md`. No HTML changes.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test 13/13 | ✅ | No HTML changes |
+
+**Result: Docs only — no regression risk**
+
+---
+
+### v2.10.0 — 2026-05-29 — GitHub Actions CI + Architecture docs
+
+**Change:** `.github/workflows/ci.yml` added (smoke test on every push/PR). `docs/ARCHITECTURE.md`
+added (3 Mermaid diagrams: agentic workflow, runtime data, harness components). No HTML changes.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| CI workflow triggers on push to main and claude/** | ✅ | |
+| CI runs `npm test` (smoke only) | ✅ | No Playwright in CI |
+| Architecture diagrams render in GitHub | ✅ | Mermaid supported natively |
+| Smoke test 13/13 | ✅ | No HTML changes |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v2.10.0**
+
+---
+
+### v2.7.0 – v2.9.1 — 2026-05-29 — Style and docs only
+
+**Changes:**
+- v2.7.0: Author name standardized to "Jussi Mantynen (jmantyne)" in package.json and STAKEHOLDER-SUMMARY.md
+- v2.8.0: (jmantyne) handle removed from internal docs (BACKLOG.md, REFLECTION.md)
+- v2.8.1: HARNESS.md references upgraded — Martin Fowler primary, isoratas.fi secondary
+- v2.9.0: BACKLOG.md version numbers corrected (v2.4→v3.0, v2.5→v3.1, Future v3.0+→v4.0+); README and STAKEHOLDER-SUMMARY updated
+- v2.9.1: Version history synced across README and AI-WORKFLOW.md
+
+No changes to `situation-monitor.html` in any of these versions.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test 13/13 | ✅ | No HTML changes across all five versions |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: Docs/style only — no regression risk**
+
+---
+
 ### v2.6.0 — 2026-05-29 — Bug fixes + harness documentation
 
 **Change:** Three bug fixes: (1) `playwright.config.js` added to resolve ES module conflict in
