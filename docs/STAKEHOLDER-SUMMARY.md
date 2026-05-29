@@ -68,7 +68,7 @@ See [`docs/HARNESS.md`](HARNESS.md) for the full explanation.
 
 | Limitation | Detail |
 |------------|--------|
-| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.0 |
+| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.1 |
 | No historical data | Only shows current conditions; trend charts planned for v3.0+ |
 | Free API rate limits | Open-Meteo allows ~10 000 calls/day — sufficient for personal use |
 | No offline mode | Requires internet connection for map tiles, weather data, and fonts |

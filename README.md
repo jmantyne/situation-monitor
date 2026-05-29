@@ -14,7 +14,7 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-003](docs/ADR-003.md) | Automated regression testing — pre-commit hook + semver |
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
-| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v2.4 interactive map, v2.5 configurable cities, v3.0 native app |
+| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.0 interactive map, v3.1 configurable cities, v4.0+ native app |
 | [REFLECTION](docs/REFLECTION.md) | What I learned — from VIC-20 to Holodeck in 4 days |
 | [STAKEHOLDER-SUMMARY](docs/STAKEHOLDER-SUMMARY.md) | Non-technical project summary |
 
