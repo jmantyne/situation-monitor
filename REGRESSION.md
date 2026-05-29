@@ -7,28 +7,28 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
-### v2.11.0 — 2026-05-29 — Full version audit
+### v2.10.3 — 2026-05-29 — Full version audit
 
 **Change:** Docs-only. Full cross-file version number audit: v2.10.2 entries added to all history
 files (AI-WORKFLOW.md, README.md, REGRESSION.md); BACKLOG.md current version corrected from v2.8.1
-to v2.11.0; REGRESSION.md catches up v2.7.0–v2.11.0 with brief docs-only entries.
+to v2.10.3; REGRESSION.md catches up v2.7.0–v2.10.3 with brief docs-only entries.
 No changes to `situation-monitor.html`.
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| VERSION = 2.11.0 | ✅ | Bumped by pre-commit hook (4 files changed → minor) |
-| package.json = 2.11.0 | ✅ | Synced by pre-commit hook |
-| AI-WORKFLOW.md has v2.10.2 and v2.11.0 entries | ✅ | |
-| README.md has v2.10.2 and v2.11.0 entries | ✅ | |
-| REGRESSION.md has entries through v2.11.0 | ✅ | |
-| BACKLOG.md current version = v2.11.0 | ✅ | Was v2.8.1 |
+| VERSION = 2.10.3 | ✅ | Bumped by pre-commit hook (BACKLOG.md = 1 counted file → patch) |
+| package.json = 2.10.3 | ✅ | Synced by pre-commit hook |
+| AI-WORKFLOW.md has v2.10.2 and v2.10.3 entries | ✅ | |
+| README.md has v2.10.2 and v2.10.3 entries | ✅ | |
+| REGRESSION.md has entries through v2.10.3 | ✅ | |
+| BACKLOG.md current version = v2.10.3 | ✅ | Was v2.8.1 |
 | Smoke test 13/13 | ✅ | No HTML changes |
 | No Finnish characters in HTML | ✅ | |
 | 11 cities present | ✅ | |
 
 **Result: All checks passed**
 
-**Decision: ✅ APPROVED — v2.11.0**
+**Decision: ✅ APPROVED — v2.10.3**
 
 ---
 
