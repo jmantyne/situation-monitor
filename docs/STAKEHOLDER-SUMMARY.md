@@ -64,6 +64,22 @@ See [`docs/HARNESS.md`](HARNESS.md) for the full explanation.
 
 ---
 
+## Security
+
+This project was designed with security as an explicit requirement, not an afterthought.
+
+| Control | Status | Detail |
+|---------|--------|--------|
+| **No API keys** | ✅ | All 5 data sources are free and key-free. There are no credentials in the codebase — and no credentials to expose. |
+| **Content Security Policy (CSP)** | ✅ | Browser-enforced policy locks all network calls to 4 known domains. No other connections are possible. |
+| **Subresource Integrity (SRI)** | ✅ | Leaflet.js and CSS are SHA-256 verified. If the CDN is tampered with, the browser blocks the load. |
+| **XSS audit** | ✅ | All dynamic content uses numbers and hardcoded strings — no user input is ever inserted into the DOM. |
+| **HTTPS** | ✅ | GitHub Pages enforces HTTPS — encrypted transport only. |
+
+The threat model, options considered, and implementation decisions are documented in [`docs/ADR-004.md`](ADR-004.md).
+
+---
+
 ## Known Limitations
 
 | Limitation | Detail |
