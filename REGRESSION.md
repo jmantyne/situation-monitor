@@ -7,6 +7,48 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.11.0 — 2026-05-29 — 3rd party code review milestone
+
+**Change:** Minor release milestone. Full external review completed by 7 people (5 USA, 2 EU)
+and 4 AI analyzers including Sulo (Finnish AI agent). All findings reviewed, fixed, or
+documented with rationale. No changes to `situation-monitor.html`.
+
+**Review findings and disposition:**
+
+| Finding | Source | Disposition |
+|---------|--------|-------------|
+| npm test broken — Playwright ESM error | Code review | ✅ Fixed v2.6.0 |
+| package.json version out of sync with VERSION | Code review | ✅ Fixed v2.6.0: hook auto-syncs |
+| ip-api.com returns HTTP 403 over HTTPS | Code review | ✅ Fixed v2.6.0: replaced with ipapi.co |
+| Backlog version numbers wrong (v2.4/v2.5 vs v3.0/v3.1) | Reviewer feedback | ✅ Fixed v2.9.0 |
+| Security controls not described in stakeholder docs | Gemini AI (valid) | ✅ Fixed v2.10.1: Security section added |
+| "Primer components used" | Gemini AI — **hallucination** | ❌ No framework exists. ADR-001: single HTML file, no build step |
+| "API keys exposure risk" | Gemini AI — **hallucination** | ❌ No API keys by design. ADR-002: all APIs free and key-free |
+| "Add backend proxy for API calls" | Gemini AI — **hallucination** | ❌ No server in this architecture. ADR-001: no server |
+
+**Gemini hallucination analysis:**
+Gemini produced 3 hallucinations from 4 findings (75% error rate on security review).
+Root cause: AI analysis matched generic web app patterns without access to ADRs.
+It assumed frameworks, API keys, and a server — none of which exist in this project.
+The one valid finding (missing security docs) was acted on immediately.
+This is documented as a harness lesson: AI code review requires architectural context.
+Raw code analysis is insufficient — the ADRs must be in context for findings to be valid.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| All code review findings actioned | ✅ | Fixed or documented with rationale |
+| Gemini hallucinations documented in fail log | ✅ | AI-WORKFLOW.md fail log — 4 entries |
+| Gemini hallucinations documented in lessons learned | ✅ | AI-WORKFLOW.md lessons section |
+| Smoke test 13/13 | ✅ | No HTML changes |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: All findings resolved. Review cycle closed.**
+
+**Decision: ✅ APPROVED — v2.11.0**
+
+---
+
 ### v2.10.3 — 2026-05-29 — Full version audit
 
 **Change:** Docs-only. Full cross-file version number audit: v2.10.2 entries added to all history
