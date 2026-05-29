@@ -33,6 +33,18 @@ if [ -f "$VERSION_FILE" ]; then
 
   echo "$NEW_VERSION" > "$VERSION_FILE"
   git add "$VERSION_FILE"
+
+  # Sync package.json version to match VERSION
+  if command -v node >/dev/null 2>&1 && [ -f "package.json" ]; then
+    node -e "
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+pkg.version = '${NEW_VERSION}';
+fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+"
+    git add "package.json"
+    echo "📦 package.json synced to ${NEW_VERSION}"
+  fi
 fi
 
 # ── Regression checks (only when situation-monitor.html is staged) ────────
@@ -61,7 +73,7 @@ done
 [ $FAIL -eq 0 ] && echo "✅ All required cities present"
 
 # 3. API endpoints
-for EP in "api.open-meteo.com" "air-quality-api.open-meteo.com" "sunrise-sunset.org" "ip-api.com"; do
+for EP in "api.open-meteo.com" "air-quality-api.open-meteo.com" "sunrise-sunset.org" "ipapi.co"; do
   if ! grep -q "$EP" "$FILE"; then
     echo "❌ Missing API: $EP"; FAIL=1
   fi

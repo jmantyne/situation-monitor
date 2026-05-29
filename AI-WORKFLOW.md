@@ -59,6 +59,7 @@ wc -c < $FILE
 | v2.4.5 | 2026-05-27 | CLAUDE.md renamed to AI-WORKFLOW.md; pre-commit hook reference updated |
 | v2.5.0 | 2026-05-28 | Fix: r.ok check before r.json() in fetchCityData; npm test wired to real tests; package.json version synced |
 | v2.5.1 | 2026-05-28 | Fix: vendor name removed from REGRESSION.md v2.5.0 heading |
+| **v2.6.0** | **2026-05-29** | **Fix: playwright.config.js; pre-commit hook syncs package.json; ip-api.com → ipapi.co (HTTPS); docs/HARNESS.md; docs/STAKEHOLDER-SUMMARY.md; Known Limitations in README** |
 
 ---
 
@@ -75,6 +76,9 @@ wc -c < $FILE
 | v2.1.0 | 2026-05-27 | JS SRI hash wrong — sourced from training data, not verified against live CDN; site broken | Fixed v2.1.1: correct hash from user curl verification on Mac |
 | v2.2.0 | 2026-05-27 | README and CLAUDE.md not updated when ADR-001–004 were added to docs/ — user had to point it out | Fixed v2.2.1: README ADR table and version history updated |
 | v2.3.1 | 2026-05-27 | README and CLAUDE.md not updated when BACKLOG.md was added — same process error repeated | Fixed v2.3.3: BACKLOG added to README docs table and version history; fail log updated |
+| v2.5.x | 2026-05-29 | npm test broken: Playwright ReferenceError: require is not defined in ES module scope | Fixed v2.6.0: added playwright.config.js with explicit testDir/testMatch; split npm test from npm run test:e2e |
+| v2.5.x | 2026-05-29 | package.json version (2.4.6) out of sync with VERSION (2.5.2) | Fixed v2.6.0: pre-commit hook now syncs package.json automatically |
+| v2.5.x | 2026-05-29 | ip-api.com returns HTTP 403 on HTTPS — free plan doesn't support SSL | Fixed v2.6.0: replaced with ipapi.co (free, HTTPS, returns latitude/longitude/timezone) |
 
 ---
 
@@ -129,7 +133,7 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 | Weather, UV, wind, pressure | api.open-meteo.com |
 | AQI, PM2.5, NO2 | air-quality-api.open-meteo.com |
 | Sunrise / sunset | api.sunrise-sunset.org |
-| Home city (IP) | ip-api.com |
+| Home city (IP) | ipapi.co (replaced ip-api.com v2.6.0 — free HTTPS endpoint) |
 | Map tiles | CartoDB Voyager (Leaflet) |
 
 ---

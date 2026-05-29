@@ -7,6 +7,40 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.6.0 — 2026-05-29 — Bug fixes + harness documentation
+
+**Change:** Three bug fixes: (1) `playwright.config.js` added to resolve ES module conflict in
+Playwright test runner; (2) pre-commit hook now syncs `package.json` version to match `VERSION`
+automatically; (3) `ip-api.com` replaced with `ipapi.co` — free HTTPS endpoint, same data shape.
+New documents: `docs/HARNESS.md` (harness architecture explanation) and
+`docs/STAKEHOLDER-SUMMARY.md` (non-technical project overview). `README.md` now includes a
+Known Limitations section. Test script split: `npm test` = smoke only, `npm run test:e2e` = Playwright.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| playwright.config.js resolves ESM conflict | ✅ | CJS config with explicit testMatch |
+| npm test runs smoke only | ✅ | No Playwright dependency for basic test run |
+| npm run test:e2e wired to Playwright | ✅ | Separate script for browser tests |
+| package.json version synced by hook | ✅ | Hook writes version after every VERSION bump |
+| ip-api.com removed from CSP connect-src | ✅ | Replaced with ipapi.co |
+| ipapi.co added to CSP connect-src | ✅ | |
+| tryIP() uses latitude/longitude (ipapi.co fields) | ✅ | Was lat/lon (ip-api.com fields) |
+| r.ok check added to tryIP() | ✅ | Consistent with fetchCityData pattern |
+| pre-commit hook checks for ipapi.co | ✅ | Was ip-api.com |
+| HARNESS.md added to docs/ | ✅ | Harness framing per "Näytä harnessisi" article |
+| STAKEHOLDER-SUMMARY.md added to docs/ | ✅ | Non-technical overview with Known Limitations |
+| README Known Limitations added | ✅ | Honest product constraints documented |
+| Smoke test 13/13 | ✅ | All structural checks pass |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+| File size under 200 000 bytes | ✅ | |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v2.6.0**
+
+---
+
 ### v2.5.0 — 2026-05-28 — Three fixes from 3rd party code review
 
 **Change:** Three fixes from external code review: (1) `r.ok` check before `r.json()` in
