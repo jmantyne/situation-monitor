@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Situation Monitor</title>
   <!-- CSP: restricts connections to known APIs only; inline scripts required for single-file build -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://unpkg.com; style-src 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src https://fonts.gstatic.com; img-src https://*.basemaps.cartocdn.com data: blob:; connect-src https://api.open-meteo.com https://air-quality-api.open-meteo.com https://api.sunrise-sunset.org https://ip-api.com; frame-ancestors 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://unpkg.com; style-src 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src https://fonts.gstatic.com; img-src https://*.basemaps.cartocdn.com data: blob:; connect-src https://api.open-meteo.com https://air-quality-api.open-meteo.com https://api.sunrise-sunset.org https://ipapi.co; frame-ancestors 'none';">
   <!-- SRI: verify Leaflet integrity — hash computed from official Leaflet 1.9.4 release -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -1248,12 +1248,12 @@ function tryGPS() {
 }
 
 function tryIP() {
-  fetch('https://ip-api.com/json/')
-    .then(r => r.json())
+  fetch('https://ipapi.co/json/')
+    .then(r => { if (!r.ok) throw new Error(`ip ${r.status}`); return r.json(); })
     .then(d => {
       let city = null;
       if (d.timezone) city = cityByTimezone(d.timezone);
-      if (!city && d.lat !== undefined && d.lon !== undefined) city = closestCity(d.lat, d.lon);
+      if (!city && d.latitude !== undefined && d.longitude !== undefined) city = closestCity(d.latitude, d.longitude);
       if (city) { markHome(city); }
       else { useDefault(); }
     })

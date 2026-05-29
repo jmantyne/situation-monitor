@@ -13,19 +13,21 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-002](docs/ADR-002.md) | API selection — free, key-free, real-time data |
 | [ADR-003](docs/ADR-003.md) | Automated regression testing — pre-commit hook + semver |
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
+| [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
 | [BACKLOG](docs/BACKLOG.md) | Product roadmap — v2.4 interactive map, v2.5 configurable cities, v3.0 native app |
 | [REFLECTION](docs/REFLECTION.md) | What I learned — from VIC-20 to Holodeck in 4 days |
+| [STAKEHOLDER-SUMMARY](docs/STAKEHOLDER-SUMMARY.md) | Non-technical project summary |
 
 ## Tests
 
 ```bash
-# Playwright (requires browser — run on Mac/Linux with Node.js)
+# Structural smoke test — no browser needed, always available
+npm test
+
+# End-to-end Playwright tests — requires Chromium
 npm install
 npx playwright install chromium
-npx playwright test
-
-# Structural smoke test (no browser needed)
-node -e "$(cat tests/smoke.js)"
+npm run test:e2e
 ```
 
 ## How to open
@@ -77,7 +79,7 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 | Weather, UV, pressure, wind | [Open-Meteo](https://open-meteo.com) |
 | Air quality (AQI, PM2.5, NO₂) | [Open-Meteo AQI](https://air-quality-api.open-meteo.com) |
 | Sunrise / sunset | [Sunrise-Sunset.org](https://sunrise-sunset.org) |
-| Home city detection | [ip-api.com](https://ip-api.com) |
+| Home city detection | [ipapi.co](https://ipapi.co) |
 | Map tiles | [CartoDB Voyager](https://carto.com) |
 
 ## Security (v2.1.0)
@@ -92,7 +94,7 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 
 ### Privacy note
 
-Home city detection uses [ip-api.com](https://ip-api.com) — your IP address is sent to this service once on page load to determine the nearest city. No other personal data is transmitted. All other APIs receive only coordinates (lat/lon), not identity.
+Home city detection uses [ipapi.co](https://ipapi.co) — your IP address is sent to this service once on page load to determine the nearest city. No other personal data is transmitted. All other APIs receive only coordinates (lat/lon), not identity.
 
 ### SRI hash verification
 
@@ -106,6 +108,16 @@ curl -s https://unpkg.com/leaflet@1.9.4/dist/leaflet.js  | openssl dgst -sha256 
 Expected (from official Leaflet 1.9.4 release):
 - CSS: `p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=`
 - JS: `20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=`
+
+## Known Limitations
+
+| Limitation | Detail |
+|------------|--------|
+| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.0 |
+| No historical data | Shows current conditions only; trend charts planned for v3.0+ |
+| Free API rate limits | Open-Meteo allows ~10 000 calls/day — sufficient for personal use |
+| No offline mode | Requires internet connection for map tiles, weather data, and fonts |
+| IP geolocation accuracy | Home city detection uses IP location; imprecise behind VPN |
 
 ## Layouts
 
@@ -144,3 +156,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.4.6 | 2026-05-27 | Pre-commit hook updated for AI-WORKFLOW.md filename |
 | **v2.5.0** | **2026-05-28** | **Fix: r.ok check before r.json(); npm test wired to real tests; package.json version synced** |
 | v2.5.1 | 2026-05-28 | Fix: vendor name removed from REGRESSION.md heading |
+| **v2.6.0** | **2026-05-29** | **Fix: Playwright config, package.json sync in hook, ip-api.com → ipapi.co; docs: HARNESS.md, STAKEHOLDER-SUMMARY.md, Known Limitations** |
