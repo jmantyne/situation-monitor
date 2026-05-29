@@ -64,6 +64,9 @@ wc -c < $FILE
 | v2.8.0 | 2026-05-29 | Style: (jmantyne) handle removed from internal docs |
 | v2.8.1 | 2026-05-29 | Docs: HARNESS.md upgraded — Martin Fowler as primary source, isoratas.fi secondary |
 | **v2.9.0** | **2026-05-29** | **Docs: backlog reversion — v3.0/v3.1/v4.0+; README and STAKEHOLDER-SUMMARY updated** |
+| v2.9.1 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md |
+| **v2.10.0** | **2026-05-29** | **Feat: GitHub Actions CI (.github/workflows/ci.yml) + docs/ARCHITECTURE.md (3 Mermaid diagrams)** |
+| v2.10.1 | 2026-05-29 | Docs: Security section added to STAKEHOLDER-SUMMARY.md |
 
 ---
 

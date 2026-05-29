@@ -162,3 +162,6 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.8.0 | 2026-05-29 | Style: (jmantyne) handle removed from internal docs BACKLOG.md and REFLECTION.md |
 | v2.8.1 | 2026-05-29 | Docs: HARNESS.md references upgraded — Martin Fowler primary, isoratas.fi secondary |
 | **v2.9.0** | **2026-05-29** | **Docs: backlog reversion — v3.0 interactive map, v3.1 configurable cities, v4.0+ native app** |
+| v2.9.1 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.7.0–v2.9.0) |
+| **v2.10.0** | **2026-05-29** | **Feat: GitHub Actions CI (smoke test on every push/PR) + docs/ARCHITECTURE.md (3 Mermaid diagrams)** |
+| v2.10.1 | 2026-05-29 | Docs: Security section added to STAKEHOLDER-SUMMARY.md — no API keys, CSP, SRI, XSS, HTTPS |
