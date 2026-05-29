@@ -7,6 +7,97 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v2.11.0 — 2026-05-29 — Full version audit
+
+**Change:** Docs-only. Full cross-file version number audit: v2.10.2 entries added to all history
+files (AI-WORKFLOW.md, README.md, REGRESSION.md); BACKLOG.md current version corrected from v2.8.1
+to v2.11.0; REGRESSION.md catches up v2.7.0–v2.11.0 with brief docs-only entries.
+No changes to `situation-monitor.html`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| VERSION = 2.11.0 | ✅ | Bumped by pre-commit hook (4 files changed → minor) |
+| package.json = 2.11.0 | ✅ | Synced by pre-commit hook |
+| AI-WORKFLOW.md has v2.10.2 and v2.11.0 entries | ✅ | |
+| README.md has v2.10.2 and v2.11.0 entries | ✅ | |
+| REGRESSION.md has entries through v2.11.0 | ✅ | |
+| BACKLOG.md current version = v2.11.0 | ✅ | Was v2.8.1 |
+| Smoke test 13/13 | ✅ | No HTML changes |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v2.11.0**
+
+---
+
+### v2.10.2 — 2026-05-29 — Docs only
+
+**Change:** Version history synced across README.md and AI-WORKFLOW.md (v2.9.1–v2.10.1 entries).
+No changes to `situation-monitor.html`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test 13/13 | ✅ | No HTML changes |
+| VERSION = 2.10.2 | ✅ | |
+| package.json = 2.10.2 | ✅ | |
+
+**Result: All checks passed — docs only**
+
+---
+
+### v2.10.1 — 2026-05-29 — Docs only
+
+**Change:** Security section added to `docs/STAKEHOLDER-SUMMARY.md`. No HTML changes.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test 13/13 | ✅ | No HTML changes |
+
+**Result: Docs only — no regression risk**
+
+---
+
+### v2.10.0 — 2026-05-29 — GitHub Actions CI + Architecture docs
+
+**Change:** `.github/workflows/ci.yml` added (smoke test on every push/PR). `docs/ARCHITECTURE.md`
+added (3 Mermaid diagrams: agentic workflow, runtime data, harness components). No HTML changes.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| CI workflow triggers on push to main and claude/** | ✅ | |
+| CI runs `npm test` (smoke only) | ✅ | No Playwright in CI |
+| Architecture diagrams render in GitHub | ✅ | Mermaid supported natively |
+| Smoke test 13/13 | ✅ | No HTML changes |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v2.10.0**
+
+---
+
+### v2.7.0 – v2.9.1 — 2026-05-29 — Style and docs only
+
+**Changes:**
+- v2.7.0: Author name standardized to "Jussi Mantynen (jmantyne)" in package.json and STAKEHOLDER-SUMMARY.md
+- v2.8.0: (jmantyne) handle removed from internal docs (BACKLOG.md, REFLECTION.md)
+- v2.8.1: HARNESS.md references upgraded — Martin Fowler primary, isoratas.fi secondary
+- v2.9.0: BACKLOG.md version numbers corrected (v2.4→v3.0, v2.5→v3.1, Future v3.0+→v4.0+); README and STAKEHOLDER-SUMMARY updated
+- v2.9.1: Version history synced across README and AI-WORKFLOW.md
+
+No changes to `situation-monitor.html` in any of these versions.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test 13/13 | ✅ | No HTML changes across all five versions |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: Docs/style only — no regression risk**
+
+---
+
 ### v2.6.0 — 2026-05-29 — Bug fixes + harness documentation
 
 **Change:** Three bug fixes: (1) `playwright.config.js` added to resolve ES module conflict in
