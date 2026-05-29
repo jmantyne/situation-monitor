@@ -98,6 +98,7 @@ wc -c < $FILE
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): hallucinated "API keys exposure risk" — no API keys exist in codebase | NOT a bug. Zero-key design is explicit (ADR-002). Lesson: AI scanner found a risk that cannot exist because of an architectural decision it did not have access to. |
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): recommended "backend proxy for API calls" — no server in this architecture | NOT applicable. ADR-001 documents the no-server decision. Lesson: AI gives generic security advice without reading architectural constraints. |
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): valid finding — security controls not visible in stakeholder docs | Fixed v2.10.1: explicit Security section added to STAKEHOLDER-SUMMARY.md. One real finding among three hallucinations. |
+| v2.14.1 | 2026-05-29 | PR #5 merged while commits were still being pushed to the branch — 4 commits (version headers, version audit) left stranded without a PR | Fixed: PR #6 created for the stranded commits. Rule added: never merge a PR while the AI is still committing to that branch. Confirm "done?" before merging. |
 
 ---
 
@@ -169,6 +170,11 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 ### GitHub Pages URL
 - Live URL: `https://jmantyne.github.io/situation-monitor/situation-monitor.html`
 - Pages configured: branch `main` / `/(root)`
+
+### Never merge a PR while the AI is still committing to the branch
+- At v2.14.1, PR #5 was merged before the AI finished pushing commits to `fix/mermaid-dark-colors`
+- Result: 4 commits (version headers, version audit) were stranded — required a second PR (#6)
+- Rule: always ask "are you done?" before merging a PR during an active AI session
 
 ### AI code review requires architectural context — do not treat findings as ground truth
 - At v2.11.0, Gemini AI reviewed the codebase and produced 3 hallucinations out of 4 findings
