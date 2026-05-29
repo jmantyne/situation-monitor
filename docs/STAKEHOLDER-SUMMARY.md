@@ -43,7 +43,7 @@ See [`docs/HARNESS.md`](HARNESS.md) for the full explanation.
 
 | | |
 |-|-|
-| **Developer** | Jussi Mantyne |
+| **Developer** | Jussi Mantynen (jmantyne) |
 | **Tools** | Claude AI (coding assistant), iPhone (primary device) |
 | **Duration** | 4 days, May 2026 |
 | **Starting point** | Blank page |
