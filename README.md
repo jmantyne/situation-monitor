@@ -157,3 +157,7 @@ Expected (from official Leaflet 1.9.4 release):
 | **v2.5.0** | **2026-05-28** | **Fix: r.ok check before r.json(); npm test wired to real tests; package.json version synced** |
 | v2.5.1 | 2026-05-28 | Fix: vendor name removed from REGRESSION.md heading |
 | **v2.6.0** | **2026-05-29** | **Fix: Playwright config, package.json sync in hook, ip-api.com → ipapi.co; docs: HARNESS.md, STAKEHOLDER-SUMMARY.md, Known Limitations** |
+| v2.7.0 | 2026-05-29 | Style: author name standardized to "Jussi Mantynen (jmantyne)" in package.json and STAKEHOLDER-SUMMARY.md |
+| v2.8.0 | 2026-05-29 | Style: (jmantyne) handle removed from internal docs BACKLOG.md and REFLECTION.md |
+| v2.8.1 | 2026-05-29 | Docs: HARNESS.md references upgraded — Martin Fowler primary, isoratas.fi secondary |
+| **v2.9.0** | **2026-05-29** | **Docs: backlog reversion — v3.0 interactive map, v3.1 configurable cities, v4.0+ native app** |
