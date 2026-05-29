@@ -1,5 +1,9 @@
 # Architecture — Situation Monitor
 
+**Date:** 2026-05-29
+**Added in:** v2.10.0
+**Author:** Jussi Mantynen
+
 Two diagrams: the agentic development workflow, and the runtime data architecture.
 
 ---

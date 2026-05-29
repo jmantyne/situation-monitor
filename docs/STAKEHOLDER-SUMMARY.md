@@ -1,5 +1,9 @@
 # Situation Monitor — Project Summary
 
+**Date:** 2026-05-29
+**Added in:** v2.6.0
+**Author:** Jussi Mantynen
+
 A real-time weather and air quality dashboard for 11 cities across 4 continents.
 Built as a single HTML file. No server, no login, no cost to run.
 
