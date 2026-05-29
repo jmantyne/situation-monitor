@@ -70,6 +70,11 @@ wc -c < $FILE
 | v2.10.2 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.9.1–v2.10.1) |
 | v2.10.3 | 2026-05-29 | Docs: full version audit — v2.10.2 entries added to all history files; BACKLOG.md current version corrected; REGRESSION.md catches up v2.7.0–v2.10.3 |
 | **v2.11.0** | **2026-05-29** | **Milestone: 3rd party code review complete — 7 people (5 USA, 2 EU) + 4 AI analyzers; all findings fixed or documented; Gemini hallucinations recorded in fail log** |
+| v2.11.1 | 2026-05-29 | Fix: Mermaid diagram colors — near-black fills replaced with GitHub-readable colors in agentic workflow and harness components map |
+| v2.12.0 | 2026-05-29 | Docs: version headers (Date · Added in · Author) added to HARNESS.md, STAKEHOLDER-SUMMARY.md, ARCHITECTURE.md |
+| v2.13.0 | 2026-05-29 | Docs: version header label corrected in all three docs |
+| v2.14.0 | 2026-05-29 | Docs: "Added in" replaces "Current version" in doc headers — stable reference |
+| v2.14.1 | 2026-05-29 | Docs: version audit — v2.11.1–v2.14.0 entries added to all history files; BACKLOG.md current version corrected |
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "situation-monitor",
-  "version": "2.14.0",
+  "version": "2.14.1",
   "description": "Real-time environmental dashboard for 11 cities across the world. Built as a single self-contained HTML file — no build step, no server required.",
   "main": "index.js",
   "directories": {
