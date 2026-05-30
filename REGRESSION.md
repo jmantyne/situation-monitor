@@ -42,6 +42,71 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ---
 
+### v3.0.0 — 2026-05-29 — Major release: harness example
+
+**Change:** Major release milestone. Formalizes the project as a documented AI workflow
+harness example. BACKLOG.md restructured: v3.0 = this release (delivered), v3.1 = interactive
+map, v3.2 = configurable cities, v4.0+ = native app. Version references updated across
+README.md, STAKEHOLDER-SUMMARY.md. No changes to `situation-monitor.html`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| VERSION = 3.0.0 | ✅ | Bumped by pre-commit hook (RELEASE_LEVEL=major) |
+| package.json = 3.0.0 | ✅ | Synced by hook |
+| BACKLOG.md — Delivered v3.0 section added | ✅ | |
+| BACKLOG.md — v3.0→v3.1, v3.1→v3.2 (EN + FI) | ✅ | |
+| README.md — roadmap references updated | ✅ | v3.1 map, v3.2 cities |
+| STAKEHOLDER-SUMMARY.md — limitations updated | ✅ | v3.2, v3.1+ |
+| Smoke test 13/13 | ✅ | No HTML changes |
+| No Finnish characters in HTML | ✅ | |
+| 11 cities present | ✅ | |
+
+**Result: All checks passed**
+
+**Decision: ✅ APPROVED — v3.0.0**
+
+---
+
+### v2.14.1 — 2026-05-29 — Version audit
+
+**Change:** Docs-only. Version audit: v2.11.1–v2.14.0 entries added to README.md, AI-WORKFLOW.md,
+REGRESSION.md. BACKLOG.md current version corrected from v2.11.0 to v2.14.1.
+No changes to `situation-monitor.html`.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| VERSION = 2.14.1 | ✅ | Bumped by pre-commit hook |
+| package.json = 2.14.1 | ✅ | Synced by hook |
+| README.md history through v2.14.1 | ✅ | |
+| AI-WORKFLOW.md history through v2.14.1 | ✅ | |
+| BACKLOG.md current version = v2.14.1 | ✅ | Was v2.11.0 |
+| Smoke test 13/13 | ✅ | No HTML changes |
+
+**Result: All checks passed — docs only**
+
+---
+
+### v2.14.0 – v2.11.1 — 2026-05-29 — Diagram colors + doc headers
+
+**Changes (newest first):**
+- v2.14.0: "Added in" replaces "Current version" in doc headers — stable reference, won't change on every version bump
+- v2.13.0: Version header label corrected in HARNESS.md, STAKEHOLDER-SUMMARY.md, ARCHITECTURE.md
+- v2.12.0: Version headers (Date · Added in · Author) added to HARNESS.md, STAKEHOLDER-SUMMARY.md, ARCHITECTURE.md
+- v2.11.1: Mermaid diagram colors — near-black fills (`#080816`, `#10102e`, `#0a1a0a`) replaced with GitHub-readable solid colors
+
+No changes to `situation-monitor.html` in any of these versions.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Harness Components Map readable on GitHub | ✅ | Subgraph background #e8f0fe (was #080816) |
+| Agentic Workflow nodes readable on GitHub | ✅ | Solid colors with white text |
+| Version headers present in 3 new docs | ✅ | HARNESS.md, STAKEHOLDER-SUMMARY.md, ARCHITECTURE.md |
+| Smoke test 13/13 | ✅ | No HTML changes across all four versions |
+
+**Result: Docs/diagram fixes — no regression risk**
+
+---
+
 ### v2.11.0 — 2026-05-29 — 3rd party code review milestone
 
 **Change:** Minor release milestone. Full external review completed by 7 people (5 USA, 2 EU)

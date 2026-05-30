@@ -15,7 +15,7 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Agentic workflow diagram + runtime data architecture (Mermaid) |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
-| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.0 interactive map, v3.1 configurable cities, v4.0+ native app |
+| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.1 interactive map, v3.2 configurable cities, v4.0+ native app |
 | [REFLECTION](docs/REFLECTION.md) | What I learned — from VIC-20 to Holodeck in 4 days |
 | [STAKEHOLDER-SUMMARY](docs/STAKEHOLDER-SUMMARY.md) | Non-technical project summary |
 
@@ -114,8 +114,8 @@ Expected (from official Leaflet 1.9.4 release):
 
 | Limitation | Detail |
 |------------|--------|
-| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.0 |
-| No historical data | Shows current conditions only; trend charts planned for v3.0+ |
+| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.2 |
+| No historical data | Shows current conditions only; trend charts planned for v3.1+ |
 | Free API rate limits | Open-Meteo allows ~10 000 calls/day — sufficient for personal use |
 | No offline mode | Requires internet connection for map tiles, weather data, and fonts |
 | IP geolocation accuracy | Home city detection uses IP location; imprecise behind VPN |
@@ -168,6 +168,12 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.10.2 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.9.1–v2.10.1) |
 | v2.10.3 | 2026-05-29 | Docs: full version audit — v2.10.2 entries added to all history files; BACKLOG.md current version corrected; REGRESSION.md catches up v2.7.0–v2.10.3 |
 | **v2.11.0** | **2026-05-29** | **Milestone: 3rd party code review complete — 7 people (5 USA, 2 EU) + 4 AI analyzers incl. Sulo; all findings fixed or documented; Gemini hallucinations recorded in fail log** |
+| **v3.0.0** | **2026-05-29** | **Major release: harness example version — CI, branch protection, full documentation, roadmap v3.1/v3.2/v4.0+ established** |
+| v2.11.1 | 2026-05-29 | Fix: Mermaid diagram colors — near-black fills replaced with GitHub-readable colors in agentic workflow and harness components map |
+| v2.12.0 | 2026-05-29 | Docs: version headers (Date · Added in · Author) added to HARNESS.md, STAKEHOLDER-SUMMARY.md, ARCHITECTURE.md |
+| v2.13.0 | 2026-05-29 | Docs: version header label corrected in all three docs |
+| v2.14.0 | 2026-05-29 | Docs: "Added in" replaces "Current version" in doc headers — stable reference, won't change on every version bump |
+| v2.14.1 | 2026-05-29 | Docs: version audit — v2.11.1–v2.14.0 entries added to all history files; BACKLOG.md current version corrected |
 | v3.0.1 | 2026-05-30 | License: MIT License added |
 | v3.0.2 | 2026-05-30 | Fix: VERSION corrected after dev branch sync issue |
 | v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |

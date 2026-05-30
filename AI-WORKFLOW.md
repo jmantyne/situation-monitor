@@ -70,6 +70,12 @@ wc -c < $FILE
 | v2.10.2 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.9.1–v2.10.1) |
 | v2.10.3 | 2026-05-29 | Docs: full version audit — v2.10.2 entries added to all history files; BACKLOG.md current version corrected; REGRESSION.md catches up v2.7.0–v2.10.3 |
 | **v2.11.0** | **2026-05-29** | **Milestone: 3rd party code review complete — 7 people (5 USA, 2 EU) + 4 AI analyzers; all findings fixed or documented; Gemini hallucinations recorded in fail log** |
+| **v3.0.0** | **2026-05-29** | **Major release: harness example version — CI, branch protection, full docs, roadmap v3.1/v3.2/v4.0+ established; BACKLOG.md reversion** |
+| v2.11.1 | 2026-05-29 | Fix: Mermaid diagram colors — near-black fills replaced with GitHub-readable colors in agentic workflow and harness components map |
+| v2.12.0 | 2026-05-29 | Docs: version headers (Date · Added in · Author) added to HARNESS.md, STAKEHOLDER-SUMMARY.md, ARCHITECTURE.md |
+| v2.13.0 | 2026-05-29 | Docs: version header label corrected in all three docs |
+| v2.14.0 | 2026-05-29 | Docs: "Added in" replaces "Current version" in doc headers — stable reference |
+| v2.14.1 | 2026-05-29 | Docs: version audit — v2.11.1–v2.14.0 entries added to all history files; BACKLOG.md current version corrected |
 | v3.0.1 | 2026-05-30 | License: MIT License added |
 | v3.0.2 | 2026-05-30 | Fix: VERSION corrected after dev branch sync issue |
 | v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
@@ -96,6 +102,7 @@ wc -c < $FILE
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): hallucinated "API keys exposure risk" — no API keys exist in codebase | NOT a bug. Zero-key design is explicit (ADR-002). Lesson: AI scanner found a risk that cannot exist because of an architectural decision it did not have access to. |
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): recommended "backend proxy for API calls" — no server in this architecture | NOT applicable. ADR-001 documents the no-server decision. Lesson: AI gives generic security advice without reading architectural constraints. |
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): valid finding — security controls not visible in stakeholder docs | Fixed v2.10.1: explicit Security section added to STAKEHOLDER-SUMMARY.md. One real finding among three hallucinations. |
+| v2.14.1 | 2026-05-29 | PR #5 merged while commits were still being pushed to the branch — 4 commits (version headers, version audit) left stranded without a PR | Fixed: PR #6 created for the stranded commits. Rule added: never merge a PR while the AI is still committing to that branch. Confirm "done?" before merging. |
 | v3.0.2 | 2026-05-30 | VERSION loop: dev branch was at v2.11.0 when MIT license committed; hook bumped to v2.11.1 instead of v3.0.1; correction commit bumped again to v3.0.2 | Fixed v3.0.3: all docs updated. Rule added: always rebase dev branch from main before committing, or predict the hook bump and write the correct version into docs before committing. |
 
 ---
@@ -168,6 +175,11 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 ### GitHub Pages URL
 - Live URL: `https://jmantyne.github.io/situation-monitor/situation-monitor.html`
 - Pages configured: branch `main` / `/(root)`
+
+### Never merge a PR while the AI is still committing to the branch
+- At v2.14.1, PR #5 was merged before the AI finished pushing commits to `fix/mermaid-dark-colors`
+- Result: 4 commits (version headers, version audit) were stranded — required a second PR (#6)
+- Rule: always ask "are you done?" before merging a PR during an active AI session
 
 ### AI code review requires architectural context — do not treat findings as ground truth
 - At v2.11.0, Gemini AI reviewed the codebase and produced 3 hallucinations out of 4 findings

@@ -1,14 +1,28 @@
 # Backlog — Situation Monitor
 
 **Date:** 2026-05-29
-**Current version:** v2.11.0
+**Current version:** v3.0.0
 **Author:** Jussi Mantynen
 
 ---
 
 ## 🇬🇧 English
 
-### Must Have — v3.0
+### Delivered — v3.0
+
+**Harness example: CI, security, documentation, 3rd party review**
+
+This release formalizes the project as a documented AI workflow harness example:
+
+- GitHub Actions CI with required smoke test before merge
+- Branch protection enforced on main
+- 3rd party code review: 7 people (5 USA, 2 EU) + 4 AI analyzers — all findings fixed or documented
+- Full documentation: HARNESS.md, ARCHITECTURE.md, STAKEHOLDER-SUMMARY.md, 4 ADRs
+- Security hardened: CSP, SRI, XSS audit, no API keys, HTTPS
+
+---
+
+### Must Have — v3.1
 
 **Interactive map: zoom and tap to add any city**
 
@@ -22,7 +36,7 @@ This is the single most requested interaction pattern for a monitoring dashboard
 
 ---
 
-### Nice to Have — v3.1
+### Nice to Have — v3.2
 
 **User-configurable city list**
 
@@ -57,19 +71,19 @@ The current stack uses free APIs exclusively. A paid tier could unlock:
 
 ---
 
-### Won't Do in v3.0 — deferred to v3.1
+### Won't Do in v3.1 — deferred to v3.2
 
-**Fixed city count of 11 — not configurable in v3.0**
+**Fixed city count of 11 — not configurable in v3.1**
 
-The 11 cities are deliberately chosen and fixed for v3.0. The layout was designed and tested specifically for a 15-inch MacBook Pro screen and an iPhone display — 11 cards fill the grid correctly on both. The author is personally interested in exactly these 11 locations.
+The 11 cities are deliberately chosen and fixed for v3.1. The layout was designed and tested specifically for a 15-inch MacBook Pro screen and an iPhone display — 11 cards fill the grid correctly on both. The author is personally interested in exactly these 11 locations.
 
-Increasing the city count would break the 6-column desktop grid (currently 11 city cards + 1 map = 12 cells), require responsive layout rework, and dilute the focused, curated feel of the dashboard. This constraint is a design decision for v3.0 — configurable cities are planned for v3.1.
+Increasing the city count would break the 6-column desktop grid (currently 11 city cards + 1 map = 12 cells), require responsive layout rework, and dilute the focused, curated feel of the dashboard. This constraint is a design decision for v3.1 — configurable cities are planned for v3.2.
 
 ---
 
 ## 🇫🇮 Suomi (alkuperäinen)
 
-### Must Have — v3.0
+### Must Have — v3.1
 
 **Interaktiivinen kartta: zoomaus ja kosketus mille tahansa kaupungille**
 
@@ -81,7 +95,7 @@ Nykyinen kartta on vain luku — pinit ovat kiinni 11 ennakkoon asetetussa kaupu
 
 ---
 
-### Nice to Have — v3.1
+### Nice to Have — v3.2
 
 **Käyttäjän muokattava kaupunkilista**
 
@@ -116,11 +130,10 @@ Nykyinen stack käyttää yksinomaan ilmaisia APItä. Maksullinen taso voisi ava
 
 ---
 
-### Tietoisesti jätetty pois v3.0:ssa — siirretty v3.1:een
+### Tietoisesti jätetty pois v3.1:stä — siirretty v3.2:een
 
-**Kiinteä 11 kaupungin määrä — ei muutettavissa v3.0:ssa**
+**Kiinteä 11 kaupungin määrä — ei muutettavissa v3.1:ssä**
 
-11 kaupunkia on tarkoituksella valittu ja kiinnitetty v3.0:aan. Layout on suunniteltu ja testattu nimenomaan 15" MacBook Pro -näytölle ja iPhone-näytölle — 11 korttia täyttää gridin oikein molemmissa. Minua kiinnostavat henkilökohtaisesti juuri nämä 11 paikkaa.
+11 kaupunkia on tarkoituksella valittu ja kiinnitetty v3.1:een. Layout on suunniteltu ja testattu nimenomaan 15" MacBook Pro -näytölle ja iPhone-näytölle — 11 korttia täyttää gridin oikein molemmissa. Minua kiinnostavat henkilökohtaisesti juuri nämä 11 paikkaa.
 
-Kaupunkien määrän kasvattaminen rikkoisi 6-sarakkeen desktop-gridin (tällä hetkellä 11 kaupunkikorttia + 1 kartta = 12 solua), vaatisi responsiivisen layoutin uudelleensuunnittelun ja hajottaisi dashboardin harkitun, kuratoidun ilmeen. Tämä on v3.0:n designpäätös — muokattavat kaupungit on suunniteltu v3.1:een.
-
+Kaupunkien määrän kasvattaminen rikkoisi 6-sarakkeen desktop-gridin (tällä hetkellä 11 kaupunkikorttia + 1 kartta = 12 solua), vaatisi responsiivisen layoutin uudelleensuunnittelun ja hajottaisi dashboardin harkitun, kuratoidun ilmeen. Tämä on v3.1:n designpäätös — muokattavat kaupungit on suunniteltu v3.2:een.

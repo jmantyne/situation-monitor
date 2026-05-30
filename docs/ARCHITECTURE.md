@@ -1,5 +1,9 @@
 # Architecture — Situation Monitor
 
+**Date:** 2026-05-29
+**Added in:** v2.10.0
+**Author:** Jussi Mantynen
+
 Two diagrams: the agentic development workflow, and the runtime data architecture.
 
 ---
@@ -31,12 +35,12 @@ flowchart TD
     CI -->|"✅ green"| LS
     LS -->|"observe · learn · iterate"| H
 
-    style H fill:#001a4d,color:#4488ff,stroke:#0033aa
-    style A fill:#10102e,color:#c0cfe8,stroke:#2a2a5a
-    style HC fill:#0a1a0a,color:#00ff88,stroke:#004400
-    style BL fill:#1a0505,color:#ff3355,stroke:#440000
-    style CI fill:#0a1020,color:#ffd54f,stroke:#333300
-    style LS fill:#0d0d1f,color:#4488ff,stroke:#2a2a5a
+    style H fill:#1565c0,color:#ffffff,stroke:#0d47a1
+    style A fill:#6a1b9a,color:#ffffff,stroke:#4a148c
+    style HC fill:#2e7d32,color:#ffffff,stroke:#1b5e20
+    style BL fill:#c62828,color:#ffffff,stroke:#b71c1c
+    style CI fill:#f57f17,color:#000000,stroke:#e65100
+    style LS fill:#0277bd,color:#ffffff,stroke:#01579b
 ```
 
 **The harness is the path between Human and Live Site.**
@@ -112,7 +116,7 @@ flowchart TD
     CI -->|"independent check"| OUTPUT
     HC -->|"local check"| OUTPUT
 
-    style MODEL fill:#10102e,color:#c0cfe8,stroke:#2a2a5a
-    style OUTPUT fill:#0a1a0a,color:#00ff88,stroke:#004400
-    style HARNESS fill:#080816,color:#4488ff,stroke:#0033aa
+    style MODEL fill:#6a1b9a,color:#ffffff,stroke:#4a148c
+    style OUTPUT fill:#2e7d32,color:#ffffff,stroke:#1b5e20
+    style HARNESS fill:#e8f0fe,color:#1a237e,stroke:#3949ab
 ```

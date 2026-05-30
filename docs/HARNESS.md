@@ -1,5 +1,9 @@
 # Show Me Your Harness — How I Built One
 
+**Date:** 2026-05-29
+**Added in:** v2.6.0
+**Author:** Jussi Mantynen
+
 This document describes the harness built around Situation Monitor
 and how it illustrates the harness engineering framework emerging in 2026.
 
