@@ -71,6 +71,8 @@ wc -c < $FILE
 | v2.10.3 | 2026-05-29 | Docs: full version audit — v2.10.2 entries added to all history files; BACKLOG.md current version corrected; REGRESSION.md catches up v2.7.0–v2.10.3 |
 | **v2.11.0** | **2026-05-29** | **Milestone: 3rd party code review complete — 7 people (5 USA, 2 EU) + 4 AI analyzers; all findings fixed or documented; Gemini hallucinations recorded in fail log** |
 | v3.0.1 | 2026-05-30 | License: MIT License added |
+| v3.0.2 | 2026-05-30 | Fix: VERSION corrected after dev branch sync issue |
+| v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
 
 ---
 
@@ -94,6 +96,7 @@ wc -c < $FILE
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): hallucinated "API keys exposure risk" — no API keys exist in codebase | NOT a bug. Zero-key design is explicit (ADR-002). Lesson: AI scanner found a risk that cannot exist because of an architectural decision it did not have access to. |
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): recommended "backend proxy for API calls" — no server in this architecture | NOT applicable. ADR-001 documents the no-server decision. Lesson: AI gives generic security advice without reading architectural constraints. |
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): valid finding — security controls not visible in stakeholder docs | Fixed v2.10.1: explicit Security section added to STAKEHOLDER-SUMMARY.md. One real finding among three hallucinations. |
+| v3.0.2 | 2026-05-30 | VERSION loop: dev branch was at v2.11.0 when MIT license committed; hook bumped to v2.11.1 instead of v3.0.1; correction commit bumped again to v3.0.2 | Fixed v3.0.3: all docs updated. Rule added: always rebase dev branch from main before committing, or predict the hook bump and write the correct version into docs before committing. |
 
 ---
 
@@ -175,12 +178,20 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 - Root cause: AI analysis matched generic web app patterns; ADRs were not in context
 - Rule: Always cross-reference AI review findings against ADRs before acting on them
 
+### Dev branch must be synced with main before committing
+- At v3.0.1/v3.0.2, MIT license was committed on dev branch that was still at v2.11.0
+- Hook bumped v2.11.0 → v2.11.1 instead of v3.0.0 → v3.0.1
+- Correction commit bumped again: v3.0.2. Docs and VERSION were out of sync.
+- Rule: always `git rebase main` or `git merge main` before committing on a dev branch
+- Alternative: predict the hook bump (always +1 patch for excluded-only commits) and write that version into docs BEFORE committing — then hook bumps to exactly that number
+
 ### Versioning scheme (from v2.0.0 onwards)
 - Use semantic versioning: MAJOR.MINOR.PATCH stored in VERSION file
 - Single change committed → patch bump (x.y.Z)
 - Multiple changes committed together → minor bump (x.Y.0)
 - Major bump (X.0.0) → manual edit of VERSION for breaking changes
 - Version managed by pre-commit hook, independent of GitHub
+- Hook excludes REGRESSION.md, AI-WORKFLOW.md, README.md, VERSION from file count
 
 ---
 

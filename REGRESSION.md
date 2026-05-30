@@ -7,6 +7,22 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v3.0.3 — 2026-05-30 — Docs: VERSION loop documented in fail log and lessons learned
+
+**Change:** AI-WORKFLOW.md fail log + lessons learned updated. No HTML changes.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| No HTML changes | ✅ | Docs only |
+| Fail log updated | ✅ | VERSION loop v3.0.1–v3.0.2 documented |
+| Lessons learned updated | ✅ | Dev branch sync rule added |
+
+**Result: All checks passed.**
+
+**Decision: ✅ APPROVED — v3.0.3**
+
+---
+
 ### v3.0.1 — 2026-05-30 — MIT License added
 
 **Change:** LICENSE file added (MIT). No changes to situation-monitor.html.
