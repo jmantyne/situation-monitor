@@ -7,6 +7,25 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v3.0.1 — 2026-05-30 — MIT License added
+
+**Change:** LICENSE file added (MIT). No changes to situation-monitor.html.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| City count | ✅ 11 | |
+| No duplicate IDs | ✅ | |
+| Score functions present | ✅ | uvScore · aqiScore · windScore · degToCompass |
+| Media queries present | ✅ | portrait + landscape |
+| File size | ✅ 48 425 bytes | < 200 000 limit |
+| No Finnish characters in HTML | ✅ | |
+
+**Result: All checks passed.**
+
+**Decision: ✅ APPROVED — v3.0.1**
+
+---
+
 ### v2.11.0 — 2026-05-29 — 3rd party code review milestone
 
 **Change:** Minor release milestone. Full external review completed by 7 people (5 USA, 2 EU)

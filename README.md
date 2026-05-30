@@ -168,3 +168,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.10.2 | 2026-05-29 | Docs: version history synced across README and AI-WORKFLOW.md (v2.9.1–v2.10.1) |
 | v2.10.3 | 2026-05-29 | Docs: full version audit — v2.10.2 entries added to all history files; BACKLOG.md current version corrected; REGRESSION.md catches up v2.7.0–v2.10.3 |
 | **v2.11.0** | **2026-05-29** | **Milestone: 3rd party code review complete — 7 people (5 USA, 2 EU) + 4 AI analyzers incl. Sulo; all findings fixed or documented; Gemini hallucinations recorded in fail log** |
+| v3.0.1 | 2026-05-30 | License: MIT License added |
