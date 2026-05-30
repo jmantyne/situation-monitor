@@ -174,3 +174,6 @@ Expected (from official Leaflet 1.9.4 release):
 | v2.13.0 | 2026-05-29 | Docs: version header label corrected in all three docs |
 | v2.14.0 | 2026-05-29 | Docs: "Added in" replaces "Current version" in doc headers — stable reference, won't change on every version bump |
 | v2.14.1 | 2026-05-29 | Docs: version audit — v2.11.1–v2.14.0 entries added to all history files; BACKLOG.md current version corrected |
+| v3.0.1 | 2026-05-30 | License: MIT License added |
+| v3.0.2 | 2026-05-30 | Fix: VERSION corrected after dev branch sync issue |
+| v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
