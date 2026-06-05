@@ -7,6 +7,31 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v3.1.0 — 2026-06-04 — Temporary inspection overlay
+
+**Change:** Interactive map inspection added. A user can click/tap the map to create one temporary
+floating inspection overlay with weather and AQI for that location. The overlay is intentionally
+outside the 1 map + 11 curated city grid and is not persisted.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test pass | ✅ | `npm test` — 21/21 |
+| Playwright pass | ✅ | `npx playwright test` — 13/13 |
+| Manual desktop review | ⏳ | Verify map click, overlay position, data render, dismiss |
+| Manual iPhone portrait review | ⏳ | Verify overlay does not break map/cards layout |
+| Manual iPhone landscape review | ⏳ | Verify overlay does not break map/legend layout |
+| No grid layout regression | ✅ | Playwright confirms 11 `.city-card` elements after inspection |
+| Overlay visual quality | ⏳ | Floating overlay is compact and distinct from city cards |
+| Dismiss behavior | ✅ | Playwright verifies dismiss removes overlay |
+| No persistence | ✅ | No storage path implemented; temporary state is runtime-only |
+| No localStorage | ✅ | Smoke test confirms absent |
+| No new API domains | ✅ | Existing CSP connect-src domains unchanged |
+| XSS audit | ✅ | Overlay values rendered through textContent; no user input inserted as HTML |
+
+**Decision:** Automated validation passed. Manual device review pending.
+
+---
+
 ### v3.0.3 — 2026-05-30 — Docs: VERSION loop documented in fail log and lessons learned
 
 **Change:** AI-WORKFLOW.md fail log + lessons learned updated. No HTML changes.

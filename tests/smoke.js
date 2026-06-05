@@ -2,6 +2,8 @@
 // Usage: node tests/smoke.js
 const fs = require('fs');
 const html = fs.readFileSync('situation-monitor.html', 'utf8');
+const csp = html.match(/Content-Security-Policy" content="([^"]+)"/)?.[1] || '';
+const connectSrc = csp.match(/connect-src ([^;]+);/)?.[1] || '';
 const tests = [
   ['Page title',              /<title>Situation Monitor<\/title>/.test(html)],
   ['11 cities in CITIES array', (html.match(/{ id: '/g)||[]).length === 11],
@@ -16,6 +18,14 @@ const tests = [
   ['5-minute API refresh',    /5 \* 60 \* 1000/.test(html)],
   ['Portrait media query',    /max-width.*orientation: portrait/.test(html)],
   ['No Finnish characters',   !/(ä|ö|Ä|Ö)/.test(html)],
+  ['No localStorage',         !/localStorage/.test(html)],
+  ['No reverse geocoding domain', !/(nominatim|geocode|geocoding|mapbox)/i.test(connectSrc)],
+  ['No new connect-src domains', connectSrc === 'https://api.open-meteo.com https://air-quality-api.open-meteo.com https://api.sunrise-sunset.org https://ipapi.co'],
+  ['Map click handler',       /map\.on\('click', handleMapInspectionClick\)/.test(html)],
+  ['Inspection generation counter', /let inspectionGeneration = 0/.test(html)],
+  ['removeInspection function', /function removeInspection/.test(html)],
+  ['Inspection overlay element', /id="inspection-overlay"/.test(html)],
+  ['fetchAllCities only uses CITIES', /Promise\.allSettled\(CITIES\.map\(city => fetchCityData\(city\)\)\)/.test(html)],
 ];
 let pass = 0, fail = 0;
 tests.forEach(([name, result]) => {

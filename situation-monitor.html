@@ -458,6 +458,128 @@
       letter-spacing: 0.1em;
     }
 
+    /* ── Temporary inspection overlay ── */
+    #inspection-overlay {
+      position: fixed;
+      right: 14px;
+      bottom: 64px;
+      z-index: 5000;
+      width: min(340px, calc(100vw - 28px));
+      background: #10102e;
+      border: 1px solid #4488ff;
+      border-top: 3px solid #4488ff;
+      border-radius: 8px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.78), 0 0 16px rgba(68,136,255,0.22);
+      overflow: hidden;
+    }
+
+    #inspection-overlay[hidden] { display: none; }
+
+    .inspection-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 10px 6px;
+      border-bottom: 1px solid #1e1e42;
+    }
+
+    .inspection-title-block {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .inspection-kicker {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.42rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.48);
+      text-transform: uppercase;
+    }
+
+    .inspection-title {
+      margin-top: 3px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: #4488ff;
+      text-transform: uppercase;
+    }
+
+    .inspection-coords {
+      margin-top: 4px;
+      font-size: 0.54rem;
+      letter-spacing: 0.06em;
+      color: #ffd54f;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #inspection-dismiss {
+      width: 26px;
+      height: 26px;
+      border: 1px solid #2a2a5a;
+      border-radius: 4px;
+      background: #12122a;
+      color: #c0cfe8;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.72rem;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    #inspection-dismiss:hover,
+    #inspection-dismiss:focus-visible {
+      border-color: #4488ff;
+      color: #ffffff;
+      outline: none;
+    }
+
+    .inspection-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px 10px 10px;
+    }
+
+    .inspection-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .inspection-label {
+      width: 54px;
+      flex-shrink: 0;
+      font-size: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.65);
+      text-transform: uppercase;
+    }
+
+    .inspection-value {
+      flex: 1;
+      min-width: 0;
+      font-size: 0.58rem;
+      letter-spacing: 0.05em;
+      color: #c0cfe8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .inspection-badge {
+      font-size: 0.42rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+
     /* ── Mobile portrait (iPhone 9:16) ── */
     @media (max-width: 500px) and (orientation: portrait) {
       /* Header */
@@ -502,6 +624,13 @@
       .data-label { font-size: 0.38rem; width: 30px; }
       .data-value { font-size: 0.42rem; }
       .sun-time   { font-size: 0.40rem; }
+      #inspection-overlay {
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        width: auto;
+      }
+      .inspection-body { max-height: 42vh; overflow-y: auto; }
 
       /* Legend: show with each group on its own row */
       #legend-bar {
@@ -554,6 +683,12 @@
       .data-label { font-size: 0.37rem; width: 28px; }
       .data-value { font-size: 0.42rem; }
       .sun-time   { font-size: 0.40rem; }
+      #inspection-overlay {
+        right: 8px;
+        bottom: 8px;
+        width: min(300px, calc(100vw - 16px));
+      }
+      .inspection-body { max-height: 52vh; overflow-y: auto; }
 
       /* Legend visible like portrait */
       #legend-bar {
@@ -709,6 +844,60 @@
   <div id="tip-ranges"></div>
 </div>
 
+<!-- Temporary inspection overlay: intentionally outside the 1 map + 11 city grid -->
+<section id="inspection-overlay" aria-live="polite" hidden>
+  <div class="inspection-head">
+    <div class="inspection-title-block">
+      <div class="inspection-kicker">Temporary</div>
+      <div class="inspection-title">Inspection</div>
+      <div class="inspection-coords" id="inspection-coords">--</div>
+    </div>
+    <button id="inspection-dismiss" type="button" aria-label="Dismiss inspection">X</button>
+  </div>
+  <div class="inspection-body">
+    <div class="inspection-row">
+      <span class="inspection-label">Status</span>
+      <span class="inspection-value" id="inspection-status">--</span>
+      <span class="inspection-badge" id="inspection-status-badge"></span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">UV</span>
+      <span class="inspection-value" id="inspection-uv">--</span>
+      <span class="inspection-badge" id="inspection-uv-badge"></span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">Temp</span>
+      <span class="inspection-value" id="inspection-temp">--</span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">Hum</span>
+      <span class="inspection-value" id="inspection-hum">--</span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">Pres</span>
+      <span class="inspection-value" id="inspection-pres">--</span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">Wind</span>
+      <span class="inspection-value" id="inspection-wind">--</span>
+      <span class="inspection-badge" id="inspection-wind-badge"></span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">AQI</span>
+      <span class="inspection-value" id="inspection-aqi">--</span>
+      <span class="inspection-badge" id="inspection-aqi-badge"></span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">PM2.5</span>
+      <span class="inspection-value" id="inspection-pm25">--</span>
+    </div>
+    <div class="inspection-row">
+      <span class="inspection-label">NO2</span>
+      <span class="inspection-value" id="inspection-no2">--</span>
+    </div>
+  </div>
+</section>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin="anonymous"></script>
@@ -741,6 +930,9 @@ const CITIES = [
 // ── State ──────────────────────────────────────────────────────────────────
 let homeCityId = null;
 let lastUpdated = null;
+let inspectionState = null;
+let inspectionMarker = null;
+let inspectionGeneration = 0;
 const cityData = {}; // id → { weather, air, sun }
 const mapMarkers = {}; // id → L.circleMarker
 
@@ -827,6 +1019,10 @@ function statusColor(status) {
 
 function computeStatus(city) {
   const d = cityData[city.id];
+  return computeStatusFromData(d);
+}
+
+function computeStatusFromData(d) {
   if (!d) return 'green';
   const uv   = d.weather ? uvScore(d.weather.uv)        : null;
   const aqi  = d.air     ? aqiScore(d.air.us_aqi)       : null;
@@ -855,8 +1051,16 @@ function aqiLabel(aqi) {
   return                 { text: 'HAZD', cls: 'aqi-hazd' };
 }
 
+function setBadge(el, text, cls) {
+  if (!el) return;
+  el.textContent = text || '';
+  el.className = 'inspection-badge' + (cls ? ' ' + cls : '');
+}
+
 // ── Build DOM ──────────────────────────────────────────────────────────────
 const cardsPanel = document.getElementById('cards-wrap');
+const inspectionOverlay = document.getElementById('inspection-overlay');
+const inspectionDismiss = document.getElementById('inspection-dismiss');
 
 CITIES.forEach(city => {
   const card = document.createElement('div');
@@ -946,7 +1150,8 @@ CITIES.forEach(city => {
     color: '#080816',
     weight: 1,
     fillColor: '#2a2a5a',
-    fillOpacity: 1
+    fillOpacity: 1,
+    bubblingMouseEvents: false
   }).addTo(map);
 
   marker.bindTooltip(city.flag + ' ' + city.name, {
@@ -968,6 +1173,8 @@ CITIES.forEach(city => {
   mapMarkers[city.id] = marker;
 });
 
+map.on('click', handleMapInspectionClick);
+
 function updateMapMarker(city, isHome) {
   const marker = mapMarkers[city.id];
   if (!marker) return;
@@ -980,6 +1187,173 @@ function updateMapMarker(city, isHome) {
     fillColor: color,
     fillOpacity: 1
   });
+}
+
+function handleMapInspectionClick(e) {
+  const location = createInspectionLocation(e.latlng.lat, e.latlng.lng);
+  inspectionGeneration += 1;
+  const generation = inspectionGeneration;
+  inspectionState = { location, data: null, loading: true, error: null };
+  showInspectionOverlay(location);
+  setInspectionLoading(location);
+  updateInspectionMarker(location, 'green');
+  fetchInspectionData(location, generation);
+}
+
+function createInspectionLocation(lat, lon) {
+  return {
+    id: 'temporary-inspection',
+    lat,
+    lon,
+    coords: formatInspectionCoords(lat, lon)
+  };
+}
+
+function showInspectionOverlay(location) {
+  if (!inspectionOverlay) return;
+  inspectionOverlay.hidden = false;
+  document.getElementById('inspection-coords').textContent = location.coords;
+}
+
+function setInspectionLoading(location) {
+  renderInspectionOverlay(location, { loading: true, weather: null, air: null, error: null });
+}
+
+function renderInspectionOverlay(location, dataState) {
+  showInspectionOverlay(location);
+  const loading = dataState.loading;
+  const w = dataState.weather || null;
+  const a = dataState.air || null;
+  const status = computeStatusFromData({ weather: w, air: a });
+
+  const statusEl = document.getElementById('inspection-status');
+  const uvEl = document.getElementById('inspection-uv');
+  const tempEl = document.getElementById('inspection-temp');
+  const humEl = document.getElementById('inspection-hum');
+  const presEl = document.getElementById('inspection-pres');
+  const windEl = document.getElementById('inspection-wind');
+  const aqiEl = document.getElementById('inspection-aqi');
+  const pm25El = document.getElementById('inspection-pm25');
+  const no2El = document.getElementById('inspection-no2');
+
+  if (loading) {
+    [statusEl, uvEl, tempEl, humEl, presEl, windEl, aqiEl, pm25El, no2El].forEach(el => {
+      if (el) el.textContent = 'loading...';
+    });
+    setBadge(document.getElementById('inspection-status-badge'), '', '');
+    setBadge(document.getElementById('inspection-uv-badge'), '', '');
+    setBadge(document.getElementById('inspection-wind-badge'), '', '');
+    setBadge(document.getElementById('inspection-aqi-badge'), '', '');
+    return;
+  }
+
+  if (dataState.error) {
+    if (statusEl) statusEl.textContent = 'Data unavailable';
+    [uvEl, tempEl, humEl, presEl, windEl, aqiEl, pm25El, no2El].forEach(el => {
+      if (el) el.textContent = '—';
+    });
+    setBadge(document.getElementById('inspection-status-badge'), '', '');
+    setBadge(document.getElementById('inspection-uv-badge'), '', '');
+    setBadge(document.getElementById('inspection-wind-badge'), '', '');
+    setBadge(document.getElementById('inspection-aqi-badge'), '', '');
+    return;
+  }
+
+  if (statusEl) statusEl.textContent = status.toUpperCase();
+  setBadge(document.getElementById('inspection-status-badge'), '●', status === 'green' ? 'uv-low' : status === 'yellow' ? 'uv-mod' : status === 'orange' ? 'uv-high' : 'uv-vhigh');
+
+  const uvVal = w ? w.uv : null;
+  if (uvVal !== null && uvVal !== undefined) {
+    const lbl = uvLabel(uvVal);
+    if (uvEl) uvEl.textContent = uvVal.toFixed(1);
+    setBadge(document.getElementById('inspection-uv-badge'), lbl.text, lbl.cls);
+  } else {
+    if (uvEl) uvEl.textContent = '—';
+    setBadge(document.getElementById('inspection-uv-badge'), '', '');
+  }
+
+  if (tempEl) {
+    tempEl.textContent = (w && w.temp !== null && w.temp !== undefined)
+      ? `${celsiusToF(w.temp)}°F / ${w.temp.toFixed(1)}°C`
+      : '—';
+  }
+  if (humEl) humEl.textContent = (w && w.hum !== null && w.hum !== undefined) ? `${w.hum}%` : '—';
+  if (presEl) {
+    const pres = w?.pres;
+    presEl.textContent = (pres !== null && pres !== undefined) ? `${Math.round(pres)} hPa` : '—';
+  }
+  if (windEl) {
+    const spd = w?.windSpeed;
+    const dir = w?.windDir;
+    if (spd !== null && spd !== undefined) {
+      const mph = Math.round(spd * 0.6214);
+      const kts = Math.round(spd * 0.5400);
+      windEl.textContent = `${degToCompass(dir)} ${mph}mph·${Math.round(spd)}km/h·${kts}kts`;
+      const wl = windLabel(spd);
+      setBadge(document.getElementById('inspection-wind-badge'), wl.text, wl.cls);
+    } else {
+      windEl.textContent = '—';
+      setBadge(document.getElementById('inspection-wind-badge'), '', '');
+    }
+  }
+
+  const aqiVal = a ? a.us_aqi : null;
+  if (aqiVal !== null && aqiVal !== undefined) {
+    const lbl = aqiLabel(aqiVal);
+    if (aqiEl) aqiEl.textContent = String(Math.round(aqiVal));
+    setBadge(document.getElementById('inspection-aqi-badge'), lbl.text, lbl.cls);
+  } else {
+    if (aqiEl) aqiEl.textContent = '—';
+    setBadge(document.getElementById('inspection-aqi-badge'), '', '');
+  }
+  if (pm25El) pm25El.textContent = (a && a.pm25 !== null && a.pm25 !== undefined) ? a.pm25.toFixed(1) : '—';
+  if (no2El) no2El.textContent = (a && a.no2 !== null && a.no2 !== undefined) ? a.no2.toFixed(1) : '—';
+}
+
+async function fetchInspectionData(location, generation) {
+  const data = await fetchEnvironmentalData(location.lat, location.lon, false);
+  if (!isCurrentInspectionGeneration(generation)) return;
+  const error = !data.weather && !data.air;
+  inspectionState = { location, data, loading: false, error };
+  renderInspectionOverlay(location, { ...data, loading: false, error });
+  updateInspectionMarker(location, computeStatusFromData(data));
+}
+
+function removeInspection() {
+  inspectionGeneration += 1;
+  inspectionState = null;
+  if (inspectionMarker) {
+    inspectionMarker.remove();
+    inspectionMarker = null;
+  }
+  if (inspectionOverlay) inspectionOverlay.hidden = true;
+}
+
+function formatInspectionCoords(lat, lon) {
+  const latDir = lat >= 0 ? 'N' : 'S';
+  const lonDir = lon >= 0 ? 'E' : 'W';
+  return `${latDir} ${Math.abs(lat).toFixed(3)}, ${lonDir} ${Math.abs(lon).toFixed(3)}`;
+}
+
+function updateInspectionMarker(location, status) {
+  if (inspectionMarker) inspectionMarker.remove();
+  inspectionMarker = L.circleMarker([location.lat, location.lon], {
+    radius: 8,
+    color: '#4488ff',
+    weight: 2,
+    fillColor: statusColor(status),
+    fillOpacity: 1,
+    bubblingMouseEvents: false
+  }).addTo(map);
+  inspectionMarker.bindTooltip('Temporary inspection', {
+    permanent: false,
+    direction: 'top',
+    offset: [0, -8]
+  });
+}
+
+function isCurrentInspectionGeneration(generation) {
+  return generation === inspectionGeneration && !!inspectionState;
 }
 
 // ── Clock tick ─────────────────────────────────────────────────────────────
@@ -1120,17 +1494,25 @@ function renderCityData(city) {
 
 // ── Data fetching ──────────────────────────────────────────────────────────
 async function fetchCityData(city) {
-  const { lat, lon, tz } = city;
+  const data = await fetchEnvironmentalData(city.lat, city.lon, true);
+  cityData[city.id] = data;
+  renderCityData(city);
+}
 
+async function fetchEnvironmentalData(lat, lon, includeSun) {
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,uv_index,surface_pressure,wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`;
   const airUrl     = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi,pm2_5,pm10,nitrogen_dioxide,ozone`;
   const sunUrl     = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0`;
 
-  const [weatherRes, airRes, sunRes] = await Promise.allSettled([
+  const requests = [
     fetch(weatherUrl).then(r => { if (!r.ok) throw new Error(`weather ${r.status}`); return r.json(); }),
-    fetch(airUrl).then(r => { if (!r.ok) throw new Error(`air ${r.status}`); return r.json(); }),
-    fetch(sunUrl).then(r => { if (!r.ok) throw new Error(`sun ${r.status}`); return r.json(); })
-  ]);
+    fetch(airUrl).then(r => { if (!r.ok) throw new Error(`air ${r.status}`); return r.json(); })
+  ];
+  if (includeSun) {
+    requests.push(fetch(sunUrl).then(r => { if (!r.ok) throw new Error(`sun ${r.status}`); return r.json(); }));
+  }
+
+  const [weatherRes, airRes, sunRes] = await Promise.allSettled(requests);
 
   // Parse weather
   let weather = null;
@@ -1165,7 +1547,7 @@ async function fetchCityData(city) {
 
   // Parse sun
   let sun = null;
-  if (sunRes.status === 'fulfilled') {
+  if (includeSun && sunRes && sunRes.status === 'fulfilled') {
     const j = sunRes.value;
     if (j && j.results && j.status === 'OK') {
       sun = {
@@ -1175,8 +1557,7 @@ async function fetchCityData(city) {
     }
   }
 
-  cityData[city.id] = { weather, air, sun };
-  renderCityData(city);
+  return { weather, air, sun };
 }
 
 async function fetchAllCities() {
@@ -1400,6 +1781,7 @@ document.getElementById('grid').addEventListener('mouseover', e => {
   else hideTip();
 });
 document.getElementById('grid').addEventListener('mouseleave', hideTip);
+inspectionDismiss.addEventListener('click', removeInspection);
 
 // ── Start ──────────────────────────────────────────────────────────────────
 tick();
