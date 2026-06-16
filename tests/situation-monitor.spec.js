@@ -83,6 +83,13 @@ async function openApp(page, options) {
   return api;
 }
 
+async function openAppWithStoredCity(page, city) {
+  await page.addInitScript(value => {
+    localStorage.setItem('situation-monitor.configurableCity.v1', JSON.stringify(value));
+  }, city);
+  return openApp(page);
+}
+
 async function clickMap(page, x = 90, y = 90) {
   await page.locator('#map').click({ position: { x, y } });
 }
@@ -177,6 +184,59 @@ test.describe('Situation Monitor', () => {
     api.enableInspectionMode();
     await clickMap(page);
     await expect(page.locator('.city-card')).toHaveCount(11);
+    for (const id of CITY_IDS) {
+      await expect(page.locator(`#card-${id}`)).toBeVisible();
+    }
+  });
+
+  test('saving an inspection creates one persistent configurable city card', async ({ page }) => {
+    const api = await openApp(page);
+    api.enableInspectionMode();
+    await clickMap(page, 120, 90);
+    await page.locator('#inspection-save').click();
+    await expect(page.locator('.city-card')).toHaveCount(12);
+    await expect(page.locator('#card-configurable-city')).toBeVisible();
+    await expect(page.locator('#card-configurable-city .card-name')).toHaveText('Saved Point');
+    await expect(page.locator('#card-configurable-city .home-badge')).toHaveText('SAVED');
+    const saved = await page.evaluate(() => localStorage.getItem('situation-monitor.configurableCity.v1'));
+    expect(saved).toContain('lat');
+    expect(saved).toContain('lon');
+  });
+
+  test('persistent configurable city reloads from storage', async ({ page }) => {
+    await openAppWithStoredCity(page, { lat: 35.0, lon: 139.0 });
+    await expect(page.locator('.city-card')).toHaveCount(12);
+    await expect(page.locator('#card-configurable-city')).toBeVisible();
+    await expect(page.locator('#temp-configurable-city')).toContainText('70.5°F / 21.4°C');
+  });
+
+  test('saving a second inspection replaces the existing configurable city', async ({ page }) => {
+    const api = await openAppWithStoredCity(page, { lat: 35.0, lon: 139.0 });
+    api.enableInspectionMode();
+    await expect(page.locator('.city-card')).toHaveCount(12);
+    await clickMap(page, 170, 120);
+    await page.locator('#inspection-save').click();
+    await expect(page.locator('.city-card')).toHaveCount(12);
+    await expect(page.locator('#card-configurable-city')).toHaveCount(1);
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCity.v1')));
+    expect(saved.lat).not.toBe(35.0);
+    expect(saved.lon).not.toBe(139.0);
+  });
+
+  test('removing the configurable city restores the 11 curated city boundary', async ({ page }) => {
+    await openAppWithStoredCity(page, { lat: 35.0, lon: 139.0 });
+    await expect(page.locator('.city-card')).toHaveCount(12);
+    await page.locator('#card-configurable-city .config-remove').click();
+    await expect(page.locator('.city-card')).toHaveCount(11);
+    await expect(page.locator('#card-configurable-city')).toHaveCount(0);
+    const saved = await page.evaluate(() => localStorage.getItem('situation-monitor.configurableCity.v1'));
+    expect(saved).toBeNull();
+  });
+
+  test('invalid persistent city data fails closed to curated cities only', async ({ page }) => {
+    await openAppWithStoredCity(page, { lat: 999, lon: 139.0 });
+    await expect(page.locator('.city-card')).toHaveCount(11);
+    await expect(page.locator('#card-configurable-city')).toHaveCount(0);
     for (const id of CITY_IDS) {
       await expect(page.locator(`#card-${id}`)).toBeVisible();
     }

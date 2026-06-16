@@ -18,14 +18,18 @@ const tests = [
   ['5-minute API refresh',    /5 \* 60 \* 1000/.test(html)],
   ['Portrait media query',    /max-width.*orientation: portrait/.test(html)],
   ['No Finnish characters',   !/(ä|ö|Ä|Ö)/.test(html)],
-  ['No localStorage',         !/localStorage/.test(html)],
+  ['Bounded localStorage persistence', /CONFIGURABLE_CITY_STORAGE_KEY/.test(html) && /localStorage\.setItem/.test(html) && /localStorage\.removeItem/.test(html)],
   ['No reverse geocoding domain', !/(nominatim|geocode|geocoding|mapbox)/i.test(connectSrc)],
   ['No new connect-src domains', connectSrc === 'https://api.open-meteo.com https://air-quality-api.open-meteo.com https://api.sunrise-sunset.org https://ipapi.co'],
   ['Map click handler',       /map\.on\('click', handleMapInspectionClick\)/.test(html)],
   ['Inspection generation counter', /let inspectionGeneration = 0/.test(html)],
   ['removeInspection function', /function removeInspection/.test(html)],
   ['Inspection overlay element', /id="inspection-overlay"/.test(html)],
-  ['fetchAllCities only uses CITIES', /Promise\.allSettled\(CITIES\.map\(city => fetchCityData\(city\)\)\)/.test(html)],
+  ['Inspection save button',   /id="inspection-save"/.test(html)],
+  ['Configurable city id',     /CONFIGURABLE_CITY_ID = 'configurable-city'/.test(html)],
+  ['Configurable city storage key', /situation-monitor\.configurableCity\.v1/.test(html)],
+  ['Display city boundary helper', /function allDisplayCities\(\)/.test(html)],
+  ['fetchAllCities uses bounded display cities', /Promise\.allSettled\(allDisplayCities\(\)\.map\(city => fetchCityData\(city\)\)\)/.test(html)],
 ];
 let pass = 0, fail = 0;
 tests.forEach(([name, result]) => {
