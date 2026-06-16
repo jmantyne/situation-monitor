@@ -1,6 +1,6 @@
 Document ID: SM-V3.2-INCREMENT-001-IMPLEMENTATION-RECORD
 
-Version: v0.0.1
+Version: v0.0.2
 
 Status: Implementation Record
 
@@ -16,46 +16,67 @@ Scope:
 
 11 curated cities + 1 persistent configurable city
 
-# Findings
+⸻
 
-1. The repository did not contain the referenced approved input files:
+Findings
 
-* SM-V3.2-SPECIFICATION-001
-* SM-V3.2-IMPLEMENTATION-DECISIONS-001
+The repository did not contain the referenced approved input files at original execution time:
 
-2. Implementation proceeded using the authorized scope provided in the execution request.
+SM-V3.2-SPECIFICATION-001
 
-3. The curated CITIES array remains fixed at 11 entries.
+SM-V3.2-IMPLEMENTATION-DECISIONS-001
 
-4. The persistent configurable city is stored separately from the curated city list.
+Implementation proceeded using the authorized scope provided in the execution request.
 
-5. Temporary inspection remains separate from persistent configurable city behavior.
+The curated CITIES array remains fixed at 11 entries.
 
-6. No new network domains were added.
+The persistent configurable city is stored separately from the curated city list.
 
-7. No reverse geocoding was added.
+Temporary inspection remains separate from persistent configurable city behavior.
 
-8. No multi-city configurable list was added.
+No new network domains were added.
 
-# Risks
+No reverse geocoding was added.
 
-1. The v3.2 approved specification and implementation decision files should be added to the repository to improve traceability.
+No multi-city configurable list was added.
 
-2. The single persistent city uses coordinates and UTC display rather than reverse geocoding or timezone lookup.
+⸻
 
-3. The situation-monitor directory is currently untracked in the platform repository, which limits repository-native diff review.
+Risks
 
-4. Manual device review remains recommended for visual validation.
+The v3.2 approved specification and implementation decision files should be available in the canonical repository context before future implementation increments begin.
 
-# Deviations
+The single persistent city uses coordinates and UTC display rather than reverse geocoding or timezone lookup.
 
-1. Approved input files were not available in the repository at implementation time.
+Manual device review remained required until completed.
 
-2. No approved decision document was modified.
+Repository execution context must be verified before future agent execution.
 
-3. No additional scope was implemented beyond one persistent configurable city.
+⸻
 
-# Validation
+Deviations
+
+Approved input files were not available in the original execution repository context.
+
+Implementation was initially produced in a non-canonical repository copy:
+
+AI-Development-Platform/situation-monitor
+
+instead of the canonical standalone repository:
+
+Situation-Monitor/situation-monitor
+
+The repository context issue was detected before merge.
+
+The implementation commit was transferred to the correct standalone Situation Monitor repository before push and PR creation.
+
+No approved decision document was modified.
+
+No additional scope was implemented beyond one persistent configurable city.
+
+⸻
+
+Validation
 
 Smoke validation:
 
@@ -72,4 +93,63 @@ PASS
 Result:
 
 18/18
+
+Manual validation:
+
+Mac Desktop Browser:
+
+PASS
+
+iPhone Portrait:
+
+PASS
+
+iPhone Landscape:
+
+PASS
+
+⸻
+
+Required Future Control
+
+Future increments require mandatory execution context preflight before implementation begins.
+
+Required preflight commands:
+
+pwd
+
+git rev-parse –show-toplevel
+
+git remote -v
+
+git branch –show-current
+
+git status
+
+Required canonical repository:
+
+git@github.com:jmantyne/situation-monitor.git
+
+Required canonical root:
+
+/Users/jmantyne/Projects/Situation-Monitor/situation-monitor
+
+If repository root, remote, branch, or required input artifacts do not match the expected execution context, implementation must stop.
+
+The mismatch must be reported before any implementation work begins.
+
+⸻
+
+Increment 001 Closure Status
+
+Increment 001 is approved for merge after:
+
+* PR checks pass
+* manual validation is recorded
+* repository context deviation is recorded
+* human approval is recorded
+
+Current status:
+
+Ready for PR merge review.
 
