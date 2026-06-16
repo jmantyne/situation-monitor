@@ -276,6 +276,11 @@
       box-shadow: 0 0 12px rgba(255,68,187,0.35);
     }
 
+    .city-card.configurable {
+      border-color: #4488ff;
+      box-shadow: 0 0 12px rgba(68,136,255,0.22);
+    }
+
     /* status top stripe */
     .city-card[data-status="green"]  { border-top-color: #00ff88; }
     .city-card[data-status="yellow"] { border-top-color: #ffc107; }
@@ -317,6 +322,7 @@
       text-overflow: ellipsis;
     }
     .city-card.home .card-name { color: #ff44bb; }
+    .city-card.configurable .card-name { color: #00d4ff; }
 
     .city-card.card-selected {
       border-color: #ffffff !important;
@@ -344,6 +350,32 @@
       display: none;
     }
     .city-card.home .home-badge { display: block; }
+    .city-card.configurable .home-badge {
+      display: block;
+      color: #00d4ff;
+      border-color: #00d4ff;
+    }
+
+    .config-remove {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #2a2a5a;
+      border-radius: 4px;
+      background: #10102e;
+      color: #c0cfe8;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.58rem;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .config-remove:hover,
+    .config-remove:focus-visible {
+      border-color: #4488ff;
+      color: #ffffff;
+      outline: none;
+    }
 
     /* clock */
     .card-clock {
@@ -534,6 +566,28 @@
     #inspection-dismiss:hover,
     #inspection-dismiss:focus-visible {
       border-color: #4488ff;
+      color: #ffffff;
+      outline: none;
+    }
+
+    #inspection-save {
+      border: 1px solid #4488ff;
+      border-radius: 4px;
+      background: #12122a;
+      color: #c0cfe8;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0 8px;
+      height: 26px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    #inspection-save:hover,
+    #inspection-save:focus-visible {
+      border-color: #00d4ff;
       color: #ffffff;
       outline: none;
     }
@@ -844,7 +898,7 @@
   <div id="tip-ranges"></div>
 </div>
 
-<!-- Temporary inspection overlay: intentionally outside the 1 map + 11 city grid -->
+<!-- Temporary inspection overlay: intentionally outside the map + city grid -->
 <section id="inspection-overlay" aria-live="polite" hidden>
   <div class="inspection-head">
     <div class="inspection-title-block">
@@ -852,6 +906,7 @@
       <div class="inspection-title">Inspection</div>
       <div class="inspection-coords" id="inspection-coords">--</div>
     </div>
+    <button id="inspection-save" type="button">Save</button>
     <button id="inspection-dismiss" type="button" aria-label="Dismiss inspection">X</button>
   </div>
   <div class="inspection-body">
@@ -933,8 +988,11 @@ let lastUpdated = null;
 let inspectionState = null;
 let inspectionMarker = null;
 let inspectionGeneration = 0;
+let configurableCity = null;
 const cityData = {}; // id → { weather, air, sun }
 const mapMarkers = {}; // id → L.circleMarker
+const CONFIGURABLE_CITY_ID = 'configurable-city';
+const CONFIGURABLE_CITY_STORAGE_KEY = 'situation-monitor.configurableCity.v1';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function pad(n) { return String(n).padStart(2, '0'); }
@@ -1057,16 +1115,81 @@ function setBadge(el, text, cls) {
   el.className = 'inspection-badge' + (cls ? ' ' + cls : '');
 }
 
+function allDisplayCities() {
+  return configurableCity ? CITIES.concat(configurableCity) : CITIES;
+}
+
+function validCoordinate(value, min, max) {
+  return typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max;
+}
+
+function createConfigurableCity(lat, lon) {
+  return {
+    id: CONFIGURABLE_CITY_ID,
+    name: 'Saved Point',
+    flag: '◆',
+    lat,
+    lon,
+    tz: 'UTC',
+    configurable: true,
+    coords: formatInspectionCoords(lat, lon)
+  };
+}
+
+function normalizeStoredConfigurableCity(value) {
+  if (!value || !validCoordinate(value.lat, -90, 90) || !validCoordinate(value.lon, -180, 180)) {
+    return null;
+  }
+  return createConfigurableCity(value.lat, value.lon);
+}
+
+function loadConfigurableCity() {
+  let raw = null;
+  try {
+    raw = window.localStorage.getItem(CONFIGURABLE_CITY_STORAGE_KEY);
+  } catch(e) {
+    return null;
+  }
+  if (!raw) return null;
+  try {
+    return normalizeStoredConfigurableCity(JSON.parse(raw));
+  } catch(e) {
+    return null;
+  }
+}
+
+function persistConfigurableCity(city) {
+  try {
+    window.localStorage.setItem(CONFIGURABLE_CITY_STORAGE_KEY, JSON.stringify({
+      lat: city.lat,
+      lon: city.lon
+    }));
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+function clearConfigurableCityStorage() {
+  try {
+    window.localStorage.removeItem(CONFIGURABLE_CITY_STORAGE_KEY);
+  } catch(e) {}
+}
+
 // ── Build DOM ──────────────────────────────────────────────────────────────
 const cardsPanel = document.getElementById('cards-wrap');
 const inspectionOverlay = document.getElementById('inspection-overlay');
 const inspectionDismiss = document.getElementById('inspection-dismiss');
+const inspectionSave = document.getElementById('inspection-save');
 
-CITIES.forEach(city => {
+function buildCityCard(city) {
   const card = document.createElement('div');
-  card.className = 'city-card';
+  card.className = 'city-card' + (city.configurable ? ' configurable' : '');
   card.id = 'card-' + city.id;
   card.dataset.status = 'green';
+  const removeButton = city.configurable
+    ? '<button class="config-remove" type="button" aria-label="Remove saved city">X</button>'
+    : '';
   card.innerHTML = `
     <div class="card-header">
       <span class="card-flag">${city.flag}</span>
@@ -1074,7 +1197,8 @@ CITIES.forEach(city => {
         <div class="card-name">${city.name}</div>
         <div class="card-offset" id="off-${city.id}">—</div>
       </div>
-      <span class="home-badge">HOME</span>
+      <span class="home-badge">${city.configurable ? 'SAVED' : 'HOME'}</span>
+      ${removeButton}
     </div>
     <div class="card-clock" id="clk-${city.id}">--:--<span class="clock-secs" id="sec-${city.id}">:--</span></div>
     <div class="card-divider"></div>
@@ -1128,7 +1252,13 @@ CITIES.forEach(city => {
     </div>
   `;
   cardsPanel.appendChild(card);
-});
+  if (city.configurable) {
+    const remove = card.querySelector('.config-remove');
+    if (remove) remove.addEventListener('click', removeConfigurableCity);
+  }
+}
+
+CITIES.forEach(buildCityCard);
 
 // ── Leaflet map ────────────────────────────────────────────────────────────
 const map = L.map('map', {
@@ -1144,12 +1274,12 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/
 map.fitBounds(L.latLngBounds(CITIES.map(c => [c.lat, c.lon])), { padding: [12, 12] });
 
 // Create circle markers for all cities
-CITIES.forEach(city => {
+function addMapMarker(city) {
   const marker = L.circleMarker([city.lat, city.lon], {
-    radius: 6,
+    radius: city.configurable ? 8 : 6,
     color: '#080816',
-    weight: 1,
-    fillColor: '#2a2a5a',
+    weight: city.configurable ? 2 : 1,
+    fillColor: city.configurable ? '#00d4ff' : '#2a2a5a',
     fillOpacity: 1,
     bubblingMouseEvents: false
   }).addTo(map);
@@ -1171,7 +1301,9 @@ CITIES.forEach(city => {
   });
 
   mapMarkers[city.id] = marker;
-});
+}
+
+CITIES.forEach(addMapMarker);
 
 map.on('click', handleMapInspectionClick);
 
@@ -1181,9 +1313,9 @@ function updateMapMarker(city, isHome) {
   const status = computeStatus(city);
   const color = statusColor(status);
   marker.setStyle({
-    radius: isHome ? 9 : 6,
-    color: isHome ? '#ff44bb' : 'rgba(0,0,0,0.4)',
-    weight: isHome ? 2 : 1,
+    radius: isHome || city.configurable ? 9 : 6,
+    color: isHome ? '#ff44bb' : city.configurable ? '#00d4ff' : 'rgba(0,0,0,0.4)',
+    weight: isHome || city.configurable ? 2 : 1,
     fillColor: color,
     fillOpacity: 1
   });
@@ -1329,6 +1461,39 @@ function removeInspection() {
   if (inspectionOverlay) inspectionOverlay.hidden = true;
 }
 
+function saveInspectionAsConfigurableCity() {
+  if (!inspectionState || !inspectionState.location) return;
+  const nextCity = createConfigurableCity(inspectionState.location.lat, inspectionState.location.lon);
+  if (!persistConfigurableCity(nextCity)) return;
+  setConfigurableCity(nextCity);
+}
+
+function setConfigurableCity(city) {
+  const existingCard = document.getElementById('card-' + CONFIGURABLE_CITY_ID);
+  if (existingCard) existingCard.remove();
+  if (mapMarkers[CONFIGURABLE_CITY_ID]) {
+    mapMarkers[CONFIGURABLE_CITY_ID].remove();
+    delete mapMarkers[CONFIGURABLE_CITY_ID];
+  }
+  configurableCity = city;
+  cityData[CONFIGURABLE_CITY_ID] = { weather: null, air: null, sun: null };
+  buildCityCard(city);
+  addMapMarker(city);
+  fetchCityData(city);
+}
+
+function removeConfigurableCity() {
+  clearConfigurableCityStorage();
+  const card = document.getElementById('card-' + CONFIGURABLE_CITY_ID);
+  if (card) card.remove();
+  if (mapMarkers[CONFIGURABLE_CITY_ID]) {
+    mapMarkers[CONFIGURABLE_CITY_ID].remove();
+    delete mapMarkers[CONFIGURABLE_CITY_ID];
+  }
+  delete cityData[CONFIGURABLE_CITY_ID];
+  configurableCity = null;
+}
+
 function formatInspectionCoords(lat, lon) {
   const latDir = lat >= 0 ? 'N' : 'S';
   const lonDir = lon >= 0 ? 'E' : 'W';
@@ -1365,7 +1530,7 @@ function tick() {
   document.getElementById('zulu-time').textContent = zu.slice(11, 19) + ' Z';
 
   // City clocks
-  CITIES.forEach(city => {
+  allDisplayCities().forEach(city => {
     const parts = {};
     try {
       new Intl.DateTimeFormat('en-US', {
@@ -1562,7 +1727,7 @@ async function fetchEnvironmentalData(lat, lon, includeSun) {
 
 async function fetchAllCities() {
   // Fetch all cities in parallel; one failure doesn't block others
-  await Promise.allSettled(CITIES.map(city => fetchCityData(city)));
+  await Promise.allSettled(allDisplayCities().map(city => fetchCityData(city)));
   lastUpdated = new Date();
   updateRefreshInfo();
 }
@@ -1782,8 +1947,12 @@ document.getElementById('grid').addEventListener('mouseover', e => {
 });
 document.getElementById('grid').addEventListener('mouseleave', hideTip);
 inspectionDismiss.addEventListener('click', removeInspection);
+inspectionSave.addEventListener('click', saveInspectionAsConfigurableCity);
 
 // ── Start ──────────────────────────────────────────────────────────────────
+const storedConfigurableCity = loadConfigurableCity();
+if (storedConfigurableCity) setConfigurableCity(storedConfigurableCity);
+
 tick();
 setInterval(tick, 1000);
 
