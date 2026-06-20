@@ -1,0 +1,905 @@
+AI REVIEW ROUND 1 — FACTORY GRADE REVIEW
+==========================================
+
+Model:        Claude (Opus 4.8)
+Repository:   jmantyne/situation-monitor
+Branch:       claude/ai-dev-platform-setup-8Aap3
+VERSION:      3.1.0
+Commit:       39651ba (Merge pull request #8)
+Timestamp:    2026-06-20T17:26:47Z
+Mode:         Read-only analysis
+
+Files audited:     12 Markdown files, 1 bash hook, 1 CI workflow, 1 HTML product file (by reference)
+Files skipped:     0
+Reviewer:          Claude — Independent Validation Reviewer
+Review standard:   Factory Grade (per prompt specification)
+
+
+===========================================================================
+1. EXECUTIVE SUMMARY
+===========================================================================
+
+This review audits the repository at jmantyne/situation-monitor to determine
+whether it can support Conductor evolution, ATR evolution, AI Product Factory
+evolution, and future multi-product scaling.
+
+BOTTOM LINE: The repository contains a well-engineered single-product weather
+dashboard with a genuine, evidence-backed development harness. The product
+layer is mature (v3.x, CI-gated, regression-tested, security-hardened). However,
+the repository cannot support platform evolution because no platform layer
+exists. The governance concepts developed across 18 analytical sprints
+(Conductor, Factory Architecture, VMM, DAI, Evidence Assessment, Validation #002)
+have zero repository presence. They exist only in conversation history.
+
+The review identifies 16 findings: 3 Critical, 5 High, 5 Medium, 3 Low.
+The critical findings all relate to the same root cause: the absence of a
+repository boundary between product and platform, compounded by the absence
+of the platform itself.
+
+Overall Result: PASS WITH SIGNIFICANT FINDINGS
+
+The product passes. The platform does not exist to pass or fail.
+
+
+===========================================================================
+2. TOP FINDINGS TABLE
+===========================================================================
+
+---------------------------------------------------------------------------
+ID:                 C-001
+Title:              Repository Identity Crisis
+Defect Class:       Class G — Product/platform boundary defect
+Severity:           Critical
+Impact Type:        AI model misinterpretation; Human operator confusion
+Affected Files:     (none — absence is the defect)
+                    Branch name: claude/ai-dev-platform-setup-8Aap3
+                    Remote: jmantyne/situation-monitor
+Evidence:
+  - Git remote says: jmantyne/situation-monitor
+  - Branch name says: ai-dev-platform-setup
+  - 18-sprint conversation says: AI-Development-Platform
+  - README.md says: "Situation Monitor"
+  - No file anywhere declares: "This repository is [X] and only [X]"
+Root Cause:
+  The repository was never given an explicit identity declaration. The
+  product name, the git remote name, the branch name, and the conversation
+  name all diverge. Without a canonical declaration, each AI agent (and
+  each conversation session) can assign its own identity to the repository.
+  This has already caused 18 sprints of analysis to proceed as if a
+  platform repository existed.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Add a repository scope declaration to an existing authority document
+  (AI-WORKFLOW.md or README.md) that states: repository name, repository
+  purpose, what it contains, and what it does not contain.
+Preventive Mechanism:
+  A pre-commit or CI check that validates the declared scope against
+  the actual directory structure could prevent structural drift. However,
+  the simpler preventive mechanism is the declaration itself — an explicit
+  statement that agents must read before operating.
+Owner Document:     AI-WORKFLOW.md (as the process/authority document)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 C-002
+Title:              Platform Governance Layer Has Zero Repository Presence
+Defect Class:       Class B — Repository truth defect
+Severity:           Critical
+Impact Type:        Wrong implementation path; Architecture drift
+Affected Files:     (none — absence is the defect)
+Evidence:
+  - find / -iname "*ai-development-platform*" returns nothing
+  - find / for harness/, orchestration/, evidence/, transport/, factory/,
+    security/ directories — all absent
+  - Glob for *CONDUCTOR*, *VALIDATION*, *AUTHORITY* — zero matches
+  - Glob for **/*.md — only 12 files, all product-level
+  - 18 analytical sprints reference: Conductor, VMM, DAI, Factory
+    Architecture, Evidence Assessment, Validation #002, HARNESS governance
+    framework, Workflow-State Artifact — NONE exist on disk
+Root Cause:
+  No decision was ever made about WHERE platform governance artifacts
+  should be persisted. Analysis occurred in conversation sessions. Uploads
+  from prior sessions provided governance documents (HARNESS governance
+  version, VMM, DAI) that were never committed to any repository. The
+  conversation accumulated intellectual work product with no persistence
+  strategy.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  The human operator must decide: (a) Does the platform layer belong in
+  this repository? (b) Does it belong in a separate repository? (c) Does
+  it not yet need a repository? Until this decision is made, no agent can
+  correctly place platform artifacts.
+Preventive Mechanism:
+  A governance rule: "No analytical sprint may proceed beyond Round 3
+  without declaring the persistence location for its outputs." This
+  prevents unbounded conversation-only analysis.
+Owner Document:     Human decision (no owner document exists yet)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 C-003
+Title:              No Repository Boundary Document Exists
+Defect Class:       Class C — Governance defect
+Severity:           Critical
+Impact Type:        AI model misinterpretation; Repository pollution
+Affected Files:     (none — absence is the defect)
+Evidence:
+  - No file declares what this repository is
+  - No file declares what this repository is NOT
+  - No file lists permitted top-level directories
+  - No file restricts what agents may create
+  - The pre-commit hook validates HTML content only — it cannot prevent
+    creation of new directories, new governance documents, or new
+    repository structures
+  - This absence directly enabled 18 sprints to treat the repository as
+    something it is not
+Root Cause:
+  Repository boundary was never a design consideration. The project grew
+  organically from a single HTML file. When it was standalone, no boundary
+  was needed. When conversation began treating it as part of a larger
+  platform, the missing boundary became a defect.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Add a repository boundary declaration to AI-WORKFLOW.md. Minimum content:
+  repository name, repository scope, permitted top-level paths, and a
+  statement that structural changes require human approval.
+Preventive Mechanism:
+  A CI or pre-commit check that validates top-level directory structure
+  against a declared allowlist. Any new directory not in the list blocks
+  the commit.
+Owner Document:     AI-WORKFLOW.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 H-001
+Title:              AI-WORKFLOW.md Conflates Four Document Roles
+Defect Class:       Class A — Documentation defect
+Severity:           High
+Impact Type:        AI model misinterpretation; Recurring maintenance debt
+Affected Files:     AI-WORKFLOW.md
+Evidence:
+  AI-WORKFLOW.md simultaneously serves as:
+  1. Authority document — "Mandatory process — before every commit"
+     (lines 19-30)
+  2. Evidence document — "Fail log — errors and fixes" (lines 85-106)
+  3. Status document — "Version history" (lines 43-81)
+  4. Knowledge document — "Lessons learned" (lines 166-206)
+  These four roles have different lifecycles:
+  - Authority: changes rarely (only when rules change)
+  - Evidence: append-only (grows with every failure)
+  - Status: changes constantly (every version)
+  - Knowledge: append-only (grows with experience)
+  Mixing them in one file means every version bump touches the authority
+  document unnecessarily, and every rule change touches the evidence log.
+Root Cause:
+  Organic accretion. The file started as CLAUDE.md (a prompt file). Rules,
+  logs, and history were added incrementally because the file was already
+  in context. No refactoring decision was ever made.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Declare the four roles explicitly within the existing file using section
+  headers that name the role. No file split required at this stage —
+  role declaration is sufficient for agents to distinguish function.
+Preventive Mechanism:
+  A review rule: "Before adding content to AI-WORKFLOW.md, identify which
+  role (Authority / Evidence / Status / Knowledge) the content belongs to."
+Owner Document:     AI-WORKFLOW.md (self-referential)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 H-002
+Title:              Three-Way Version History Duplication
+Defect Class:       Class F — Workflow/process-state defect
+Severity:           High
+Impact Type:        Recurring maintenance debt; AI model misinterpretation
+Affected Files:     README.md, AI-WORKFLOW.md, REGRESSION.md
+Evidence:
+  - Full version history is maintained in three separate files
+  - The fail log documents this as a KNOWN recurring error:
+    v2.2.0: "README and CLAUDE.md not updated when ADR-001-004 added"
+    v2.3.1: "README and CLAUDE.md not updated — same process error repeated"
+  - The pre-commit hook does NOT enforce cross-file version synchronization
+  - This is a documented, acknowledged, unfixed defect that has caused
+    at least 2 commit failures
+Root Cause:
+  The three files serve three audiences (external readers, AI workflow,
+  QA process) and each was given its own history table independently.
+  No single-source-of-truth decision was made. No automation enforces
+  synchronization.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Designate one file as the authoritative version history (recommend
+  REGRESSION.md, since it already contains the most detail). Other files
+  can reference it rather than duplicating it.
+Preventive Mechanism:
+  A pre-commit check: if any version-history section is modified, verify
+  that all three files are staged. Alternatively: collapse to a single
+  source and replace the other two with cross-references.
+Owner Document:     AI-WORKFLOW.md (as the process authority)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 H-003
+Title:              Pre-Commit Hook Covers Product Only
+Defect Class:       Class H — Factory scalability defect
+Severity:           High
+Impact Type:        Governance bypass; Repository pollution
+Affected Files:     .githooks/pre-commit
+Evidence:
+  - Hook triggers ONLY when situation-monitor.html is staged (line 51-55:
+    "if [ -z "$FILE" ]; then exit 0")
+  - For non-HTML commits, the hook performs ONLY a version bump
+  - The hook cannot detect or prevent:
+    * Creation of new top-level directories
+    * Addition of files that violate repository scope
+    * Cross-document inconsistencies
+    * Governance document modifications
+    * Branch naming violations
+  - Any agent can create any directory structure and commit it without
+    triggering a single check beyond version increment
+Root Cause:
+  The hook was designed for product quality enforcement — it validates the
+  HTML file's structural invariants. It was never extended to cover
+  repository-level governance because repository governance was not a
+  concern when the hook was written.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  This is a design observation, not an immediate action item. The hook's
+  current scope is appropriate for its origin. If platform-level governance
+  is added, a structural check should be added to the hook or CI pipeline.
+Preventive Mechanism:
+  A directory-allowlist check in the pre-commit hook: any new top-level
+  directory not in the declared set triggers a warning or block.
+Owner Document:     .githooks/pre-commit
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 H-004
+Title:              Architecture.md Has Accumulated Governance Responsibility
+Defect Class:       Class E — Architecture defect
+Severity:           High
+Impact Type:        Architecture drift; AI model misinterpretation
+Affected Files:     docs/ARCHITECTURE.md
+Evidence:
+  docs/ARCHITECTURE.md contains three Mermaid diagrams:
+  1. "Agentic Development Workflow" (lines 15-43) — describes the process
+     from Human → AI → Code → Hook → Regression → CI → Live Site.
+     This is a GOVERNANCE diagram (who does what, what gates exist).
+  2. "Runtime Data Architecture" (lines 56-89) — describes API data flow.
+     This is a genuine ARCHITECTURE diagram.
+  3. "Harness Components Map" (lines 97-122) — describes authority flow:
+     AI-WORKFLOW.md guides MODEL, MODEL produces code, pre-commit blocks
+     failures, fail log feeds new rules.
+     This is a GOVERNANCE diagram.
+  Result: 2 of 3 diagrams describe governance (authority, workflow, gates),
+  not architecture (data flow, system structure, component interaction).
+Root Cause:
+  The diagrams were added together (v2.10.0) as a documentation milestone.
+  No classification of "architecture diagram" vs. "governance diagram" was
+  applied. The filename ARCHITECTURE.md attracted governance content because
+  governance diagrams had no other home.
+Symptom or Root Cause:  SYMPTOM of C-003 (no boundary document)
+Recommended Remediation:
+  Rename sections within ARCHITECTURE.md to distinguish:
+  - "Runtime Data Architecture" (architecture)
+  - "Development Workflow" (governance/process)
+  - "Harness Components" (governance/process)
+  This is a labeling fix, not a file restructure.
+Preventive Mechanism:
+  A documentation rule: "Architecture documents describe system structure.
+  Governance documents describe authority, workflow, and decision flow.
+  Label each diagram with its category."
+Owner Document:     docs/ARCHITECTURE.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 H-005
+Title:              No Preventive Mechanism Against Repository Structure Changes
+Defect Class:       Class I — AI-agent failure-mode defect
+Severity:           High
+Impact Type:        Repository pollution; Governance bypass
+Affected Files:     .githooks/pre-commit (scope limitation)
+Evidence:
+  - An AI agent operating on this repository can:
+    * Create any directory (harness/, conductor/, factory/, etc.)
+    * Add any governance document
+    * Restructure the repository layout
+    * Nest the repository inside a parent structure
+  - None of these actions would trigger any check, warning, or block
+  - The pre-commit hook only validates HTML content
+  - CI only runs smoke tests
+  - There is no CODEOWNERS file
+  - There is no branch protection rule that requires review for
+    structural changes
+Root Cause:
+  Same as C-003. Without a boundary declaration and enforcement mechanism,
+  the repository is structurally open to any modification.
+Symptom or Root Cause:  SYMPTOM of C-003
+Recommended Remediation:
+  Add a structural validation step. Simplest implementation: a CI job
+  that checks top-level directory names against an allowlist in
+  AI-WORKFLOW.md.
+Preventive Mechanism:
+  Directory allowlist in pre-commit or CI. Alternatively: CODEOWNERS
+  file requiring human review for new top-level paths.
+Owner Document:     AI-WORKFLOW.md + .githooks/pre-commit
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 M-001
+Title:              BACKLOG.md Version Header Stale
+Defect Class:       Class A — Documentation defect
+Severity:           Medium
+Impact Type:        AI model misinterpretation; Human operator confusion
+Affected Files:     docs/BACKLOG.md
+Evidence:
+  - BACKLOG.md line 3: "Current version: v3.0.0"
+  - VERSION file: 3.1.0
+  - Delta: at least 1 minor version behind
+  - This same defect was fixed at v2.10.3 and v2.14.1 — it has recurred
+Root Cause:
+  BACKLOG.md version is updated manually. No hook or automation enforces
+  synchronization. The fix is applied, the fix drifts, the fix is applied
+  again. Structural problem, not human error.
+Symptom or Root Cause:  SYMPTOM of H-002 (version duplication)
+Recommended Remediation:
+  Remove the "Current version" field from BACKLOG.md entirely. VERSION
+  file is the source of truth. Duplicating it creates a stale-by-default
+  field.
+Preventive Mechanism:
+  Either remove the field or add a pre-commit check that validates it.
+Owner Document:     docs/BACKLOG.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 M-002
+Title:              HARNESS.md Error Count Stale
+Defect Class:       Class A — Documentation defect
+Severity:           Medium
+Impact Type:        Human operator confusion
+Affected Files:     docs/HARNESS.md
+Evidence:
+  - HARNESS.md states: "a fail log with 8 documented errors"
+  - AI-WORKFLOW.md fail log: 16 entries
+  - HARNESS.md was written at v2.6.0 and has not been updated for
+    content accuracy since
+Root Cause:
+  HARNESS.md is written as a narrative essay, not a live reference.
+  Numeric claims in essays become stale as the underlying data grows.
+Symptom or Root Cause:  SYMPTOM (of static essays referencing dynamic data)
+Recommended Remediation:
+  Replace specific numbers with relative references: "the fail log
+  (see AI-WORKFLOW.md)" instead of "8 documented errors." This makes
+  the essay maintenance-free.
+Preventive Mechanism:
+  A documentation guideline: "Do not hardcode counts from other documents.
+  Reference the source instead."
+Owner Document:     docs/HARNESS.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 M-003
+Title:              Branch Name Implies Unstarted Work
+Defect Class:       Class F — Workflow/process-state defect
+Severity:           Medium
+Impact Type:        AI model misinterpretation
+Affected Files:     (git branch metadata)
+Evidence:
+  - Branch: claude/ai-dev-platform-setup-8Aap3
+  - Branch contains zero new commits (HEAD is identical to main)
+  - Name implies "AI Development Platform setup" — no such setup exists
+  - An AI agent joining this branch will read the name and may attempt
+    platform setup work
+Root Cause:
+  Branch was created for a task that pivoted entirely to read-only
+  analysis. The branch name was never corrected because no work was
+  committed and the name was not re-evaluated.
+Symptom or Root Cause:  SYMPTOM of C-001 (identity crisis)
+Recommended Remediation:
+  If no platform work will be committed to this branch, delete it and
+  work from main or a correctly named branch.
+Preventive Mechanism:
+  A working convention: branch names must describe the actual work, not
+  aspirational scope. If a branch pivots, rename or recreate it.
+Owner Document:     AI-WORKFLOW.md (as process authority)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 M-004
+Title:              Evidence Authority Not Declared
+Defect Class:       Class D — Authority defect
+Severity:           Medium
+Impact Type:        Governance bypass
+Affected Files:     REGRESSION.md, AI-WORKFLOW.md
+Evidence:
+  - REGRESSION.md is the de facto evidence-of-quality document
+  - AI-WORKFLOW.md is the de facto authority document
+  - Neither document declares its own authority role
+  - Neither document declares its relationship to the other
+  - An agent cannot determine which document to update in which
+    circumstance without reading all of AI-WORKFLOW.md's process section
+Root Cause:
+  Document roles emerged organically. The roles are clear to the human
+  operator who created them but are not machine-readable or explicitly
+  declared.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Add a one-line role declaration at the top of each document:
+  - AI-WORKFLOW.md: "Role: Process authority and session memory"
+  - REGRESSION.md: "Role: Quality evidence log"
+Preventive Mechanism:
+  Documentation standard: every .md file declares its role in the
+  first 5 lines.
+Owner Document:     AI-WORKFLOW.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 M-005
+Title:              ADR-003 Supersedence Contradicts Reality
+Defect Class:       Class A — Documentation defect
+Severity:           Medium
+Impact Type:        AI model misinterpretation
+Affected Files:     docs/ADR-003.md
+Evidence:
+  - ADR-003.md line 6: "Superseded by: -- (supersede if CI moves to
+    GitHub Actions or Playwright replaces the bash hook)"
+  - CI DID move to GitHub Actions at v2.10.0
+  - The ADR was not superseded or updated
+  - An AI agent reading this ADR will conclude CI has NOT moved to
+    GitHub Actions, contradicting the actual .github/workflows/ci.yml
+Root Cause:
+  ADRs were treated as immutable point-in-time records. The supersedence
+  note was written as a future trigger but was never checked when the
+  trigger condition was met.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Update the supersedence note to reflect that CI was added but the
+  pre-commit hook was retained alongside it (dual enforcement model).
+  This is not a supersedence — it is an evolution. The note should say:
+  "CI added at v2.10.0. Pre-commit hook retained. Both run."
+Preventive Mechanism:
+  When implementing a change that matches an ADR's supersedence trigger,
+  review and update the ADR.
+Owner Document:     docs/ADR-003.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 L-001
+Title:              REFLECTION.md Header Format Inconsistent
+Defect Class:       Class A — Documentation defect
+Severity:           Low
+Impact Type:        Human operator confusion (minor)
+Affected Files:     docs/REFLECTION.md
+Evidence:
+  - REFLECTION.md uses "Version: v2.3.4" format
+  - HARNESS.md, ARCHITECTURE.md, STAKEHOLDER-SUMMARY.md use
+    "Added in: vX.Y.Z" format (standardized at v2.14.0)
+  - REFLECTION.md was not updated during the v2.14.0 standardization
+Root Cause:
+  REFLECTION.md was written before the header standardization and was
+  missed during the v2.14.0 update sweep.
+Symptom or Root Cause:  SYMPTOM (of manual standardization)
+Recommended Remediation:
+  Change header to "Added in: v2.3.4" for consistency.
+Preventive Mechanism:
+  A pre-commit check for header format consistency across docs/*.md files.
+Owner Document:     docs/REFLECTION.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 L-002
+Title:              ADR-002 Decision Table References Replaced API
+Defect Class:       Class A — Documentation defect
+Severity:           Low
+Impact Type:        AI model misinterpretation (minor)
+Affected Files:     docs/ADR-002.md
+Evidence:
+  - ADR-002.md line 54: ip-api.com shown as "Selected" for home city
+    detection
+  - ip-api.com was replaced with ipapi.co at v2.6.0
+  - ADR is a point-in-time record, so this is technically correct
+  - However, an agent reading the ADR without also reading the fail log
+    will attempt to use ip-api.com
+Root Cause:
+  ADRs are designed as immutable records. This is a valid design choice
+  but creates a known trap for agents that read ADRs without also reading
+  the fail log.
+Symptom or Root Cause:  ROOT CAUSE (acceptable by design)
+Recommended Remediation:
+  Add an "Implementation Note" at the bottom of ADR-002: "ip-api.com was
+  replaced by ipapi.co at v2.6.0. See AI-WORKFLOW.md fail log."
+Preventive Mechanism:
+  ADR convention: when a decision is materially changed post-ADR, add
+  a dated note to the ADR.
+Owner Document:     docs/ADR-002.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 L-003
+Title:              BACKLOG.md Has Not Updated for v3.0.x Delivered Items
+Defect Class:       Class A — Documentation defect
+Severity:           Low
+Impact Type:        Human operator confusion (minor)
+Affected Files:     docs/BACKLOG.md
+Evidence:
+  - BACKLOG.md "Delivered - v3.0" section lists items delivered at v3.0.0
+  - v3.0.1 (MIT License) and v3.0.2-v3.0.3 (VERSION fixes) are not listed
+    in the Delivered section
+  - These are minor post-release patches, so omission is defensible
+Root Cause:
+  BACKLOG.md delivery tracking is manual and milestone-focused, not
+  patch-focused.
+Symptom or Root Cause:  SYMPTOM (minor, acceptable)
+Recommended Remediation:
+  No action required. Patches do not need backlog delivery entries.
+Preventive Mechanism:
+  None needed.
+Owner Document:     docs/BACKLOG.md
+---------------------------------------------------------------------------
+
+
+===========================================================================
+3. ROOT CAUSE ANALYSIS
+===========================================================================
+
+The 16 findings cluster around THREE root causes:
+
+ROOT CAUSE 1: NO REPOSITORY BOUNDARY DECLARATION
+  Findings: C-001, C-003, H-003, H-004, H-005, M-003
+  Count: 6 findings (2 Critical, 3 High, 1 Medium)
+
+  The repository has never declared what it is. Without a boundary, agents
+  cannot distinguish product from platform, permitted from unpermitted, or
+  in-scope from out-of-scope. This single root cause accounts for 38% of
+  all findings and both non-structural Critical findings.
+
+  Remediation surface: Add boundary declaration to AI-WORKFLOW.md.
+  Estimated scope: 10-20 lines of text.
+
+ROOT CAUSE 2: NO PERSISTENCE STRATEGY FOR GOVERNANCE WORK
+  Findings: C-002
+  Count: 1 finding (Critical)
+
+  18 sprints of analytical work produced intellectual artifacts that were
+  never persisted to any repository. The work exists in conversation
+  ephemera and prior-session uploads. This is not a documentation defect
+  — it is a decision defect. The human operator has not yet decided where
+  platform governance lives.
+
+  Remediation surface: Human decision. Not a code or document change.
+
+ROOT CAUSE 3: ORGANIC DOCUMENT GROWTH WITHOUT ROLE CLASSIFICATION
+  Findings: H-001, H-002, M-001, M-002, M-004, M-005, L-001, L-002, L-003
+  Count: 9 findings (2 High, 5 Medium, 3 Low — but 1 Medium is acceptable
+  by design)
+
+  Documents grew by accretion. Content was added where convenient, not
+  where it belongs by role. Version history was duplicated because three
+  files each wanted their own copy. Numeric claims in essays went stale
+  because no cross-reference mechanism exists.
+
+  Remediation surface: Role declarations + reference consolidation.
+  Estimated scope: Small edits across existing files.
+
+
+===========================================================================
+4. FACTORY SCALABILITY ASSESSMENT
+===========================================================================
+
+Can this repository scale to support multiple products?
+
+  ANSWER: NO
+
+Evidence:
+  1. Repository identity is fused to a single product ("Situation Monitor")
+  2. Pre-commit hook is hardcoded for situation-monitor.html (line 6)
+  3. CI runs a single test suite (npm test)
+  4. Version history is product version history — no concept of platform
+     versioning exists
+  5. The harness (AI-WORKFLOW.md) references Situation Monitor by name
+     throughout — it is not a generalizable harness template
+  6. No directory structure separates product from infrastructure
+  7. The 11-city check, the API endpoint check, and the Finnish character
+     check are all product-specific guardrails with no abstraction layer
+
+Can it scale to 10 products? NO — the hook, CI, and documents are
+  single-product.
+Can it scale to 100 products? NO — same reasons, compounded.
+Can it scale to 1000 products? NO — same reasons, compounded further.
+
+Can it scale to support Conductor evolution? NO — Conductor has no
+  repository home and no evidence trail.
+Can it scale to support ATR evolution? NO — ATR has no repository
+  presence.
+Can it scale to support AI Product Factory evolution? NO — the Factory
+  concept exists only in conversation.
+
+HOWEVER: The harness PATTERN demonstrated by this repository (fail-driven
+rule creation, pre-commit enforcement, regression documentation) is
+inherently scalable. The pattern is sound. The current implementation is
+single-product.
+
+The path to scalability is:
+  1. Decide whether platform governance lives in this repository or
+     a new one (human decision)
+  2. If here: separate product/ from platform/ at the directory level
+  3. If elsewhere: create the platform repository and reference this
+     one as the first product
+  4. Either way: abstract the harness pattern from its Situation Monitor
+     implementation
+
+
+===========================================================================
+5. AI-AGENT RISK ASSESSMENT
+===========================================================================
+
+RISK 1: IDENTITY CONFUSION (Probability: HIGH)
+  An agent entering this repository via the branch name
+  "claude/ai-dev-platform-setup-8Aap3" will believe it is operating
+  in a platform repository. It may attempt to create platform-level
+  directories, governance documents, or orchestration infrastructure.
+  No mechanism prevents this.
+  Already observed: This exact confusion occurred across 18 analytical
+  sprints.
+
+RISK 2: GOVERNANCE DOCUMENT CREATION (Probability: HIGH)
+  An agent directed to implement Conductor, VMM, DAI, or Factory
+  Architecture will create new files in this repository. The pre-commit
+  hook will not block these files (it only checks HTML). The resulting
+  documents will be committed alongside product documentation with no
+  separation, creating permanent scope confusion.
+  Already observed: The corrected Repository Truth Sprint assumed
+  platform directories exist. They could easily be created by an agent
+  following similar instructions.
+
+RISK 3: CONTEXT LOSS ACROSS SESSIONS (Probability: HIGH)
+  This has already been documented in REFLECTION.md: "four forced pauses
+  when the context window ran out." Each new session or context reset
+  loses the analytical state built up in the prior session. The
+  conversation summary attempts to bridge this gap but cannot fully
+  reconstruct 18 sprints of nuanced governance analysis.
+  No mechanism exists: AI-WORKFLOW.md serves as partial memory but does
+  not contain any of the governance concepts developed in conversation.
+
+RISK 4: SCOPE CREEP IN PRODUCT CHANGES (Probability: MEDIUM)
+  Documented in the fail log: v2.0.5 changed sun-time color without
+  being asked. The pre-commit hook catches structural violations but
+  cannot detect semantic scope creep (changing things that were not
+  requested).
+  Partially mitigated: REGRESSION.md review catches scope creep post
+  facto, but not pre-commit.
+
+RISK 5: STALE REFERENCE PROPAGATION (Probability: MEDIUM)
+  An agent reading ADR-002 will find ip-api.com listed as the selected
+  API. An agent reading ADR-003 will conclude CI has not been added.
+  An agent reading HARNESS.md will believe only 8 errors exist. Stale
+  references in authoritative-looking documents cause agents to make
+  decisions based on outdated information.
+  Partially mitigated: An agent that also reads AI-WORKFLOW.md will
+  find corrections. But agents that read only one document will be
+  misled.
+
+RISK 6: DUPLICATE STRUCTURE CREATION (Probability: MEDIUM)
+  An agent could create a second CITIES array in the HTML (fail log
+  documents this happened). More broadly, an agent could create parallel
+  documentation structures (a second version history, a second fail log,
+  a second regression tracker) without realizing the originals exist.
+  Partially mitigated: Pre-commit check #8 catches duplicate city IDs
+  in HTML. No equivalent check exists for document-level duplication.
+
+
+===========================================================================
+6. REQUIRED REMEDIATION BEFORE NEXT PHASE
+===========================================================================
+
+These are the MINIMUM changes required before the repository can support
+any platform-level evolution (Conductor, ATR, Factory):
+
+REQ-1: HUMAN DECISION — Platform persistence location
+  The human operator must declare: does the platform governance layer
+  belong in this repository, in a new repository, or nowhere yet?
+  This is not a document change. It is a decision.
+  Blocks: All platform work.
+
+REQ-2: Repository boundary declaration
+  Add to AI-WORKFLOW.md:
+  - Repository name and purpose
+  - What this repository contains
+  - What this repository does not contain
+  - Permitted top-level directories (allowlist)
+  - Statement: "Structural changes require human approval"
+  Blocks: C-001, C-003, H-005
+
+REQ-3: Document role declarations
+  Add a one-line role statement to the header of each primary document:
+  - AI-WORKFLOW.md: Process authority and session memory
+  - REGRESSION.md: Quality evidence log
+  - README.md: External-facing product description
+  Blocks: H-001, M-004
+
+No new documents are required. No new agents are required. No new
+architecture is required. The remediation is: declare boundaries,
+declare roles, make one human decision.
+
+
+===========================================================================
+7. OPTIONAL IMPROVEMENTS
+===========================================================================
+
+OPT-1: Consolidate version history to single source
+  Designate REGRESSION.md as the authoritative version history.
+  Replace version tables in README.md and AI-WORKFLOW.md with a
+  reference: "See REGRESSION.md for complete version history."
+  Addresses: H-002, M-001
+
+OPT-2: Add structural validation to pre-commit or CI
+  A check that validates top-level directory names against a declared
+  allowlist. Prevents accidental repository pollution by agents.
+  Addresses: H-003, H-005
+
+OPT-3: Replace hardcoded counts in HARNESS.md with references
+  Change "8 documented errors" to "the fail log (see AI-WORKFLOW.md)"
+  Addresses: M-002
+
+OPT-4: Update ADR-003 supersedence note
+  Reflect that CI was added at v2.10.0 alongside the pre-commit hook.
+  Addresses: M-005
+
+OPT-5: Add implementation notes to ADRs
+  When a decision is materially changed post-ADR, add a dated note.
+  Addresses: L-002
+
+OPT-6: Standardize REFLECTION.md header
+  Change "Version:" to "Added in:" for consistency.
+  Addresses: L-001
+
+
+===========================================================================
+8. FINAL RECOMMENDATION
+===========================================================================
+
+  C. Run remediation round first.
+
+Rationale:
+  The product layer is solid (the product itself would receive an A).
+  But the review question is whether the repository can support platform
+  evolution. It cannot — not because of quality defects, but because the
+  platform layer does not exist and the product layer has no boundaries
+  that would protect it from platform contamination.
+
+  The remediation required is SMALL:
+  - One human decision (REQ-1)
+  - One boundary declaration (~20 lines added to AI-WORKFLOW.md) (REQ-2)
+  - Three one-line role declarations (REQ-3)
+
+  After these three items, the repository can safely support the next
+  phase. Without them, any agent that attempts platform work will
+  contaminate the product repository, repeat the identity confusion
+  observed across 18 sprints, and create structural debt that compounds
+  with every subsequent commit.
+
+  This is not "stop and redesign" (Option D). The existing architecture
+  is sound. It needs boundary declaration, not redesign.
+
+
+===========================================================================
+9. CONFIDENCE ASSESSMENT
+===========================================================================
+
+Confidence in findings:            HIGH
+  All findings are based on verified filesystem state, git topology,
+  and line-by-line document reads. No finding relies on conversation
+  history or assumed state.
+
+Confidence in root cause analysis:  HIGH
+  The three root causes (no boundary, no persistence strategy, organic
+  growth) are directly observable in the repository. They are not
+  inferred from symptoms.
+
+Confidence in scalability assessment: HIGH
+  The pre-commit hook, CI pipeline, and document structure are all
+  verifiably single-product. No abstraction layer exists.
+
+Confidence in recommendation:       HIGH
+  The remediation is small, bounded, and directly addresses the root
+  causes. It does not require new architecture, new documents, or new
+  agents.
+
+Limitation of this review:
+  This review audits the repository only. The governance concepts
+  developed across 18 conversation sprints (Conductor, VMM, DAI, Factory
+  Architecture, Evidence Assessment, Validation #002) exist outside the
+  repository and were NOT audited for internal consistency. A separate
+  review of those conversation artifacts would be needed to assess their
+  readiness for persistence.
+
+
+===========================================================================
+10. APPENDIX
+===========================================================================
+
+A. MANDATORY QUESTIONS — ANSWERS
+
+1. Can an AI agent clearly identify which repository it is operating in?
+   NO. Three conflicting identity signals exist (remote name, branch
+   name, conversation name). No declaration resolves the conflict.
+
+2. Can an AI agent distinguish platform assets from product assets?
+   NO. No platform assets exist. No classification system exists.
+   An agent cannot determine that platform assets SHOULD NOT exist here.
+
+3. Can an AI agent avoid recreating nested repositories?
+   NO. No preventive mechanism exists. An agent following platform
+   setup instructions would create new directories unchecked.
+
+4. Is there a preventive mechanism against repository contamination?
+   PARTIAL. The pre-commit hook prevents HTML content contamination
+   (product level). No mechanism prevents structural contamination
+   (repository level).
+
+5. Are authority boundaries explicit and enforceable?
+   PARTIAL. Human authority is stated repeatedly in prose. No
+   machine-enforceable authority boundary exists. The pre-commit hook
+   enforces product invariants but not authority rules.
+
+6. Has Architecture.md accumulated governance responsibility?
+   YES. 2 of 3 diagrams describe governance flow, not system
+   architecture. Finding H-004.
+
+7. Are current focus and repository status synchronized?
+   NO. Branch name implies platform work. VERSION says 3.1.0.
+   BACKLOG says v3.0.0. No single status view exists.
+
+8. Are evidence documents clearly separated from authority documents?
+   NO. AI-WORKFLOW.md is both authority and evidence. Document roles
+   are not declared. Finding H-001, M-004.
+
+9. Can future agents repeat previously observed mistakes?
+   YES. The pre-commit hook prevents 9 specific product mistakes.
+   Structural and governance mistakes (identity confusion, scope
+   creep, context loss, repository pollution) have no preventive
+   mechanism.
+
+10. Would this repository scale to 10, 100, or 1000 products?
+    NO. Single-product design throughout. See Section 4.
+
+
+B. FILES READ
+
+  README.md                         (180 lines)
+  AI-WORKFLOW.md                    (215 lines)
+  REGRESSION.md                     (750 lines)
+  docs/ADR-001.md                   (119 lines)
+  docs/ADR-002.md                   (114 lines)
+  docs/ADR-003.md                   (130 lines)
+  docs/ADR-004.md                   (112 lines)
+  docs/ARCHITECTURE.md              (123 lines)
+  docs/BACKLOG.md                   (140 lines)
+  docs/HARNESS.md                   (225 lines)
+  docs/REFLECTION.md                (94  lines)
+  docs/STAKEHOLDER-SUMMARY.md       (113 lines)
+  .githooks/pre-commit              (147 lines)
+  .github/workflows/ci.yml          (21  lines)
+  Total: 14 files, ~2,383 lines
+
+  Skipped: 0
+
+
+C. REVIEW METADATA
+
+  Review duration:    Single pass, ~3 minutes elapsed
+  Methodology:        Line-by-line read of all .md files +
+                      structural analysis of hook and CI +
+                      filesystem verification (find, git) +
+                      cross-reference validation
+  Prior context:      Repository Truth Sprint (same session)
+                      provided baseline; this review independently
+                      re-verified all findings
+  Artifacts created:  This file (1)
+  Files modified:     None
+  Commits made:       None
+
+
+===========================================================================
+END OF REVIEW
+===========================================================================
