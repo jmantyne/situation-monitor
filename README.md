@@ -13,11 +13,27 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-002](docs/ADR-002.md) | API selection — free, key-free, real-time data |
 | [ADR-003](docs/ADR-003.md) | Automated regression testing — pre-commit hook + semver |
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
+| [ADR-005](docs/ADR-005.md) | First end-to-end validation of multi-model AI governance delivery pipeline |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Agentic workflow diagram + runtime data architecture (Mermaid) |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
-| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.1 interactive map, v3.2 configurable cities, v4.0+ native app |
+| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.1 temporary inspection overlay delivered, v3.2 configurable cities, v4.0+ native app |
 | [REFLECTION](docs/REFLECTION.md) | What I learned — from VIC-20 to Holodeck in 4 days |
 | [STAKEHOLDER-SUMMARY](docs/STAKEHOLDER-SUMMARY.md) | Non-technical project summary |
+
+## AI Governance Validation
+
+v3.1.0 was the first Situation Monitor release delivered through the full multi-model AI governance pipeline: specification, implementation decisions, execution, automated testing, manual validation, and release audit.
+
+Release readiness reviews completed:
+- Codex: Conditional GO
+- Claude: Conditional GO
+- Grok: Product Challenge completed
+
+Validation completed:
+- Smoke tests: 21/21 passed
+- Desktop Safari validated
+- iPhone Portrait validated
+- iPhone Landscape validated
 
 ## Tests
 
@@ -56,6 +72,8 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 | 🟡 Yellow | 0.5 – 1.4 | Moderate |
 | 🟠 Orange | 1.5 – 2.4 | Elevated |
 | 🔴 Red | ≥ 2.5 | Poor conditions |
+
+The world map also supports temporary inspection: click or tap any point on the map to open a floating overlay with live weather and AQI for that location. Temporary inspections are runtime-only, visually separate from the curated city cards, and can be dismissed without changing the 11-city dashboard.
 
 ## Cities (west → east)
 
@@ -115,7 +133,8 @@ Expected (from official Leaflet 1.9.4 release):
 | Limitation | Detail |
 |------------|--------|
 | Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.2 |
-| No historical data | Shows current conditions only; trend charts planned for v3.1+ |
+| Temporary inspections are not saved | Map inspection points are runtime-only and disappear on refresh |
+| No historical data | Shows current conditions only; trend charts planned for a later roadmap release |
 | Free API rate limits | Open-Meteo allows ~10 000 calls/day — sufficient for personal use |
 | No offline mode | Requires internet connection for map tiles, weather data, and fonts |
 | IP geolocation accuracy | Home city detection uses IP location; imprecise behind VPN |
@@ -177,3 +196,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v3.0.1 | 2026-05-30 | License: MIT License added |
 | v3.0.2 | 2026-05-30 | Fix: VERSION corrected after dev branch sync issue |
 | v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
+| **v3.1.0** | **2026-06-05** | **Feat: temporary inspection overlay — click/tap any map location for live weather and AQI; ADR-005 governance validation; smoke tests 21/21; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
