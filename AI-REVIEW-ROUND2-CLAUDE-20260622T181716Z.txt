@@ -1,0 +1,877 @@
+AI REVIEW ROUND 2 — FACTORY READINESS REMEDIATION REVIEW
+==========================================================
+
+Model:          Claude (Opus 4.8)
+Target Repo:    jmantyne/AI-Development-Platform
+Accessible Repo: jmantyne/situation-monitor
+Branch:         main (post-PR #18, v3.2.0)
+VERSION:        3.2.0
+Timestamp:      2026-06-22T18:17:16Z
+Mode:           Read-only analysis
+
+Files audited:     18 Markdown files + pre-commit hook + CI workflow
+Files skipped:     0 (within accessible repository)
+Reviewer:          Claude — Independent Validation Reviewer
+Review standard:   Factory Grade (per prompt specification)
+Baseline:          AI Review Round 1 (AI-REVIEW-ROUND1-CLAUDE-20260620T172647Z)
+
+
+===========================================================================
+1. EXECUTIVE SUMMARY
+===========================================================================
+
+THIS REVIEW CANNOT EVALUATE WP002.
+
+The review was directed at "AI-Development-Platform main after PR #12:
+WP002 Factory Readiness - Repository Identity and Boundary Controls."
+This session has access to jmantyne/situation-monitor only. The
+AI-Development-Platform repository exists on GitHub (confirmed via
+search) but access was denied:
+
+  "Access denied: repository jmantyne/ai-development-platform is not
+   configured for this session. Allowed repositories:
+   jmantyne/situation-monitor"
+
+WP002 does not exist in situation-monitor. No file, commit, or reference
+to "WP002" or "Factory Readiness" or "Repository Identity and Boundary
+Controls" exists in this repository. The governance documents referenced
+by the mandatory questions (DOCUMENT-AUTHORITY-INDEX, HARNESS governance
+framework v0.0.7, VALIDATION-MATURITY-MODEL-001) are referenced FROM
+situation-monitor documents but do not exist IN this repository.
+
+This is not a tooling limitation. This is the primary finding:
+
+  THE REVIEW WAS DIRECTED AT THE WRONG EXECUTION CONTEXT.
+
+An AI agent (Claude Code) was given a review brief targeting
+AI-Development-Platform and was executed in a session bound to
+situation-monitor. No mechanism detected the mismatch. No mechanism
+stopped the review. The agent had to discover the mismatch empirically
+by searching the filesystem and attempting GitHub API access.
+
+This is a live, real-time demonstration of the exact failure mode that
+Repository Context Verification (mandatory question #7-9) is supposed
+to prevent. The review brief asks whether that mechanism works. The
+answer is: it did not prevent THIS review from executing in the wrong
+repository.
+
+WHAT THIS REVIEW CAN DO: Audit situation-monitor's current state against
+the Round 1 findings, evaluate what changed since Round 1, and assess
+cross-repository reference integrity from the product side.
+
+Overall Result: FAIL
+
+The review fails not because the repository is bad, but because the
+review target is not the accessible repository. Issuing PASS against
+the wrong repository would itself be a governance defect.
+
+
+===========================================================================
+2. ROUND 1 REMEDIATION ASSESSMENT
+===========================================================================
+
+Round 1 identified 3 root causes and 16 findings in situation-monitor.
+
+Assessment of each root cause against current situation-monitor state:
+
+ROOT CAUSE 1: NO REPOSITORY BOUNDARY DECLARATION
+  Round 1 status:  No file declared what the repository is or is not.
+  Current status:  UNCHANGED in situation-monitor.
+  Evidence:        No boundary declaration exists in any .md file.
+                   No DOCUMENT-AUTHORITY-INDEX exists in this repo.
+                   No repository scope statement in AI-WORKFLOW.md.
+                   No directory allowlist in any document or hook.
+  Assessment:      NOT REMEDIATED in situation-monitor.
+                   May have been remediated in AI-Development-Platform
+                   (WP002), but this cannot be verified.
+
+ROOT CAUSE 2: NO PERSISTENCE STRATEGY FOR GOVERNANCE WORK
+  Round 1 status:  Governance documents existed only in conversation.
+  Current status:  PARTIALLY REMEDIATED.
+  Evidence:        AI-Development-Platform repository now exists on
+                   GitHub (created 2026-06-01). ADR-005 explicitly
+                   references it: "CONDUCTOR-001 | AI-Development-
+                   Platform: orchestration/". SM-V3.2-SPECIFICATION-001
+                   references HARNESS v0.0.7, VMM v0.0.2, and DAI as
+                   governing documents. SM-V3.2-INCREMENT-001 notes
+                   "The situation-monitor directory is currently
+                   untracked in the platform repository."
+  Assessment:      The persistence LOCATION has been decided (AI-
+                   Development-Platform exists). But the governance
+                   documents cannot be verified from this session.
+                   The product repository now references governance
+                   documents that are NOT accessible to agents operating
+                   in this session context.
+
+ROOT CAUSE 3: ORGANIC DOCUMENT GROWTH WITHOUT ROLE CLASSIFICATION
+  Round 1 status:  Documents had no declared roles.
+  Current status:  UNCHANGED in situation-monitor.
+  Evidence:        AI-WORKFLOW.md still conflates authority, evidence,
+                   status, and knowledge (Round 1 finding H-001).
+                   No document in situation-monitor declares its role.
+                   Version history is still duplicated across 3 files
+                   (Round 1 finding H-002).
+  Assessment:      NOT REMEDIATED in situation-monitor.
+
+SUMMARY:
+  Root Cause 1: Not remediated (in accessible repository)
+  Root Cause 2: Partially remediated (platform repo exists, content
+                unverifiable)
+  Root Cause 3: Not remediated
+
+
+===========================================================================
+3. TOP FINDINGS TABLE
+===========================================================================
+
+---------------------------------------------------------------------------
+ID:                 R2-C-001
+Title:              Review Executed in Wrong Repository Context
+Defect Class:       Class G — Product/platform boundary defect
+Severity:           Critical
+Impact Type:        Governance bypass; Wrong implementation path
+Affected Files:     (session configuration — not a file defect)
+Evidence:
+  - Review brief: "Repository: AI-Development-Platform"
+  - Session access: jmantyne/situation-monitor only
+  - GitHub API response: "Access denied: repository
+    jmantyne/ai-development-platform is not configured for this session"
+  - No mechanism detected the mismatch before execution began
+  - The agent discovered the mismatch empirically after reading the
+    filesystem
+Root Cause:
+  The review brief was issued to a Claude Code session that was bound
+  to situation-monitor. No pre-execution check validated that the
+  session's repository scope matched the review target. The human
+  operator issued the brief; the session accepted it without verifying
+  context.
+Symptom or Root Cause:  ROOT CAUSE (of this specific review failure)
+  Also SYMPTOM of the absence of Repository Context Verification
+Recommended Remediation:
+  1. Issue Round 2 review in a session bound to AI-Development-Platform
+  2. Implement the Repository Context Verification protocol described
+     in the mandatory questions — which should include: Target Repository
+     declaration, Current Repository verification, PASS/FAIL gate
+Preventive Mechanism:
+  Any review brief that names a repository MUST begin with a context
+  check: "Is this session bound to the named repository?" If NO,
+  the review MUST halt and report the mismatch before proceeding.
+Owner Document:     HARNESS (governance version, in AI-Development-Platform)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-C-002
+Title:              Product References Platform Documents That Cannot Be
+                    Verified From Product Context
+Defect Class:       Class G — Product/platform boundary defect
+Severity:           Critical
+Impact Type:        AI model misinterpretation; Governance bypass
+Affected Files:
+  - docs/specifications/SM-V3.2-SPECIFICATION-001.md (lines 241-243)
+  - docs/ADR-005.md (lines 99, 109, 118)
+  - docs/SM-V3.2-INCREMENT-001-IMPLEMENTATION-RECORD.md (line 46)
+Evidence:
+  SM-V3.2-SPECIFICATION-001 declares governance by:
+    "HARNESS v0.0.7"
+    "VALIDATION-MATURITY-MODEL-001 v0.0.2"
+    "DOCUMENT-AUTHORITY-INDEX"
+  ADR-005 references:
+    "CONDUCTOR-001 | AI-Development-Platform: orchestration/"
+  SM-V3.2-INCREMENT-001 states:
+    "The situation-monitor directory is currently untracked in the
+     platform repository"
+
+  None of these referenced documents exist in situation-monitor.
+  An agent operating in situation-monitor CANNOT:
+    - Verify HARNESS v0.0.7 rules
+    - Verify VMM v0.0.2 maturity criteria
+    - Verify DAI authority hierarchy
+    - Verify CONDUCTOR-001 orchestration spec
+    - Resolve cross-repository governance claims
+Root Cause:
+  The product repository references platform governance documents by
+  name and version but does not include them, mirror them, or provide
+  a machine-resolvable path to them. The references are human-readable
+  but not agent-resolvable within a single-repository session.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Either: (a) Include a cross-repository reference manifest in
+  situation-monitor that an agent can use to verify it needs platform
+  repo access, OR (b) ensure that any governance review of
+  situation-monitor is conducted from a session that has access to
+  both repositories.
+Preventive Mechanism:
+  A cross-repository dependency declaration in AI-WORKFLOW.md:
+  "This repository is governed by documents in
+  AI-Development-Platform. Reviews requiring governance verification
+  must have access to both repositories."
+Owner Document:     AI-WORKFLOW.md (situation-monitor) and
+                    DOCUMENT-AUTHORITY-INDEX (AI-Development-Platform)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-H-001
+Title:              SM-V3.2 Increment 001 Proceeded Without Approved
+                    Inputs In Repository
+Defect Class:       Class C — Governance defect
+Severity:           High
+Impact Type:        Governance bypass
+Affected Files:
+  - docs/SM-V3.2-INCREMENT-001-IMPLEMENTATION-RECORD.md
+  - decisions/SM-V3.2-IMPLEMENTATION-DECISIONS-001.md
+  - docs/specifications/SM-V3.2-SPECIFICATION-001.md
+Evidence:
+  SM-V3.2-INCREMENT-001-IMPLEMENTATION-RECORD (Finding #1):
+    "The repository did not contain the referenced approved input files:
+     SM-V3.2-SPECIFICATION-001
+     SM-V3.2-IMPLEMENTATION-DECISIONS-001"
+
+  The implementation record itself documents that execution proceeded
+  WITHOUT the approved specification and decision documents being
+  present in the repository at implementation time. They were added
+  in separate PRs (#16, #17) and the implementation ran in PR #18.
+
+  The implementation record (Finding #2) states:
+    "Implementation proceeded using the authorized scope provided in
+     the execution request."
+
+  This means the execution agent received scope via chat/prompt rather
+  than via repository-resident approved documents.
+Root Cause:
+  The governance pipeline requires specification approval before
+  implementation. The documents were created and approved but were
+  merged to main in a sequence that left the implementation agent
+  without repository access to them at execution time. The agent
+  accepted scope from the execution request (conversation) rather
+  than from the repository (the system of record).
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  The governance model should require that approved input documents
+  are verifiably present in the repository (on the execution branch)
+  BEFORE implementation begins. The implementation agent should
+  verify: "Can I read SM-V3.2-SPECIFICATION-001 from this branch?"
+Preventive Mechanism:
+  An implementation pre-check: the execution agent reads the
+  specification and decision documents from the repository before
+  writing any code. If they are not present, it halts.
+Owner Document:     HARNESS (governance version)
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-H-002
+Title:              V3.2 Specification Status Is "Draft" But
+                    Implementation Is Complete
+Defect Class:       Class F — Workflow/process-state defect
+Severity:           High
+Impact Type:        Human operator confusion; AI model misinterpretation
+Affected Files:
+  - docs/specifications/SM-V3.2-SPECIFICATION-001.md (line 4)
+Evidence:
+  SM-V3.2-SPECIFICATION-001 header:
+    "Status: Draft"
+    "Version: v0.2.0"
+
+  But:
+  - Implementation decisions (SM-V3.2-IMPLEMENTATION-DECISIONS-001)
+    are at Status: Candidate, Version: v1.0.0
+  - SM-V3.2-INCREMENT-001 implementation is COMPLETE (smoke 25/25,
+    browser 18/18)
+  - The specification was merged to main (PR #16)
+
+  An agent reading the specification will see "Draft" and may conclude
+  that implementation has not been approved. But implementation is
+  already done and merged.
+Root Cause:
+  Document status was not updated when the specification was approved
+  for implementation. The lifecycle (Draft -> Candidate -> Approved ->
+  Implemented) was not enforced at merge time.
+Symptom or Root Cause:  ROOT CAUSE
+Recommended Remediation:
+  Update specification status to reflect its actual lifecycle position
+  (at minimum: "Approved" or "Implementation Complete").
+Preventive Mechanism:
+  A merge-time check: when a specification is referenced by an
+  approved implementation decision document, its status should be
+  updated to "Approved."
+Owner Document:     SM-V3.2-SPECIFICATION-001.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-H-003
+Title:              Implementation Decisions Status Is "Candidate" But
+                    Implementation Is Complete
+Defect Class:       Class F — Workflow/process-state defect
+Severity:           High
+Impact Type:        Human operator confusion; AI model misinterpretation
+Affected Files:
+  - decisions/SM-V3.2-IMPLEMENTATION-DECISIONS-001.md (line 6)
+Evidence:
+  Status field: "Candidate"
+  But the document's own Change Log says:
+    "v1.0.0 — Implementation decision set approved."
+    "Ready for GitHub review, commit, PR, and merge."
+  And implementation is complete (PR #18 merged, tests passing).
+Root Cause:
+  Same as R2-H-002. The status field was written at document creation
+  time and never updated through the lifecycle.
+Symptom or Root Cause:  SYMPTOM of the same lifecycle-tracking gap
+Recommended Remediation:
+  Update status to "Approved" or "Implemented."
+Preventive Mechanism:
+  Same as R2-H-002.
+Owner Document:     SM-V3.2-IMPLEMENTATION-DECISIONS-001.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-H-004
+Title:              Pre-Commit Hook Still Product-Only — No Structural
+                    Governance Coverage
+Defect Class:       Class H — Factory scalability defect
+Severity:           High
+Impact Type:        Repository pollution; Governance bypass
+Affected Files:     .githooks/pre-commit
+Evidence:
+  The pre-commit hook is IDENTICAL to Round 1 (146 lines, same 9
+  checks). No structural validation was added. The hook still:
+  - Only triggers on situation-monitor.html changes
+  - Cannot detect new top-level directories
+  - Cannot validate document status consistency
+  - Cannot enforce repository boundary rules
+  - Cannot detect cross-document version mismatches
+  This was Round 1 finding H-003 and H-005. Status: UNCHANGED.
+Root Cause:
+  WP002 remediation (if it occurred) happened in AI-Development-Platform,
+  not in situation-monitor. The product repository's own enforcement
+  mechanisms were not updated.
+Symptom or Root Cause:  SYMPTOM of the boundary gap
+Recommended Remediation:
+  If situation-monitor is to remain a standalone repository governed
+  by external platform documents, its hook should at minimum validate
+  that no undeclared top-level directories are created.
+Preventive Mechanism:
+  Directory allowlist in pre-commit hook.
+Owner Document:     .githooks/pre-commit
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-M-001
+Title:              BACKLOG.md Version Still Stale
+Defect Class:       Class A — Documentation defect
+Severity:           Medium
+Impact Type:        AI model misinterpretation
+Affected Files:     docs/BACKLOG.md
+Evidence:
+  BACKLOG.md header: "Current version: v3.0.0"
+  VERSION file: 3.2.0
+  Delta: 2 minor versions behind.
+  This was Round 1 finding M-001. It was stale then (v3.0.0 vs v3.0.3)
+  and is MORE stale now (v3.0.0 vs v3.2.0).
+Root Cause:
+  Manual field, no automation. Same as Round 1.
+Symptom or Root Cause:  SYMPTOM (recurring, unfixed)
+Recommended Remediation:
+  Remove the field or automate it.
+Preventive Mechanism:
+  Same as Round 1 recommendation.
+Owner Document:     docs/BACKLOG.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-M-002
+Title:              HARNESS.md Error Count Still Stale
+Defect Class:       Class A — Documentation defect
+Severity:           Medium
+Impact Type:        Human operator confusion
+Affected Files:     docs/HARNESS.md
+Evidence:
+  HARNESS.md still states: "a fail log with 8 documented errors"
+  AI-WORKFLOW.md fail log: 16 entries (unchanged since Round 1)
+  This was Round 1 finding M-002. UNCHANGED.
+Root Cause:         Same as Round 1.
+Symptom or Root Cause:  SYMPTOM (recurring, unfixed)
+Recommended Remediation:
+  Replace count with reference.
+Owner Document:     docs/HARNESS.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-M-003
+Title:              ADR-003 Supersedence Note Still Contradicts Reality
+Defect Class:       Class A — Documentation defect
+Severity:           Medium
+Impact Type:        AI model misinterpretation
+Affected Files:     docs/ADR-003.md
+Evidence:
+  ADR-003 still says: "Superseded by: -- (supersede if CI moves to
+  GitHub Actions or Playwright replaces the bash hook)"
+  CI HAS moved to GitHub Actions (v2.10.0, still active).
+  Playwright tests ARE now running (13/13 at v3.1.0).
+  Both trigger conditions are met. ADR not updated.
+  This was Round 1 finding M-005. UNCHANGED.
+Root Cause:         Same as Round 1.
+Symptom or Root Cause:  ROOT CAUSE (ADR lifecycle not maintained)
+Recommended Remediation:
+  Update supersedence note.
+Owner Document:     docs/ADR-003.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-M-004
+Title:              Version History Not Updated for v3.2.0
+Defect Class:       Class A — Documentation defect
+Severity:           Medium
+Impact Type:        Human operator confusion
+Affected Files:     README.md, AI-WORKFLOW.md
+Evidence:
+  README.md version history ends at v3.1.0.
+  AI-WORKFLOW.md version history ends at v3.0.3.
+  VERSION file: 3.2.0.
+  v3.2.0 Increment 001 is implemented and merged (PR #18).
+  Neither version history file records it.
+Root Cause:
+  Three-way version history duplication (Round 1 H-002). Each
+  release requires manual updates to multiple files. v3.2 implementation
+  updated the HTML and tests but did not update the version history
+  tables.
+Symptom or Root Cause:  SYMPTOM of H-002 (recurring)
+Recommended Remediation:
+  Update version history in README.md and AI-WORKFLOW.md.
+Owner Document:     README.md, AI-WORKFLOW.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-M-005
+Title:              No REGRESSION.md Entry for v3.2.0
+Defect Class:       Class F — Workflow/process-state defect
+Severity:           Medium
+Impact Type:        Governance bypass
+Affected Files:     REGRESSION.md
+Evidence:
+  REGRESSION.md latest entry: v3.1.0
+  VERSION: 3.2.0
+  The v3.2 increment is implemented, tested (smoke 25/25, browser
+  18/18 per implementation record), and merged — but REGRESSION.md
+  has no entry for it.
+  This is notable because the pre-commit hook requires REGRESSION.md
+  to be staged alongside HTML changes (check #6). Either the check
+  was bypassed, or REGRESSION.md was staged with content that did not
+  include a v3.2.0 entry header.
+Root Cause:
+  The pre-commit hook checks that REGRESSION.md is STAGED but does
+  not validate that it contains an entry for the current version.
+  An agent can satisfy the check by staging REGRESSION.md with any
+  change (or no new entry).
+Symptom or Root Cause:  ROOT CAUSE (hook gap)
+Recommended Remediation:
+  Add v3.2.0 regression entry. Consider strengthening the hook to
+  verify REGRESSION.md contains the new version string.
+Preventive Mechanism:
+  Hook check: grep for the new version number in REGRESSION.md.
+Owner Document:     REGRESSION.md + .githooks/pre-commit
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-L-001
+Title:              New Directory "decisions/" Not Documented
+Defect Class:       Class A — Documentation defect
+Severity:           Low
+Impact Type:        AI model misinterpretation (minor)
+Affected Files:     README.md (ADR table does not list decisions/)
+Evidence:
+  A new top-level directory "decisions/" was added for implementation
+  decision documents. README.md's documentation table does not reference
+  it. An agent scanning README.md for the document inventory will miss
+  the decisions/ directory entirely.
+Root Cause:
+  README.md was not updated when the decisions/ directory was created.
+Symptom or Root Cause:  SYMPTOM (minor)
+Recommended Remediation:
+  Add decisions/ to the README documentation table.
+Owner Document:     README.md
+---------------------------------------------------------------------------
+
+---------------------------------------------------------------------------
+ID:                 R2-L-002
+Title:              New Directory "docs/specifications/" Not Documented
+Defect Class:       Class A — Documentation defect
+Severity:           Low
+Impact Type:        AI model misinterpretation (minor)
+Affected Files:     README.md
+Evidence:
+  Same as R2-L-001 but for docs/specifications/.
+Root Cause:         Same.
+Recommended Remediation:
+  Add specifications to README documentation table.
+Owner Document:     README.md
+---------------------------------------------------------------------------
+
+
+===========================================================================
+4. WHAT IMPROVED SINCE ROUND 1
+===========================================================================
+
+1. PLATFORM REPOSITORY EXISTS
+   AI-Development-Platform was created on GitHub (2026-06-01). This is
+   a material improvement: the governance work now has a persistence
+   location. Round 1 root cause #2 is partially addressed.
+
+2. CROSS-REPOSITORY REFERENCES ARE EXPLICIT
+   ADR-005 names the platform repository and specific paths:
+   "CONDUCTOR-001 | AI-Development-Platform: orchestration/"
+   SM-V3.2-SPECIFICATION-001 names governing documents with versions:
+   "HARNESS v0.0.7", "VMM v0.0.2", "DOCUMENT-AUTHORITY-INDEX"
+   These references are not yet machine-resolvable but they are
+   human-readable and auditable.
+
+3. GOVERNANCE PIPELINE VALIDATED AT FEATURE SCALE
+   ADR-005 records the first end-to-end validation of the multi-model
+   governance pipeline. This is genuine evidence: specification ->
+   decisions -> execution -> testing -> validation -> release.
+   The artifact chain is auditable from the repository.
+
+4. NEW DOCUMENT TYPES ESTABLISHED
+   Three new document types appeared:
+   - Specifications (docs/specifications/)
+   - Implementation Decisions (decisions/)
+   - Implementation Records (docs/)
+   These provide structural separation that did not exist in Round 1.
+
+5. v3.1 AND v3.2 DELIVERED THROUGH GOVERNANCE
+   Two product releases were delivered since Round 1, both following
+   the governance pipeline. The pipeline is now demonstrated twice,
+   not just theorized.
+
+
+===========================================================================
+5. WHAT STILL FAILS
+===========================================================================
+
+ROUND 1 FINDINGS — STATUS:
+
+| Round 1 ID | Title                              | Status     |
+|------------|-------------------------------------|------------|
+| C-001      | Repository Identity Crisis          | OPEN       |
+| C-002      | Platform Layer Zero Repo Presence   | PARTIAL    |
+| C-003      | No Repository Boundary Document     | OPEN       |
+| H-001      | AI-WORKFLOW.md Conflates 4 Roles    | OPEN       |
+| H-002      | Three-Way Version History Dup       | OPEN       |
+| H-003      | Pre-Commit Hook Product Only        | OPEN       |
+| H-004      | Architecture.md Governance Creep    | OPEN       |
+| H-005      | No Structural Change Prevention     | OPEN       |
+| M-001      | BACKLOG.md Version Stale            | WORSE      |
+| M-002      | HARNESS.md Error Count Stale        | OPEN       |
+| M-003      | Branch Name Implies Unstarted Work  | N/A        |
+| M-004      | Evidence Authority Not Declared     | OPEN       |
+| M-005      | ADR-003 Supersedence Contradicts    | OPEN       |
+| L-001      | REFLECTION.md Header Inconsistent   | OPEN       |
+| L-002      | ADR-002 References Replaced API     | OPEN       |
+| L-003      | BACKLOG.md Delivered Items          | OPEN       |
+
+Of 16 Round 1 findings:
+  Fixed:    0
+  Partial:  1 (C-002)
+  Open:     13
+  Worse:    1 (M-001)
+  N/A:      1 (M-003 — branch no longer relevant)
+
+
+===========================================================================
+6. NEW FINDINGS INTRODUCED BY WP002 (OR POST-ROUND-1 WORK)
+===========================================================================
+
+| ID        | Title                                          | Severity |
+|-----------|------------------------------------------------|----------|
+| R2-C-001  | Review Executed in Wrong Repo Context           | Critical |
+| R2-C-002  | Product References Unverifiable Platform Docs   | Critical |
+| R2-H-001  | V3.2 Inc 001 Proceeded Without Approved Inputs  | High     |
+| R2-H-002  | V3.2 Spec Status "Draft" But Implementation Done| High     |
+| R2-H-003  | Decisions Status "Candidate" But Implemented    | High     |
+| R2-M-004  | Version History Not Updated for v3.2.0          | Medium   |
+| R2-M-005  | No REGRESSION.md Entry for v3.2.0               | Medium   |
+| R2-L-001  | decisions/ Directory Not Documented              | Low      |
+| R2-L-002  | specifications/ Directory Not Documented         | Low      |
+
+5 of 9 new findings (both Critical, two High, one Medium) relate
+directly to the product/platform boundary — the exact area WP002
+was supposed to remediate.
+
+
+===========================================================================
+7. FACTORY SCALABILITY ASSESSMENT
+===========================================================================
+
+Can this repository now scale to support multiple products?
+
+  ANSWER: NO (same as Round 1)
+
+While the platform repository now exists separately, situation-monitor
+itself has not changed structurally. The pre-commit hook is still
+single-product. The CI is still single-test-suite. The documents still
+have no role declarations. The version history is still duplicated.
+
+The creation of AI-Development-Platform is a necessary step toward
+scalability, but situation-monitor's own readiness to BE GOVERNED by
+that platform has not improved. It still cannot:
+  - Verify platform governance documents
+  - Enforce platform rules locally
+  - Distinguish its own authority from platform authority
+  - Prevent structural contamination
+
+
+===========================================================================
+8. AI-AGENT RISK ASSESSMENT
+===========================================================================
+
+RISK 1: WRONG-CONTEXT EXECUTION (Probability: DEMONSTRATED)
+  This review is the proof. An AI agent was directed to audit
+  AI-Development-Platform and executed against situation-monitor.
+  No mechanism caught it. Severity: Critical.
+
+RISK 2: UNRESOLVABLE CROSS-REPO REFERENCES (Probability: HIGH)
+  SM-V3.2-SPECIFICATION-001 names HARNESS v0.0.7, VMM v0.0.2, and DAI
+  as governing documents. An implementation agent in situation-monitor
+  cannot read these. It will either: (a) ignore the governance
+  requirements (bypass), or (b) hallucinate their content from training
+  data (incorrect compliance), or (c) halt (blocked).
+  Already observed: SM-V3.2-INCREMENT-001 notes the specification was
+  not in the repository at implementation time.
+
+RISK 3: STALE STATUS FIELDS (Probability: HIGH)
+  Two documents have status fields that contradict reality (Draft and
+  Candidate when implementation is complete). Agents reading these will
+  make incorrect state assessments.
+
+RISK 4: REGRESSION DOCUMENTATION GAP (Probability: MEDIUM)
+  The pre-commit hook checks REGRESSION.md is staged but not that it
+  contains the current version's entry. An agent can satisfy the check
+  mechanically without documenting the actual regression results.
+
+RISK 5: STRUCTURAL CONTAMINATION (Probability: MEDIUM, unchanged)
+  No mechanism prevents directory creation. Two new directories were
+  added (decisions/, docs/specifications/) without documentation in
+  README.md or any structural governance check.
+
+
+===========================================================================
+9. REQUIRED REMEDIATION BEFORE v3.2.0 INCREMENT 002 COMPLETION
+===========================================================================
+
+REQ-1: EXECUTE THIS REVIEW IN THE CORRECT REPOSITORY
+  Round 2 must be re-run against AI-Development-Platform to evaluate
+  WP002. The current review cannot answer the mandatory questions about
+  DOCUMENT-AUTHORITY-INDEX, HARNESS governance alignment, or Repository
+  Context Verification because those documents are not accessible.
+
+REQ-2: UPDATE DOCUMENT STATUS FIELDS
+  SM-V3.2-SPECIFICATION-001: Draft -> Approved (or Implemented)
+  SM-V3.2-IMPLEMENTATION-DECISIONS-001: Candidate -> Approved
+
+REQ-3: ADD v3.2.0 REGRESSION ENTRY
+  REGRESSION.md must document the v3.2.0 increment test results.
+
+REQ-4: UPDATE VERSION HISTORY
+  README.md and AI-WORKFLOW.md must include v3.2.0 entries.
+
+REQ-5: DECLARE CROSS-REPOSITORY DEPENDENCY
+  AI-WORKFLOW.md should state that this repository is governed by
+  documents in AI-Development-Platform, and that governance reviews
+  require access to both repositories.
+
+
+===========================================================================
+10. OPTIONAL IMPROVEMENTS
+===========================================================================
+
+OPT-1: Document new directory structure in README
+  Add decisions/ and docs/specifications/ to the documentation table.
+
+OPT-2: Strengthen REGRESSION.md hook check
+  Verify the new version string appears in REGRESSION.md content,
+  not just that the file is staged.
+
+OPT-3: Add directory allowlist to pre-commit hook
+  Permitted top-level dirs: docs, decisions, tests, .githooks, .github
+  Any new directory triggers a warning.
+
+OPT-4: Fix Round 1 stale-document findings
+  BACKLOG.md version, HARNESS.md error count, ADR-003 supersedence,
+  REFLECTION.md header format.
+
+
+===========================================================================
+11. FINAL RECOMMENDATION
+===========================================================================
+
+  C. Run remediation round first.
+
+But the remediation has two parts:
+
+PART A (blocking): Re-run Round 2 in a session with access to
+  AI-Development-Platform. The mandatory questions about DOCUMENT-
+  AUTHORITY-INDEX, HARNESS governance, and Repository Context
+  Verification CANNOT be answered from situation-monitor. Until the
+  platform review is completed, the review objective is unmet.
+
+PART B (actionable now): Fix the situation-monitor findings that do
+  not require platform access:
+  - Update document status fields (REQ-2)
+  - Add v3.2.0 regression entry (REQ-3)
+  - Update version history (REQ-4)
+  - Declare cross-repository dependency (REQ-5)
+
+Recommendation D (stop and redesign) is NOT warranted. The governance
+model is demonstrably working — two releases delivered through the
+pipeline. The problem is operational (wrong session context, stale
+status fields) not architectural.
+
+
+===========================================================================
+12. CONFIDENCE ASSESSMENT
+===========================================================================
+
+Confidence in findings (situation-monitor):     HIGH
+  All findings verified against filesystem and file content.
+
+Confidence in findings (AI-Development-Platform): ZERO
+  Cannot access the target repository. No findings possible.
+
+Confidence in Round 1 remediation assessment:    HIGH for situation-
+  monitor, LOW for platform. 13 of 16 Round 1 findings are verifiably
+  open in situation-monitor. Whether they were addressed in the platform
+  repository is unknown.
+
+Confidence in recommendation:                    HIGH
+  The recommendation is structurally sound: you cannot review a
+  repository you cannot access. Re-running in the correct context
+  is the minimum viable remediation.
+
+Key uncertainty:
+  WP002 may have addressed many or all of the Round 1 root causes
+  in AI-Development-Platform. This review can neither confirm nor deny
+  that. The strongest statement possible is: whatever WP002 did in the
+  platform repository has not yet propagated to situation-monitor's
+  own documents, hooks, or CI.
+
+
+===========================================================================
+13. APPENDIX
+===========================================================================
+
+A. MANDATORY QUESTIONS — ANSWERS
+
+1. Does DOCUMENT-AUTHORITY-INDEX.md now clearly define AI-Development-
+   Platform as a Platform Repository?
+   CANNOT VERIFY. Document not in situation-monitor. AI-Development-
+   Platform not accessible.
+
+2. Does it clearly state that the platform repository is not a product
+   repository?
+   CANNOT VERIFY. Same reason.
+
+3. Does it clearly prohibit product repositories inside the platform
+   repository?
+   CANNOT VERIFY. However, SM-V3.2-INCREMENT-001 (line 46) states:
+   "The situation-monitor directory is currently untracked in the
+   platform repository" — suggesting situation-monitor MAY exist as a
+   directory inside AI-Development-Platform, which would mean it is NOT
+   prohibited.
+
+4. Does it correctly handle historical embedded repository exceptions?
+   CANNOT VERIFY.
+
+5. Does HARNESS.md align with the new authority classification?
+   CANNOT VERIFY for governance HARNESS. situation-monitor's
+   docs/HARNESS.md is unchanged from Round 1 (harness engineering
+   essay, not governance framework).
+
+6. Does HARNESS.md now distinguish historical embedded exceptions from
+   approved repository patterns?
+   CANNOT VERIFY.
+
+7. Does Repository Context Verification now include Target Repository
+   and Current Repository?
+   EMPIRICALLY NO. This review was executed in the wrong repository
+   context and no mechanism stopped it.
+
+8. Does it include a PASS/FAIL result model?
+   CANNOT VERIFY from this session. Observable behavior: FAIL (review
+   proceeded in wrong context).
+
+9. Does it stop when Target Repository does not equal Current Repository?
+   NO. Demonstrated by this review session.
+
+10. Can an AI agent still reasonably recreate situation-monitor inside
+    AI-Development-Platform?
+    UNKNOWN from this session. SM-V3.2-INCREMENT-001 suggests
+    situation-monitor already exists as an untracked directory inside
+    AI-Development-Platform. If true, the risk has already materialized.
+
+11. Can an AI agent still place review artifacts in the wrong repository?
+    YES. The Round 1 review artifact (AI-REVIEW-ROUND1-CLAUDE-*.txt)
+    was placed in situation-monitor. If that was intended for the
+    platform repository, it is in the wrong location. No mechanism
+    validates artifact placement.
+
+12. Is Architecture.md still carrying governance responsibility that
+    belongs elsewhere?
+    YES. docs/ARCHITECTURE.md is unchanged from Round 1. 2 of 3
+    diagrams still describe governance flow, not system architecture.
+
+13. Are Current Focus and Next Milestone synchronized after WP002?
+    NO in situation-monitor. BACKLOG says v3.0.0. VERSION says 3.2.0.
+    SPECIFICATION says v3.2 target. Implementation record says v3.2
+    Increment 001 is done. No single synchronized status view exists.
+
+14. Are evidence/hypothesis documents still likely to be confused with
+    authority?
+    YES. AI-WORKFLOW.md still conflates authority and evidence. Document
+    roles are still undeclared.
+
+15. Would this repository now scale better to 10, 100 or 1000 product
+    repositories?
+    MARGINALLY. The existence of AI-Development-Platform as a separate
+    repository is a structural improvement. But situation-monitor itself
+    has not gained any scalability features.
+
+
+B. FILES READ (situation-monitor, main branch)
+
+  README.md                                            (199 lines)
+  AI-WORKFLOW.md                                       (214 lines)
+  REGRESSION.md                                        (780 lines)
+  docs/ADR-001.md                                      (118 lines)
+  docs/ADR-002.md                                      (113 lines)
+  docs/ADR-003.md                                      (129 lines)
+  docs/ADR-004.md                                      (111 lines)
+  docs/ADR-005.md                                      (158 lines)
+  docs/ARCHITECTURE.md                                 (122 lines)
+  docs/BACKLOG.md                                      (149 lines)
+  docs/HARNESS.md                                      (224 lines)
+  docs/REFLECTION.md                                   (93 lines)
+  docs/STAKEHOLDER-SUMMARY.md                          (112 lines)
+  docs/SM-V3.2-INCREMENT-001-IMPLEMENTATION-RECORD.md  (75 lines)
+  docs/specifications/SM-V3.1-FINAL-SPECIFICATION-001.md (167 lines)
+  docs/specifications/SM-V3.2-SPECIFICATION-001.md     (413 lines)
+  decisions/SM-V3.1-IMPLEMENTATION-DECISIONS-001.md    (105 lines)
+  decisions/SM-V3.2-IMPLEMENTATION-DECISIONS-001.md    (340 lines)
+  .githooks/pre-commit                                 (146 lines)
+  .github/workflows/ci.yml                             (21 lines)
+  Total: 20 files, ~3,869 lines
+
+  Skipped: 0
+
+
+C. REVIEW METADATA
+
+  Elapsed time:       ~88 seconds (18:17:16 to 18:18:44 UTC)
+  Target repository:  jmantyne/AI-Development-Platform (NOT ACCESSIBLE)
+  Audited repository: jmantyne/situation-monitor (accessible)
+  Platform access:    DENIED
+  Artifacts created:  This file (1)
+  Files modified:     None
+  Commits made:       None
+
+
+===========================================================================
+END OF REVIEW
+===========================================================================
