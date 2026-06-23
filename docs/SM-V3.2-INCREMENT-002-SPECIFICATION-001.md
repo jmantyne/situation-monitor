@@ -1,8 +1,10 @@
+Tässä koko päivitetty tiedosto v0.2.0:
+
 Document ID: SM-V3.2-INCREMENT-002-SPECIFICATION-001
 
 Title: Situation Monitor v3.2 Increment 002 Specification
 
-Version: v0.1.0
+Version: v0.2.0
 
 Status: Draft
 
@@ -14,7 +16,7 @@ Increment: 002
 
 Created: 2026-06-23T00:30:00Z
 
-Last Updated: 2026-06-23T00:30:00Z
+Last Updated: 2026-06-23T02:10:00Z
 
 Timezone: UTC
 
@@ -37,6 +39,20 @@ Jussi Mantynen
 ⸻
 
 Change Log
+
+v0.2.0
+
+2026-06-23T02:10:00Z
+
+Updated OD-001 configurable city boundary.
+
+Changed configurable city range from 0–3 to 2–6.
+
+Added Dashboard Capacity Model.
+
+Added Founder Validation Evidence.
+
+Recorded OD-001 Resolution.
 
 v0.1.0
 
@@ -96,7 +112,7 @@ Increment 002 delivers:
 * Restore default curated city set
 * Duplicate city prevention
 * Unsupported city handling
-* Support for 0–3 configurable cities
+* Support for 2–6 configurable cities
 
 while preserving:
 
@@ -105,6 +121,125 @@ while preserving:
 * Existing AQI functionality
 * Existing map functionality
 * Existing temporary inspection functionality
+
+⸻
+
+Dashboard Capacity Model
+
+Minimum Configuration:
+
+World Map
+
+plus
+
+2 monitored locations
+
+equals
+
+3 dashboard cells.
+
+Default Configuration:
+
+World Map
+
+plus
+
+11 curated cities
+
+equals
+
+12 dashboard cells.
+
+Maximum Configuration:
+
+World Map
+
+plus
+
+11 curated cities
+
+plus
+
+6 configurable cities
+
+equals
+
+18 dashboard cells.
+
+The 18-cell maximum supports a visually balanced three-row layout on desktop and remains usable on validated mobile layouts.
+
+⸻
+
+OD-001 Resolution
+
+Decision:
+
+APPROVED
+
+Decision Authority:
+
+Founder Approval
+
+Approved Dashboard Capacity:
+
+Minimum:
+
+Map + 2 monitored locations
+
+Maximum:
+
+Map + 11 curated cities + 6 configurable cities
+
+Approved Configurable City Range:
+
+2–6 configurable cities
+
+Review Recommendation:
+
+0–3 configurable cities
+
+Final Founder Decision:
+
+2–6 configurable cities
+
+Rationale:
+
+The primary useful scenario requires at least two monitored user locations, such as home and destination.
+
+Founder usability validation confirmed that the maximum dashboard configuration remains readable and operational on:
+
+* Desktop browser
+* iPhone portrait
+* iPhone landscape
+
+⸻
+
+Founder Validation Evidence
+
+Founder validation confirmed that the proposed maximum capacity preserves usability across:
+
+* Mac desktop browser
+* iPhone portrait
+* iPhone landscape
+
+Observation:
+
+The current default dashboard uses:
+
+* World Map
+* 11 curated cities
+
+for a 12-cell layout.
+
+The approved maximum uses:
+
+* World Map
+* 11 curated cities
+* 6 configurable cities
+
+for an 18-cell layout.
+
+This preserves a balanced dashboard structure while supporting practical user scenarios.
 
 ⸻
 
@@ -134,7 +269,7 @@ FR-002-006
 
 Configurable city count supports:
 
-0–3 configurable cities.
+2–6 configurable cities.
 
 FR-002-007
 
@@ -184,6 +319,8 @@ Functional Acceptance:
 * Unsupported city selections do not break the dashboard.
 * Default curated city configuration can be restored.
 * Existing monitoring functionality remains operational.
+* Configurable city range supports 2–6 configurable cities.
+* Maximum dashboard capacity supports 18 cells.
 
 Regression Acceptance:
 
@@ -192,6 +329,9 @@ Regression Acceptance:
 * Existing map functionality remains operational.
 * Existing temporary inspection functionality remains operational.
 * Existing validated user workflows remain operational.
+* Desktop usability remains acceptable at maximum capacity.
+* iPhone portrait usability remains acceptable at maximum capacity.
+* iPhone landscape usability remains acceptable at maximum capacity.
 
 Validation Acceptance:
 
@@ -201,6 +341,7 @@ Validation Acceptance:
 * Validation evidence recorded.
 * Regression evidence recorded.
 * Human approval recorded.
+* OD-001 decision recorded.
 
 ⸻
 
@@ -297,7 +438,7 @@ How is restore-default behavior exposed?
 
 OQ-003
 
-What layout behavior is used at maximum city count?
+What exact layout behavior is used at maximum city count?
 
 OQ-004
 
@@ -310,4 +451,3 @@ Expected Outcome
 Increment 002 completes the approved city-management capability originally defined for Situation Monitor v3.2.0 while preserving product identity, governance integrity and regression protection.
 
 Successful completion strengthens Validation #002 evidence without introducing unapproved scope expansion.
-
