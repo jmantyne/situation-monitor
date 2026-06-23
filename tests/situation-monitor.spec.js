@@ -83,16 +83,49 @@ async function openApp(page, options) {
   return api;
 }
 
-async function openAppWithStoredCity(page, city) {
+async function openAppWithLegacyStoredCity(page, city) {
   await page.addInitScript(value => {
     localStorage.setItem('situation-monitor.configurableCity.v1', JSON.stringify(value));
   }, city);
   return openApp(page);
 }
 
+async function openAppWithStoredConfigurableCities(page, cities) {
+  await page.addInitScript(value => {
+    localStorage.setItem('situation-monitor.configurableCities.v2', JSON.stringify(value));
+  }, cities);
+  return openApp(page);
+}
+
 async function clickMap(page, x = 90, y = 90) {
   await page.locator('#map').click({ position: { x, y } });
 }
+
+async function saveMapPoint(page, lat, lon) {
+  await page.evaluate(({ lat, lon }) => {
+    map.fire('click', { latlng: L.latLng(lat, lon) });
+  }, { lat, lon });
+  await expect(page.locator('#inspection-overlay')).toBeVisible();
+  await page.locator('#inspection-save').click();
+}
+
+const MAX_CONFIGURABLE_POINTS = [
+  [10.0, 10.0],
+  [20.0, 20.0],
+  [30.0, 30.0],
+  [40.0, 40.0],
+  [50.0, 50.0],
+  [60.0, 60.0],
+];
+
+const STORED_CONFIGURABLE_CITIES = [
+  { lat: 35.0, lon: 139.0 },
+  { lat: 48.8, lon: 2.3 },
+  { lat: -23.5, lon: -46.6 },
+  { lat: 19.4, lon: -99.1 },
+  { lat: 1.3, lon: 103.8 },
+  { lat: 64.1, lon: -21.9 },
+];
 
 test.describe('Situation Monitor', () => {
 
@@ -192,74 +225,142 @@ test.describe('Situation Monitor', () => {
   test('saving an inspection creates one persistent configurable city card', async ({ page }) => {
     const api = await openApp(page);
     api.enableInspectionMode();
-    await clickMap(page, 120, 90);
-    await page.locator('#inspection-save').click();
+    await saveMapPoint(page, 12.345, 67.89);
     await expect(page.locator('.city-card')).toHaveCount(12);
-    await expect(page.locator('#card-configurable-city')).toBeVisible();
-    await expect(page.locator('#card-configurable-city .card-name')).toHaveText('Saved Point');
-    await expect(page.locator('#card-configurable-city .home-badge')).toHaveText('SAVED');
-    const saved = await page.evaluate(() => localStorage.getItem('situation-monitor.configurableCity.v1'));
-    expect(saved).toContain('lat');
-    expect(saved).toContain('lon');
+    await expect(page.locator('#card-configurable-city-1')).toBeVisible();
+    await expect(page.locator('#card-configurable-city-1 .card-name')).toHaveText('Saved Point 1');
+    await expect(page.locator('#card-configurable-city-1 .home-badge')).toHaveText('SAVED');
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCities.v2')));
+    expect(saved).toHaveLength(1);
+    expect(saved[0]).toHaveProperty('lat');
+    expect(saved[0]).toHaveProperty('lon');
   });
 
-  test('persistent configurable city reloads from storage', async ({ page }) => {
-    await openAppWithStoredCity(page, { lat: 35.0, lon: 139.0 });
-    await expect(page.locator('.city-card')).toHaveCount(12);
-    await expect(page.locator('#card-configurable-city')).toBeVisible();
-    await expect(page.locator('#temp-configurable-city')).toContainText('70.5°F / 21.4°C');
+  test('configurable cities reload from v2 storage', async ({ page }) => {
+    await openAppWithStoredConfigurableCities(page, STORED_CONFIGURABLE_CITIES.slice(0, 2));
+    await expect(page.locator('.city-card')).toHaveCount(13);
+    await expect(page.locator('#card-configurable-city-1')).toBeVisible();
+    await expect(page.locator('#card-configurable-city-2')).toBeVisible();
+    await expect(page.locator('#temp-configurable-city-1')).toContainText('70.5°F / 21.4°C');
   });
 
-  test('saving a second inspection replaces the existing configurable city', async ({ page }) => {
-    const api = await openAppWithStoredCity(page, { lat: 35.0, lon: 139.0 });
+  test('legacy v1 configurable city migrates to v2 storage', async ({ page }) => {
+    await openAppWithLegacyStoredCity(page, { lat: 35.0, lon: 139.0 });
+    await expect(page.locator('.city-card')).toHaveCount(12);
+    await expect(page.locator('#card-configurable-city-1')).toBeVisible();
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCities.v2')));
+    expect(saved).toHaveLength(1);
+    expect(saved[0].lat).toBe(35.0);
+    expect(saved[0].lon).toBe(139.0);
+  });
+
+  test('saving inspections appends up to six configurable cities', async ({ page }) => {
+    const api = await openApp(page);
     api.enableInspectionMode();
+    for (let i = 0; i < MAX_CONFIGURABLE_POINTS.length; i += 1) {
+      await saveMapPoint(page, MAX_CONFIGURABLE_POINTS[i][0], MAX_CONFIGURABLE_POINTS[i][1]);
+      await expect(page.locator('.city-card')).toHaveCount(12 + i);
+      await expect(page.locator(`#card-configurable-city-${i + 1}`)).toBeVisible();
+    }
+    await expect(page.locator('.city-card')).toHaveCount(17);
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCities.v2')));
+    expect(saved).toHaveLength(6);
+  });
+
+  test('seventh configurable city save is blocked safely', async ({ page }) => {
+    const api = await openAppWithStoredConfigurableCities(page, STORED_CONFIGURABLE_CITIES);
+    api.enableInspectionMode();
+    await expect(page.locator('.city-card')).toHaveCount(17);
+    await saveMapPoint(page, -12.3, 77.7);
+    await expect(page.locator('.city-card')).toHaveCount(17);
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCities.v2')));
+    expect(saved).toHaveLength(6);
+  });
+
+  test('duplicate configurable city save is rejected safely', async ({ page }) => {
+    const api = await openApp(page);
+    api.enableInspectionMode();
+    await saveMapPoint(page, 12.345, 67.89);
     await expect(page.locator('.city-card')).toHaveCount(12);
-    await clickMap(page, 170, 120);
-    await page.locator('#inspection-save').click();
+    await saveMapPoint(page, 12.345, 67.89);
     await expect(page.locator('.city-card')).toHaveCount(12);
-    await expect(page.locator('#card-configurable-city')).toHaveCount(1);
-    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCity.v1')));
-    expect(saved.lat).not.toBe(35.0);
-    expect(saved.lon).not.toBe(139.0);
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCities.v2')));
+    expect(saved).toHaveLength(1);
+  });
+
+  test('duplicate curated city coordinate is rejected safely', async ({ page }) => {
+    await openApp(page);
+    const result = await page.evaluate(() => {
+      const before = localStorage.getItem('situation-monitor.configurableCities.v2');
+      const allowed = canAddConfigurableCity({ lat: 21.3069, lon: -157.8583 });
+      return { before, allowed, count: document.querySelectorAll('.city-card').length };
+    });
+    expect(result.allowed).toBe(false);
+    expect(result.before).toBeNull();
+    expect(result.count).toBe(11);
   });
 
   test('removing the configurable city restores the 11 curated city boundary', async ({ page }) => {
-    await openAppWithStoredCity(page, { lat: 35.0, lon: 139.0 });
+    await openAppWithStoredConfigurableCities(page, STORED_CONFIGURABLE_CITIES.slice(0, 2));
+    await expect(page.locator('.city-card')).toHaveCount(13);
+    await page.locator('#card-configurable-city-1 .config-remove').click();
     await expect(page.locator('.city-card')).toHaveCount(12);
-    await page.locator('#card-configurable-city .config-remove').click();
-    await expect(page.locator('.city-card')).toHaveCount(11);
-    await expect(page.locator('#card-configurable-city')).toHaveCount(0);
-    const saved = await page.evaluate(() => localStorage.getItem('situation-monitor.configurableCity.v1'));
-    expect(saved).toBeNull();
+    await expect(page.locator('#card-configurable-city-1')).toBeVisible();
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('situation-monitor.configurableCities.v2')));
+    expect(saved).toHaveLength(1);
   });
 
   test('invalid persistent city data fails closed to curated cities only', async ({ page }) => {
-    await openAppWithStoredCity(page, { lat: 999, lon: 139.0 });
+    await openAppWithStoredConfigurableCities(page, [{ lat: 999, lon: 139.0 }]);
     await expect(page.locator('.city-card')).toHaveCount(11);
-    await expect(page.locator('#card-configurable-city')).toHaveCount(0);
+    await expect(page.locator('[id^="card-configurable-city-"]')).toHaveCount(0);
     for (const id of CITY_IDS) {
       await expect(page.locator(`#card-${id}`)).toBeVisible();
     }
   });
 
+  test('restore default returns to 11 curated cities and clears storage', async ({ page }) => {
+    await openAppWithStoredConfigurableCities(page, STORED_CONFIGURABLE_CITIES.slice(0, 3));
+    await expect(page.locator('.city-card')).toHaveCount(14);
+    await page.locator('#restore-default').click();
+    await expect(page.locator('.city-card')).toHaveCount(11);
+    await expect(page.locator('[id^="card-configurable-city-"]')).toHaveCount(0);
+    const saved = await page.evaluate(() => ({
+      v2: localStorage.getItem('situation-monitor.configurableCities.v2'),
+      v1: localStorage.getItem('situation-monitor.configurableCity.v1')
+    }));
+    expect(saved.v2).toBeNull();
+    expect(saved.v1).toBeNull();
+  });
+
+  test('desktop remains usable at 18 dashboard cells', async ({ page }) => {
+    await openAppWithStoredConfigurableCities(page, STORED_CONFIGURABLE_CITIES);
+    await expect(page.locator('#map')).toBeVisible();
+    await expect(page.locator('.city-card')).toHaveCount(17);
+    await expect(page.locator('#card-honolulu')).toBeVisible();
+    await expect(page.locator('#card-configurable-city-6')).toBeVisible();
+  });
+
   test('mobile portrait overlay does not hide the map or curated city grid', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    const api = await openApp(page);
+    const api = await openAppWithStoredConfigurableCities(page, STORED_CONFIGURABLE_CITIES);
     api.enableInspectionMode();
     await clickMap(page, 120, 80);
     await expect(page.locator('#inspection-overlay')).toBeVisible();
     await expect(page.locator('#map')).toBeVisible();
     await expect(page.locator('#card-honolulu')).toBeVisible();
+    await expect(page.locator('#card-configurable-city-6')).toBeVisible();
   });
 
   test('mobile landscape overlay does not hide the map or legend', async ({ page }) => {
     await page.setViewportSize({ width: 844, height: 390 });
-    const api = await openApp(page);
+    const api = await openAppWithStoredConfigurableCities(page, STORED_CONFIGURABLE_CITIES);
     api.enableInspectionMode();
     await clickMap(page, 120, 80);
     await expect(page.locator('#inspection-overlay')).toBeVisible();
     await expect(page.locator('#map')).toBeVisible();
     await expect(page.locator('#legend-bar')).toBeVisible();
+    await expect(page.locator('#card-configurable-city-6')).toBeVisible();
   });
 
 });
