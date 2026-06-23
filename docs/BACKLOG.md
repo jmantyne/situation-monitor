@@ -1,7 +1,7 @@
 # Backlog — Situation Monitor
 
-**Date:** 2026-05-29
-**Current version:** v3.1.0
+**Date:** 2026-06-23
+**Current version:** v3.2.0
 **Author:** Jussi Mantynen
 
 ---
@@ -40,17 +40,80 @@ ADR-005 records the governance validation outcome: v3.1 was the first Situation 
 
 ---
 
-### Nice to Have — v3.2
+### Delivered — v3.2
 
-**User-configurable city list**
+**Configurable City Capability**
 
-Currently the 11 cities are hardcoded — there is no way to add, remove, or replace them. A configurable city list would allow any user to build their own monitoring set:
+v3.2 delivered configurable monitoring locations through two governed increments.
 
-- Add a city by name or by tapping the map
-- Remove cities that are not relevant
-- Persist the selection in `localStorage` so it survives page refresh
+#### Increment 001
 
-This is a meaningful step up in complexity: the pre-commit hook city count check (exactly 11) would need to be relaxed or replaced with a range check, and the grid layout would need to adapt to variable city counts.
+Established the first persistent configurable city:
+
+- Save a map inspection as a monitored location
+- Persistent storage across refresh
+- Temporary inspection remains separate from monitored locations
+- Curated 11-city dashboard preserved
+
+#### Increment 002
+
+Expanded the configurable-city model into a bounded collection:
+
+- Add configurable cities from map inspection
+- Remove configurable cities individually
+- Restore default dashboard
+- Duplicate prevention
+- Unsupported-selection fail-safe behavior
+- v2 persistence model
+- Legacy v1 migration support
+- Dashboard capacity model
+
+Delivered dashboard capacity:
+
+- Default: Map + 11 curated cities = 12 cells
+- Maximum: Map + 11 curated cities + 6 configurable cities = 18 cells
+
+Validation completed on:
+
+- Desktop Safari
+- iPhone Portrait
+- iPhone Landscape
+
+ADR-006 records the governance validation outcome: Increment 002 became the second successful end-to-end validation of the multi-model AI governance delivery pipeline and confirmed human decision authority over review consensus.
+
+---
+
+### Candidate Future Capability
+
+**User-Managed Curated Set**
+
+Current model:
+
+- 11 curated cities remain fixed
+- User adds 0–6 configurable cities
+
+Future evaluation:
+
+Allow users to:
+
+- Reduce curated cities
+- Replace curated cities
+- Customize the monitored city set
+
+Potential capacity model:
+
+- Minimum: Map + 2 monitored locations
+- Maximum: User-defined monitored set
+
+Origin:
+
+Identified during v3.2 Increment 002 validation.
+
+Status:
+
+Deferred.
+
+Not part of v3.2.
 
 ---
 
@@ -81,13 +144,13 @@ The current stack uses free APIs exclusively. A paid tier could unlock:
 
 The 11 cities remained deliberately chosen and fixed in v3.1. The layout was designed and tested specifically for a 15-inch MacBook Pro screen and an iPhone display — 11 cards fill the grid correctly on both. The author is personally interested in exactly these 11 locations.
 
-Increasing the curated city count would have broken the 6-column desktop grid (currently 11 city cards + 1 map = 12 cells), required responsive layout rework, and diluted the focused, curated feel of the dashboard. v3.1 intentionally delivered temporary inspection only; configurable cities remain planned for v3.2.
+Increasing the curated city count would have broken the 6-column desktop grid (11 city cards + 1 map = 12 cells), required responsive layout rework, and diluted the focused, curated feel of the dashboard. v3.1 intentionally delivered temporary inspection only; configurable cities were deferred to v3.2 and delivered in v3.2 Increment 001 and Increment 002.
 
 ---
 
 ## 🇫🇮 Suomi (alkuperäinen)
 
-### Delivered — v3.1
+### Toimitettu — v3.1
 
 **Väliaikainen inspektio-overlay**
 
@@ -105,17 +168,80 @@ ADR-005 kirjaa governance-validaation: v3.1 oli ensimmäinen Situation Monitor -
 
 ---
 
-### Nice to Have — v3.2
+### Toimitettu — v3.2
 
-**Käyttäjän muokattava kaupunkilista**
+**Käyttäjän muokattavat seurantapaikat**
 
-Tällä hetkellä 11 kaupunkia on kovakoodattu — niitä ei voi lisätä, poistaa tai vaihtaa. Muokattava lista mahdollistaisi oman monitorointisetin rakentamisen:
+v3.2 toimitti muokattavat seurantapaikat kahdessa hallitussa incrementissä.
 
-- Kaupungin lisääminen nimen perusteella tai koskettamalla karttaa
-- Tarpeettomien kaupunkien poistaminen
-- Valinnan tallentaminen `localStorage`:iin sivun päivityksen yli
+#### Increment 001
 
-Tämä on merkittävä askel monimutkaisuudessa: pre-commit hookin kaupunkien lukumäärätarkistus (tasan 11) pitäisi korvata vaihteluvälitarkistuksella, ja grid-layout pitäisi adaptoida muuttuvalle kaupunkimäärälle.
+Perusti ensimmäisen pysyvän muokattavan kaupungin:
+
+- Kartta-inspektion voi tallentaa seurattavaksi paikaksi
+- Tallennus säilyy sivun päivityksen yli
+- Väliaikainen inspektio pysyy erillään seurattavista paikoista
+- Kuratoitu 11 kaupungin dashboard säilyi muuttumattomana
+
+#### Increment 002
+
+Laajensi muokattavan kaupungin mallin rajatuksi kokoelmaksi:
+
+- Muokattavia kaupunkeja voi lisätä kartta-inspektiosta
+- Muokattavia kaupunkeja voi poistaa yksitellen
+- Dashboardin voi palauttaa oletustilaan
+- Duplikaatit estetään
+- Tukemattomat valinnat epäonnistuvat turvallisesti
+- v2-persistenssimalli
+- Vanhan v1-arvon migraatiotuki
+- Dashboardin kapasiteettimalli
+
+Toimitettu dashboard-kapasiteetti:
+
+- Oletus: kartta + 11 kuratoitua kaupunkia = 12 solua
+- Maksimi: kartta + 11 kuratoitua kaupunkia + 6 muokattavaa kaupunkia = 18 solua
+
+Validointi tehtiin:
+
+- Desktop Safari
+- iPhone Portrait
+- iPhone Landscape
+
+ADR-006 kirjaa governance-validaation: Increment 002 oli toinen onnistunut päästä päähän -validointi monimalli-AI-governance-putkelle ja vahvisti ihmisoperaattorin päätösvallan review-konsensuksen yli.
+
+---
+
+### Tuleva kyvykkyysehdokas
+
+**Käyttäjän hallitsema kuratoitu setti**
+
+Nykyinen malli:
+
+- 11 kuratoitua kaupunkia pysyy kiinteänä
+- Käyttäjä lisää 0–6 muokattavaa kaupunkia
+
+Tuleva arviointi:
+
+Mahdollista käyttäjälle:
+
+- Kuratoitujen kaupunkien vähentäminen
+- Kuratoitujen kaupunkien korvaaminen
+- Oman seurattavan kaupunkisetin muokkaaminen
+
+Mahdollinen kapasiteettimalli:
+
+- Minimi: kartta + 2 seurattavaa paikkaa
+- Maksimi: käyttäjän määrittelemä seurantajoukko
+
+Alkuperä:
+
+Tunnistettu v3.2 Increment 002 -validoinnin aikana.
+
+Status:
+
+Siirretty myöhempään arviointiin.
+
+Ei osa v3.2:ta.
 
 ---
 
@@ -144,6 +270,6 @@ Nykyinen stack käyttää yksinomaan ilmaisia APItä. Maksullinen taso voisi ava
 
 **Kiinteä 11 kaupungin määrä — ei muutettavissa v3.1:ssä**
 
-11 kaupunkia pysyi tarkoituksella valittuna ja kiinnitettynä v3.1:ssä. Layout on suunniteltu ja testattu nimenomaan 15" MacBook Pro -näytölle ja iPhone-näytölle — 11 korttia täyttää gridin oikein molemmissa. Minua kiinnostavat henkilökohtaisesti juuri nämä 11 paikkaa.
+11 kaupunkia pysyi tarkoituksella valittuna ja kiinnitettynä v3.1:ssä. Layout oli suunniteltu ja testattu nimenomaan 15" MacBook Pro -näytölle ja iPhone-näytölle — 11 korttia täytti gridin oikein molemmissa. Minua kiinnostavat henkilökohtaisesti juuri nämä 11 paikkaa.
 
-Kuratoitujen kaupunkien määrän kasvattaminen olisi rikkonut 6-sarakkeen desktop-gridin (tällä hetkellä 11 kaupunkikorttia + 1 kartta = 12 solua), vaatinut responsiivisen layoutin uudelleensuunnittelun ja hajottanut dashboardin harkitun, kuratoidun ilmeen. v3.1 toimitti tarkoituksella vain väliaikaisen inspektion; muokattavat kaupungit on suunniteltu v3.2:een.
+Kuratoitujen kaupunkien määrän kasvattaminen olisi rikkonut 6-sarakkeen desktop-gridin (11 kaupunkikorttia + 1 kartta = 12 solua), vaatinut responsiivisen layoutin uudelleensuunnittelun ja hajottanut dashboardin harkitun, kuratoidun ilmeen. v3.1 toimitti tarkoituksella vain väliaikaisen inspektion; muokattavat kaupungit siirrettiin v3.2:een ja toimitettiin v3.2 Increment 001:ssä ja Increment 002:ssa.

@@ -63,6 +63,8 @@
 
     #zulu-right {
       display: flex;
+      align-items: center;
+      gap: 8px;
       justify-content: flex-end;
     }
 
@@ -105,6 +107,26 @@
       letter-spacing: 0.08em;
       color: rgba(255,255,255,0.35);
       white-space: nowrap;
+    }
+
+    #restore-default {
+      border: 1px solid #2a2a5a;
+      border-radius: 4px;
+      background: #10102e;
+      color: rgba(255,255,255,0.55);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.44rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 7px;
+      cursor: pointer;
+    }
+
+    #restore-default:hover,
+    #restore-default:focus-visible {
+      border-color: #4488ff;
+      color: #ffffff;
+      outline: none;
     }
 
     /* ── Content grid (map + cards in one 6-column grid) ── */
@@ -642,6 +664,7 @@
       #zulu-time { font-size: 0.72rem; }
       #zulu-label { font-size: 0.40rem; }
       #refresh-info { display: none; }
+      #restore-default { font-size: 0.36rem; padding: 3px 5px; }
 
       /* Whole page scrolls — legend reaches bottom naturally */
       html, body { overflow-y: auto; overflow-x: hidden; height: auto; min-height: 100%; }
@@ -712,6 +735,7 @@
       #app-title { font-size: 0.52rem; letter-spacing: 0.18em; }
       #zulu-time { font-size: 0.75rem; }
       #zulu-label { font-size: 0.44rem; }
+      #restore-default { font-size: 0.38rem; padding: 3px 5px; }
 
       /* 4-column grid: map + 3 cities on row 1, 4+4 on rows 2–3 */
       #grid {
@@ -789,6 +813,7 @@
       <span id="zulu-time">--:--:--</span>
     </div>
     <div id="zulu-right">
+      <button id="restore-default" type="button">Reset</button>
       <span id="refresh-info">Updated —</span>
     </div>
   </div>
@@ -988,11 +1013,13 @@ let lastUpdated = null;
 let inspectionState = null;
 let inspectionMarker = null;
 let inspectionGeneration = 0;
-let configurableCity = null;
+let configurableCities = [];
 const cityData = {}; // id → { weather, air, sun }
 const mapMarkers = {}; // id → L.circleMarker
-const CONFIGURABLE_CITY_ID = 'configurable-city';
-const CONFIGURABLE_CITY_STORAGE_KEY = 'situation-monitor.configurableCity.v1';
+const MAX_CONFIGURABLE_CITIES = 6;
+const CONFIGURABLE_CITY_ID_PREFIX = 'configurable-city-';
+const CONFIGURABLE_CITIES_STORAGE_KEY = 'situation-monitor.configurableCities.v2';
+const LEGACY_CONFIGURABLE_CITY_STORAGE_KEY = 'situation-monitor.configurableCity.v1';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function pad(n) { return String(n).padStart(2, '0'); }
@@ -1116,54 +1143,92 @@ function setBadge(el, text, cls) {
 }
 
 function allDisplayCities() {
-  return configurableCity ? CITIES.concat(configurableCity) : CITIES;
+  return CITIES.concat(configurableCities);
 }
 
 function validCoordinate(value, min, max) {
   return typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max;
 }
 
-function createConfigurableCity(lat, lon) {
+function coordinateIdentity(lat, lon) {
+  return `${Number(lat).toFixed(3)},${Number(lon).toFixed(3)}`;
+}
+
+function monitoredCityIdentity(city) {
+  return coordinateIdentity(city.lat, city.lon);
+}
+
+function createConfigurableCity(lat, lon, index) {
   return {
-    id: CONFIGURABLE_CITY_ID,
-    name: 'Saved Point',
+    id: CONFIGURABLE_CITY_ID_PREFIX + (index + 1),
+    name: `Saved Point ${index + 1}`,
     flag: '◆',
     lat,
     lon,
     tz: 'UTC',
     configurable: true,
+    identity: coordinateIdentity(lat, lon),
     coords: formatInspectionCoords(lat, lon)
   };
 }
 
-function normalizeStoredConfigurableCity(value) {
+function normalizeStoredConfigurableCity(value, index) {
   if (!value || !validCoordinate(value.lat, -90, 90) || !validCoordinate(value.lon, -180, 180)) {
     return null;
   }
-  return createConfigurableCity(value.lat, value.lon);
+  return createConfigurableCity(value.lat, value.lon, index);
 }
 
-function loadConfigurableCity() {
-  let raw = null;
+function normalizeStoredConfigurableCities(value) {
+  if (!Array.isArray(value) || value.length > MAX_CONFIGURABLE_CITIES) return null;
+  const seen = new Set(CITIES.map(monitoredCityIdentity));
+  const cities = [];
+  for (const item of value) {
+    const city = normalizeStoredConfigurableCity(item, cities.length);
+    if (!city || seen.has(city.identity)) return null;
+    seen.add(city.identity);
+    cities.push(city);
+  }
+  return cities;
+}
+
+function readStorage(key) {
   try {
-    raw = window.localStorage.getItem(CONFIGURABLE_CITY_STORAGE_KEY);
+    return window.localStorage.getItem(key);
   } catch(e) {
     return null;
   }
-  if (!raw) return null;
+}
+
+function loadConfigurableCities() {
+  const raw = readStorage(CONFIGURABLE_CITIES_STORAGE_KEY);
+  if (raw) {
+    try {
+      return normalizeStoredConfigurableCities(JSON.parse(raw)) || [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  const legacyRaw = readStorage(LEGACY_CONFIGURABLE_CITY_STORAGE_KEY);
+  if (!legacyRaw) return [];
   try {
-    return normalizeStoredConfigurableCity(JSON.parse(raw));
+    const legacyCity = normalizeStoredConfigurableCity(JSON.parse(legacyRaw), 0);
+    if (!legacyCity || CITIES.map(monitoredCityIdentity).includes(legacyCity.identity)) return [];
+    const migrated = [legacyCity];
+    persistConfigurableCities(migrated);
+    return migrated;
   } catch(e) {
-    return null;
+    return [];
   }
 }
 
-function persistConfigurableCity(city) {
+function persistConfigurableCities(cities) {
   try {
-    window.localStorage.setItem(CONFIGURABLE_CITY_STORAGE_KEY, JSON.stringify({
+    window.localStorage.setItem(CONFIGURABLE_CITIES_STORAGE_KEY, JSON.stringify(cities.map(city => ({
       lat: city.lat,
       lon: city.lon
-    }));
+    }))));
     return true;
   } catch(e) {
     return false;
@@ -1172,8 +1237,16 @@ function persistConfigurableCity(city) {
 
 function clearConfigurableCityStorage() {
   try {
-    window.localStorage.removeItem(CONFIGURABLE_CITY_STORAGE_KEY);
+    window.localStorage.removeItem(CONFIGURABLE_CITIES_STORAGE_KEY);
+    window.localStorage.removeItem(LEGACY_CONFIGURABLE_CITY_STORAGE_KEY);
   } catch(e) {}
+}
+
+function canAddConfigurableCity(location) {
+  if (!location || !validCoordinate(location.lat, -90, 90) || !validCoordinate(location.lon, -180, 180)) return false;
+  if (configurableCities.length >= MAX_CONFIGURABLE_CITIES) return false;
+  const identity = coordinateIdentity(location.lat, location.lon);
+  return !allDisplayCities().some(city => monitoredCityIdentity(city) === identity);
 }
 
 // ── Build DOM ──────────────────────────────────────────────────────────────
@@ -1181,6 +1254,7 @@ const cardsPanel = document.getElementById('cards-wrap');
 const inspectionOverlay = document.getElementById('inspection-overlay');
 const inspectionDismiss = document.getElementById('inspection-dismiss');
 const inspectionSave = document.getElementById('inspection-save');
+const restoreDefault = document.getElementById('restore-default');
 
 function buildCityCard(city) {
   const card = document.createElement('div');
@@ -1254,7 +1328,7 @@ function buildCityCard(city) {
   cardsPanel.appendChild(card);
   if (city.configurable) {
     const remove = card.querySelector('.config-remove');
-    if (remove) remove.addEventListener('click', removeConfigurableCity);
+    if (remove) remove.addEventListener('click', () => removeConfigurableCity(city.id));
   }
 }
 
@@ -1463,35 +1537,56 @@ function removeInspection() {
 
 function saveInspectionAsConfigurableCity() {
   if (!inspectionState || !inspectionState.location) return;
-  const nextCity = createConfigurableCity(inspectionState.location.lat, inspectionState.location.lon);
-  if (!persistConfigurableCity(nextCity)) return;
-  setConfigurableCity(nextCity);
+  if (!canAddConfigurableCity(inspectionState.location)) return;
+  const nextCity = createConfigurableCity(
+    inspectionState.location.lat,
+    inspectionState.location.lon,
+    configurableCities.length
+  );
+  const nextCities = configurableCities.concat(nextCity);
+  if (!persistConfigurableCities(nextCities)) return;
+  setConfigurableCities(nextCities);
 }
 
-function setConfigurableCity(city) {
-  const existingCard = document.getElementById('card-' + CONFIGURABLE_CITY_ID);
-  if (existingCard) existingCard.remove();
-  if (mapMarkers[CONFIGURABLE_CITY_ID]) {
-    mapMarkers[CONFIGURABLE_CITY_ID].remove();
-    delete mapMarkers[CONFIGURABLE_CITY_ID];
-  }
-  configurableCity = city;
-  cityData[CONFIGURABLE_CITY_ID] = { weather: null, air: null, sun: null };
-  buildCityCard(city);
-  addMapMarker(city);
-  fetchCityData(city);
+function clearConfigurableCityRender() {
+  configurableCities.forEach(city => {
+    const card = document.getElementById('card-' + city.id);
+    if (card) card.remove();
+    if (mapMarkers[city.id]) {
+      mapMarkers[city.id].remove();
+      delete mapMarkers[city.id];
+    }
+    delete cityData[city.id];
+  });
 }
 
-function removeConfigurableCity() {
+function setConfigurableCities(cities) {
+  clearConfigurableCityRender();
+  configurableCities = cities.map((city, index) => createConfigurableCity(city.lat, city.lon, index));
+  configurableCities.forEach(city => {
+    cityData[city.id] = { weather: null, air: null, sun: null };
+    buildCityCard(city);
+    addMapMarker(city);
+    fetchCityData(city);
+  });
+}
+
+function removeConfigurableCity(cityId) {
+  const nextCities = configurableCities
+    .filter(city => city.id !== cityId)
+    .map((city, index) => createConfigurableCity(city.lat, city.lon, index));
+  if (!persistConfigurableCities(nextCities)) return;
+  setConfigurableCities(nextCities);
+}
+
+function restoreDefaultConfiguration() {
   clearConfigurableCityStorage();
-  const card = document.getElementById('card-' + CONFIGURABLE_CITY_ID);
-  if (card) card.remove();
-  if (mapMarkers[CONFIGURABLE_CITY_ID]) {
-    mapMarkers[CONFIGURABLE_CITY_ID].remove();
-    delete mapMarkers[CONFIGURABLE_CITY_ID];
+  setConfigurableCities([]);
+  if (inspectionState && inspectionState.location) {
+    renderInspectionOverlay(inspectionState.location, inspectionState.loading
+      ? { loading: true, weather: null, air: null, error: null }
+      : { ...(inspectionState.data || {}), loading: false, error: inspectionState.error });
   }
-  delete cityData[CONFIGURABLE_CITY_ID];
-  configurableCity = null;
 }
 
 function formatInspectionCoords(lat, lon) {
@@ -1948,10 +2043,11 @@ document.getElementById('grid').addEventListener('mouseover', e => {
 document.getElementById('grid').addEventListener('mouseleave', hideTip);
 inspectionDismiss.addEventListener('click', removeInspection);
 inspectionSave.addEventListener('click', saveInspectionAsConfigurableCity);
+restoreDefault.addEventListener('click', restoreDefaultConfiguration);
 
 // ── Start ──────────────────────────────────────────────────────────────────
-const storedConfigurableCity = loadConfigurableCity();
-if (storedConfigurableCity) setConfigurableCity(storedConfigurableCity);
+const storedConfigurableCities = loadConfigurableCities();
+if (storedConfigurableCities.length > 0) setConfigurableCities(storedConfigurableCities);
 
 tick();
 setInterval(tick, 1000);

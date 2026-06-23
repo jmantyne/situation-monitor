@@ -7,6 +7,40 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v3.2.0 Increment 002 — 2026-06-23 — Bounded configurable city list
+
+**Change:** Increment 002 expands the persistent configurable-city capability from one saved
+inspection point to a bounded configurable-city list. Configurable cities are added only through
+the existing map temporary inspection + Save workflow, persisted separately from the curated city
+list, and capped at six configurable cities. The default startup remains the world map plus the
+11 curated cities.
+
+**Boundary note:** `SM-V3.2-IMPLEMENTATION-DECISIONS-001` records the earlier 0-3 configurable-city
+boundary. `SM-V3.2-INCREMENT-002-SPECIFICATION-001` v0.2.0 records OD-001 founder approval for
+2-6 configurable cities and controls this Increment 002 implementation.
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Smoke test pass | ✅ | `npm test` — 29/29 |
+| Playwright pass | ✅ | `npm run test:e2e` — 24/24 |
+| Curated city baseline | ✅ | `CITIES` remains 11 entries; configurable cities are stored separately |
+| Maximum dashboard capacity | ✅ | Playwright verifies map + 11 curated + 6 configurable cities |
+| V2 persistence | ✅ | `situation-monitor.configurableCities.v2` stores bounded configurable city list |
+| Legacy migration | ✅ | Valid `situation-monitor.configurableCity.v1` data migrates to v2 |
+| Duplicate prevention | ✅ | Coordinate identity uses lat/lon rounded to 3 decimals |
+| Unsupported/fail-safe handling | ✅ | Invalid stored city data fails closed to curated cities only |
+| Restore default | ✅ | Reset clears configurable cities and v1/v2 storage, returning to 11 curated cards |
+| Temporary inspection separation | ✅ | Inspection remains temporary unless saved through the approved Save action |
+| No new API domains | ✅ | Existing CSP connect-src domains unchanged |
+| No reverse geocoding | ✅ | No geocoding/search domain or search UI added |
+| Desktop max-capacity usability | ✅ | Automated check confirms 18 dashboard cells render |
+| iPhone portrait max-capacity usability | ✅ | Automated viewport check confirms map, curated city, configurable city remain visible |
+| iPhone landscape max-capacity usability | ✅ | Automated viewport check confirms map, legend, configurable city remain visible |
+
+**Result: Automated validation passed. Manual human review still required for release approval.**
+
+---
+
 ### v3.1.0 — 2026-06-05 — Temporary inspection overlay
 
 **Change:** Interactive map inspection added. A user can click/tap the map to create one temporary
