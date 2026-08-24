@@ -2,7 +2,7 @@ Document ID: SM-V3.2-IMPLEMENTATION-DECISIONS-001
 
 Version: v1.0.0
 
-Status: Candidate
+Status: Accepted / Partially Superseded by OD-001
 
 Product: Situation Monitor
 
@@ -23,6 +23,12 @@ Governed Repeatability
 Owner:
 
 Jussi Mantynen
+
+---
+
+Status Note:
+
+Decisions 001-008 were the pre-recorded implementation boundaries for v3.2. Decision 002B recorded the original 0-3 configurable-city boundary. Increment 002 later introduced OD-001 in SM-V3.2-INCREMENT-002-SPECIFICATION-001 v0.2.0, raising the delivered configurable-city ceiling to 6 based on founder validation evidence. The delivered Increment 002 behavior is governed by the Increment 002 specification, ADR-006 and SM-V3.2-INCREMENT-002-IMPLEMENTATION-RECORD.
 
 ---
 
@@ -285,11 +291,15 @@ Implementation execution shall record founder involvement observations required 
 
 ---
 
-# Open Questions
+# Resolved Questions
 
 OQ-001
 
 Do implementation results support these decisions?
+
+Resolution:
+
+Yes, with one recorded boundary override. Implementation results supported the persistence, composition, recovery, duplicate, unsupported behavior, identity, layout and temporary-inspection separation decisions. Decision 002B's 0-3 configurable-city boundary was later superseded by OD-001 for Increment 002 delivery.
 
 ---
 
@@ -297,11 +307,19 @@ OQ-002
 
 Did any decision require modification during implementation?
 
+Resolution:
+
+Yes. Decision 002B required modification. OD-001 raised the configurable-city ceiling from 3 to 6 after founder validation confirmed the 18-cell dashboard remained usable on desktop, iPhone portrait and iPhone landscape.
+
 ---
 
 OQ-003
 
 What implementation observations were recorded during execution?
+
+Resolution:
+
+Implementation observations are recorded in ADR-006, REGRESSION.md and SM-V3.2-INCREMENT-002-IMPLEMENTATION-RECORD. Key observations include singleton-to-collection migration, v2 persistence, v1 migration, coordinate duplicate identity and preservation of temporary inspection separation.
 
 ---
 
@@ -309,11 +327,19 @@ OQ-004
 
 Did any decision create unexpected regression risk?
 
+Resolution:
+
+No unresolved unexpected regression risk remained after validation. Increment 002 regression evidence records smoke 29/29, Playwright 24/24 and desktop, iPhone portrait and iPhone landscape validation.
+
 ---
 
 OQ-005
 
 How are configurable cities represented within the approved composition model?
+
+Resolution:
+
+Configurable cities are represented as secondary saved map-inspection cards appended to the curated 11-city dashboard. Curated cities remain primary, fixed and recoverable through Reset.
 
 ---
 

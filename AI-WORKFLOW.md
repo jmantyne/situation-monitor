@@ -23,7 +23,7 @@ The hook lives in `.githooks/pre-commit` — it travels with the repo but must b
 2. **Run regression checks** (bash commands below)
 3. Record results in `REGRESSION.md` as a new version entry
 4. Update `README.md` version history
-5. Update `CLAUDE.md` version table
+5. Update `AI-WORKFLOW.md` version history when the change affects release history or process memory
 6. Commit everything together — hook validates automatically
 
 **Regression automated checks:**
@@ -79,6 +79,8 @@ wc -c < $FILE
 | v3.0.1 | 2026-05-30 | License: MIT License added |
 | v3.0.2 | 2026-05-30 | Fix: VERSION corrected after dev branch sync issue |
 | v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
+| **v3.1.0** | **2026-06-05** | **Feat: temporary inspection overlay — map click/tap opens runtime-only weather and AQI inspection; ADR-005 first end-to-end multi-model governance validation; smoke 21/21; Playwright 13/13; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
+| **v3.2.0** | **2026-06-23** | **Feat: configurable monitoring locations delivered in two increments — singleton saved point expanded to bounded 0–6 collection; v2 persistence, legacy v1 migration, duplicate prevention, Reset restore-default; ADR-006 governed repeatability and human decision authority validation; smoke 29/29; Playwright 24/24** |
 
 ---
 
@@ -141,7 +143,7 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 | 0 | Version bump | reads VERSION file, minor bump if >1 file changed, patch if 1 |
 | 1 | City count | exactly 11 |
 | 2 | All IDs present | see list above |
-| 3 | API endpoints | open-meteo · air-quality-api · sunrise-sunset · ip-api |
+| 3 | API endpoints | open-meteo · air-quality-api · sunrise-sunset · ipapi.co |
 | 4 | Score functions | uvScore · aqiScore · windScore · degToCompass |
 | 5 | Media queries | portrait + landscape |
 | 6 | REGRESSION.md staged | required |
