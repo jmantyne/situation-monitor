@@ -749,9 +749,12 @@ No translation was needed. Process gap was the missing explicit audit step.
 - [ ] Home city pin has pink ring, larger radius
 - [ ] Clicking a pin scrolls to the correct city card
 - [ ] Clicked card gets white border for ~3 seconds
+- [ ] Clicking a non-city map point opens temporary inspection overlay
+- [ ] Temporary inspection can be dismissed without changing monitored city count
 
-### City cards (6 columns × 2 rows)
-- [ ] All 11 cards visible
+### City cards — default configuration
+- [ ] Default dashboard shows map + 11 curated city cards
+- [ ] Curated cities remain in the approved west-to-east order
 - [ ] Each card shows: flag, city name, GMT offset, live clock
 - [ ] UV value with colour label
 - [ ] TEMP in °F / °C
@@ -762,6 +765,20 @@ No translation was needed. Process gap was the missing explicit audit step.
 - [ ] AQI with colour label
 - [ ] PM2.5 and NO₂ values
 - [ ] Home city card has pink border and pink city name
+
+### Configurable cities
+- [ ] Saving a temporary inspection creates a configurable city card
+- [ ] Configurable city cards are visually secondary to curated city cards
+- [ ] Configurable city cards can be removed individually
+- [ ] Reset clears configurable cities and returns to 11 curated cards
+- [ ] Six configurable city cards can be present at maximum capacity
+- [ ] A seventh configurable city is blocked without changing dashboard or storage
+- [ ] Duplicate configurable coordinates are rejected without changing dashboard or storage
+
+### Maximum capacity
+- [ ] Maximum dashboard shows map + 11 curated city cards + 6 configurable city cards
+- [ ] Maximum desktop capacity is 18 dashboard cells
+- [ ] 18-cell desktop layout remains readable and operational
 
 ### Hover tooltips (desktop only)
 - [ ] Hovering UV, TEMP, HUM, PRES, WIND, AQI, PM2.5, NO₂ shows tooltip
@@ -776,11 +793,13 @@ No translation was needed. Process gap was the missing explicit audit step.
 
 ## Layout 2 — iPhone landscape (844 × 390 px)
 
-- [ ] 4-column grid: map + 3 cities in row 1
-- [ ] 4 cities in row 2, 4 cities in row 3
+- [ ] 4-column responsive grid renders without horizontal overflow
+- [ ] Default layout shows map + 11 curated city cards
+- [ ] Maximum layout supports map + 11 curated city cards + 6 configurable city cards
 - [ ] Page scrolls vertically through all rows
 - [ ] Legend visible at bottom of page
-- [ ] No horizontal overflow
+- [ ] Temporary inspection overlay remains usable
+- [ ] Configurable city remove control remains usable
 
 ---
 
@@ -788,9 +807,12 @@ No translation was needed. Process gap was the missing explicit audit step.
 
 - [ ] Map full width at top (~200 px tall)
 - [ ] Cards in 2-column grid below map
-- [ ] Page scrolls vertically through all 11 cards
+- [ ] Page scrolls vertically through all curated cards
+- [ ] Maximum layout supports map + 11 curated city cards + 6 configurable city cards
 - [ ] Legend visible at the bottom of the page
 - [ ] Home city card pink border visible
+- [ ] Temporary inspection overlay does not hide the map or curated city grid
+- [ ] Configurable city remove control remains usable
 
 ---
 
@@ -809,6 +831,7 @@ No translation was needed. Process gap was the missing explicit audit step.
 
 - Map colours cannot be customised without TopoJSON artefacts — CartoDB Voyager used as stable baseline
 - Hover tooltips do not work on touch screens — by design
-- ip-api.com home city detection may fail on `file://` protocol — works on HTTPS
+- Home city detection uses ipapi.co and requires network access
+- Configurable saved points use UTC clocks; no reverse geocoding or timezone lookup is performed
 - Tahoe City and San Jose share America/Los_Angeles — correct
 - Dubai is the only city with no DST (UTC+4 always) — use for UTC offset testing

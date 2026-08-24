@@ -63,6 +63,7 @@ flowchart LR
     end
 
     subgraph APP["situation-monitor.html (single file)"]
+        CF["Configurable city state\nv2 localStorage · v1 migration"]
         FC["fetchCityData()\nPromise.allSettled"]
         RD["renderCityData()\nDOM update"]
         SC["Score functions\nuvScore · aqiScore · windScore"]
@@ -71,7 +72,8 @@ flowchart LR
     end
 
     subgraph UI["Browser UI"]
-        CD["City cards × 11"]
+        CD["City cards\n11 curated + 0–6 configurable"]
+        TI["Temporary inspection overlay"]
         WM["World map"]
         LG["Legend bar"]
     end
@@ -79,13 +81,16 @@ flowchart LR
     OM & AQ & SS -->|"every 5 min"| FC
     IP -->|"once on load"| FC
     CT -->|"tile requests"| MP
+    CF --> FC
+    CF --> RD
     FC --> RD
     RD --> SC
     SC --> RD
     RD --> CD
+    RD --> TI
     MP --> WM
     CK --> CD
-    CD & WM & LG --> UI
+    CD & TI & WM & LG --> UI
 ```
 
 ---

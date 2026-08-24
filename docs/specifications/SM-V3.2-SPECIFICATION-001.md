@@ -2,12 +2,16 @@ SM-V3.2-SPECIFICATION-001
 
 Title: Situation Monitor v3.2 Specification
 Version: v0.2.0
-Status: Draft
+Status: Completed / Superseded by Increment 002 closure artifacts
 Product: Situation Monitor
 Target Release: v3.2
 Validation Activity: Validation #002
 Validation Target: Governed Repeatability
 Owner: Jussi Mantynen
+
+Closure Note:
+
+Situation Monitor v3.2 was delivered through Increment 001 and Increment 002. This parent specification remains the v3.2 umbrella specification. Final delivery and validation closure are recorded in SM-V3.2-INCREMENT-002-SPECIFICATION-001, SM-V3.2-INCREMENT-002-IMPLEMENTATION-RECORD, ADR-006 and REGRESSION.md.
 
 # 1. Purpose
 
@@ -394,15 +398,35 @@ Did v3.2 strengthen or weaken Governed Repeatability evidence?
 
 Assessment completed at release.
 
-# 20. Open Questions
+# 20. Resolved Questions
 
 * Does v3.2 strengthen repeatability evidence?
+
+  Resolved: Yes. ADR-006 records that v3.2 strengthened governed repeatability evidence by running the multi-model governance pipeline end-to-end a second time on a harder data-model migration.
+
 * What governance observations were recorded?
+
+  Resolved: ADR-006 records the governance observations: role-defined and model-agnostic pipeline structure, human decision authority over review consensus, HARNESS as an active governance step and Occam's Razor as a documentation-governance principle.
+
 * What operational-awareness observations were recorded?
+
+  Resolved: Increment 002 delivered configurable monitoring locations while preserving the curated Situation Monitor identity. ADR-006 and BACKLOG.md record the future user-managed curated set as a deliberately deferred capability.
+
 * What founder-dependency observations were recorded?
+
+  Resolved: ADR-006 records that delivery remained human-coordinated end to end. Validation #002 confirmed governed repeatability in a one-operator model; it did not validate automated coordination or operator independence.
+
 * What evidence remains missing for future maturity advancement?
 
+  Resolved: ATR, Conductor, Product Factory, Operator Independence and Scaled Repeatability remain explicitly out of scope for Validation #002 and remain future maturity targets.
+
 # 21. Change Log
+
+v0.2.1
+
+* Closure status recorded after v3.2 Increment 002 delivery
+* Open Questions resolved through ADR-006, REGRESSION.md and Increment 002 implementation record
+* Parent specification retained as umbrella specification, not final implementation record
 
 v0.2.0
 

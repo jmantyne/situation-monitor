@@ -1,12 +1,10 @@
-Tässä koko päivitetty tiedosto v0.2.0:
-
 Document ID: SM-V3.2-INCREMENT-002-SPECIFICATION-001
 
 Title: Situation Monitor v3.2 Increment 002 Specification
 
 Version: v0.2.0
 
-Status: Draft
+Status: Approved / Implemented
 
 Product: Situation Monitor
 
@@ -19,6 +17,10 @@ Created: 2026-06-23T00:30:00Z
 Last Updated: 2026-06-23T02:10:00Z
 
 Timezone: UTC
+
+Status Note:
+
+Increment 002 was implemented in Situation Monitor v3.2.0. OD-001 controls this increment over the earlier 0-3 review recommendation. Default startup remains World Map + 11 curated cities + 0 configurable cities. The approved 2-6 configurable city range is the useful operating range, not a forced startup floor.
 
 Related Specification:
 
@@ -426,23 +428,39 @@ Increment 002 is complete when:
 
 ⸻
 
-Open Questions
+Resolved Questions
 
 OQ-001
 
 How are configurable cities represented in the UI?
 
+Resolution:
+
+Configurable cities are added through the existing map temporary inspection + Save workflow and rendered as secondary configurable city cards. The curated 11-city dashboard remains primary.
+
 OQ-002
 
 How is restore-default behavior exposed?
+
+Resolution:
+
+The Reset control clears configurable city state and v1/v2 localStorage, returning the dashboard to the curated 11-city default.
 
 OQ-003
 
 What exact layout behavior is used at maximum city count?
 
+Resolution:
+
+Maximum capacity is 18 dashboard cells: World Map + 11 curated cities + 6 configurable cities. Desktop, iPhone portrait and iPhone landscape usability were validated.
+
 OQ-004
 
 Does Increment 002 strengthen or weaken governed repeatability evidence?
+
+Resolution:
+
+Increment 002 strengthened governed repeatability evidence. The outcome is recorded in ADR-006 and REGRESSION.md with smoke 29/29, Playwright 24/24 and three-device validation evidence.
 
 ⸻
 

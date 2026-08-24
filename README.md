@@ -14,23 +14,26 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-003](docs/ADR-003.md) | Automated regression testing — pre-commit hook + semver |
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
 | [ADR-005](docs/ADR-005.md) | First end-to-end validation of multi-model AI governance delivery pipeline |
+| [ADR-006](docs/ADR-006.md) | Governed repeatability and human decision authority — second validation of the multi-model AI pipeline |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Agentic workflow diagram + runtime data architecture (Mermaid) |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
-| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.1 temporary inspection overlay delivered, v3.2 configurable cities, v4.0+ native app |
+| [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.0 harness, v3.1 temporary inspection, v3.2 configurable cities, v4.0+ native app |
+| [SM-V3.2-INCREMENT-002-IMPLEMENTATION-RECORD](docs/SM-V3.2-INCREMENT-002-IMPLEMENTATION-RECORD.md) | Increment 002 delivery evidence — 0–6 configurable locations, v2 persistence, v1 migration, validation |
 | [REFLECTION](docs/REFLECTION.md) | What I learned — from VIC-20 to Holodeck in 4 days |
 | [STAKEHOLDER-SUMMARY](docs/STAKEHOLDER-SUMMARY.md) | Non-technical project summary |
 
 ## AI Governance Validation
 
-v3.1.0 was the first Situation Monitor release delivered through the full multi-model AI governance pipeline: specification, implementation decisions, execution, automated testing, manual validation, and release audit.
+Situation Monitor has completed two governed multi-model AI delivery validations.
 
-Release readiness reviews completed:
-- Codex: Conditional GO
-- Claude: Conditional GO
-- Grok: Product Challenge completed
+| Release | Validation Outcome |
+|---------|-------------------|
+| v3.1.0 | First end-to-end validation of the multi-model AI governance delivery pipeline (ADR-005) |
+| v3.2.0 | Governed repeatability and human decision authority validation on a harder data-model migration (ADR-006) |
 
-Validation completed:
-- Smoke tests: 21/21 passed
+Latest validation:
+- Smoke tests: 29/29 passed
+- Playwright tests: 24/24 passed
 - Desktop Safari validated
 - iPhone Portrait validated
 - iPhone Landscape validated
@@ -75,6 +78,8 @@ The world map shows a coloured pin per city based on avg(UV · AQI · Wind) scor
 
 The world map also supports temporary inspection: click or tap any point on the map to open a floating overlay with live weather and AQI for that location. Temporary inspections are runtime-only, visually separate from the curated city cards, and can be dismissed without changing the 11-city dashboard.
 
+Temporary inspections can also be saved as configurable monitoring locations. The curated 11 cities remain primary and fixed; saved locations are stored separately, can be removed individually, and can be cleared with Reset to restore the default dashboard.
+
 ## Cities (west → east)
 
 | # | City | Time zone | UTC offset |
@@ -107,7 +112,7 @@ The world map also supports temporary inspection: click or tap any point on the 
 |---------|--------|--------|
 | Subresource Integrity (SRI) | ✅ | Leaflet CSS + JS integrity-verified via SHA-256 |
 | Content Security Policy (CSP) | ✅ | `connect-src` locks API calls to known domains; `frame-ancestors 'none'` blocks clickjacking |
-| XSS audit | ✅ | All `innerHTML` uses numbers or hardcoded strings — no user input inserted |
+| XSS audit | ✅ | Dynamic values are rendered from API numbers, coordinates, or hardcoded labels; no free-form user text is inserted |
 | Secret scanning | ✅ | GitHub automatic scanning active (public repo); no API keys in codebase |
 | HTTPS | ✅ | GitHub Pages enforces HTTPS |
 
@@ -132,8 +137,8 @@ Expected (from official Leaflet 1.9.4 release):
 
 | Limitation | Detail |
 |------------|--------|
-| Fixed city list | 11 cities are hardcoded; configurable cities planned for v3.2 |
-| Temporary inspections are not saved | Map inspection points are runtime-only and disappear on refresh |
+| Curated city set | 11 curated cities remain fixed; users can add 0–6 configurable monitoring locations |
+| Saved points use UTC clocks | Configurable map-saved points use UTC display; no reverse geocoding or timezone lookup is performed |
 | No historical data | Shows current conditions only; trend charts planned for a later roadmap release |
 | Free API rate limits | Open-Meteo allows ~10 000 calls/day — sufficient for personal use |
 | No offline mode | Requires internet connection for map tiles, weather data, and fonts |
@@ -143,8 +148,8 @@ Expected (from official Leaflet 1.9.4 release):
 
 | Device | Orientation | Layout |
 |--------|-------------|--------|
-| Mac / desktop | — | 6-column grid, map top-left |
-| iPhone | Landscape | Map left panel, cards scroll horizontally |
+| Mac / desktop | — | 6-column grid, map top-left; default 12 cells, maximum 18 cells |
+| iPhone | Landscape | 4-column responsive grid, scrolls vertically |
 | iPhone | Portrait | Map full width top, cards 2-column, scrolls down |
 
 ## Version history
@@ -197,3 +202,4 @@ Expected (from official Leaflet 1.9.4 release):
 | v3.0.2 | 2026-05-30 | Fix: VERSION corrected after dev branch sync issue |
 | v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
 | **v3.1.0** | **2026-06-05** | **Feat: temporary inspection overlay — click/tap any map location for live weather and AQI; ADR-005 governance validation; smoke tests 21/21; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
+| **v3.2.0** | **2026-06-23** | **Feat: configurable monitoring locations — map inspection Save, 0–6 configurable locations, v2 persistence, legacy v1 migration, duplicate prevention, Reset restore-default; ADR-006 governed repeatability validation; smoke tests 29/29; Playwright 24/24; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
