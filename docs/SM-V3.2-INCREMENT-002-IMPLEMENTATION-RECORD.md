@@ -190,4 +190,16 @@ Increment 002 is implementation-complete and recorded as delivered in:
 
 Current status:
 
-Ready for human review.
+Released.
+
+Human confirmation:
+
+Production status was confirmed by the Human Operator on 2026-08-25 during the v3.2.2 release-coherence correction.
+
+The original release approval date was not reconstructed.
+
+Historical release relationship:
+
+* v3.2.0 delivered and validated Increment 002 runtime behavior.
+* v3.2.1 synchronized the governance baseline without runtime changes.
+* v3.2.2 corrected release identity, history and lifecycle-state coherence without runtime changes.

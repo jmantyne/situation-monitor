@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [ main, 'claude/**' ]
+    tags: [ 'v*' ]
   pull_request:
     branches: [ main ]
 
@@ -18,3 +19,19 @@ jobs:
 
       - name: Run smoke tests
         run: npm test
+
+      - name: Verify release coherence
+        shell: bash
+        run: |
+          VERSION_VALUE="$(tr -d '[:space:]' < VERSION)"
+          PACKAGE_VALUE="$(node -p "require('./package.json').version")"
+
+          test "$VERSION_VALUE" = "$PACKAGE_VALUE"
+          grep -q "v${VERSION_VALUE}" README.md
+          grep -q "v${VERSION_VALUE}" AI-WORKFLOW.md
+          grep -q "v${VERSION_VALUE}" REGRESSION.md
+          grep -q "Current version.*v${VERSION_VALUE}" docs/BACKLOG.md
+
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            test "$GITHUB_REF_NAME" = "v${VERSION_VALUE}"
+          fi

@@ -7,6 +7,34 @@ Test on all three layouts: Mac desktop, iPhone landscape, iPhone portrait.
 
 ## Test run history
 
+### v3.2.2 — 2026-08-25 — Release-coherence correction
+
+**Change:** Documentation and governance correction only. Runtime implementation remains identical
+to v3.2.0. v3.2.1 is retained as the historical governance-baseline synchronization tag. v3.2.2
+aligns VERSION, package.json, release histories and human-confirmed lifecycle status, preserves the
+four independent post-release reviews and synthesis, and updates current governance views to the
+role-based multi-model model recorded by ADR-006.
+
+**Inherited runtime baseline:** `v3.2.0` (`21c004b`).
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| Runtime diff from v3.2.0 | ✅ | No change to `situation-monitor.html`, runtime tests or runtime dependencies |
+| VERSION | ✅ | `3.2.2` |
+| package.json version | ✅ | `3.2.2` |
+| README release history | ✅ | v3.2.1 and v3.2.2 recorded |
+| AI-WORKFLOW release history | ✅ | v3.2.1 and v3.2.2 recorded |
+| BACKLOG current version | ✅ | v3.2.2 |
+| ADR-006 historical product version | ✅ | Remains v3.2.0 as the Increment 002 feature/validation record |
+| Four-model review evidence | ✅ | ChatGPT, Codex, Claude Code and Grok reviews plus synthesis under `reviews/v3.2.1/` |
+| Smoke test | ✅ | `npm test` — 29/29 |
+| Playwright test | ✅ | `npm run test:e2e` — 24/24 |
+| Human release decision | ✅ | Coherence correction authorized by Human Operator on 2026-08-25 |
+
+**Release status: READY FOR HUMAN RELEASE DECISION.**
+
+---
+
 ### v3.2.0 Increment 002 — 2026-06-23 — Bounded configurable city list
 
 **Change:** Increment 002 expands the persistent configurable-city capability from one saved
@@ -37,7 +65,7 @@ boundary. `SM-V3.2-INCREMENT-002-SPECIFICATION-001` v0.2.0 records OD-001 founde
 | iPhone portrait max-capacity usability | ✅ | Automated viewport check confirms map, curated city, configurable city remain visible |
 | iPhone landscape max-capacity usability | ✅ | Automated viewport check confirms map, legend, configurable city remain visible |
 
-**Result: Automated validation passed. Manual human review still required for release approval.**
+**Result: Automated and manual validation passed. The production state was confirmed by the Human Operator on 2026-08-25 during the v3.2.2 release-coherence correction. The original approval date was not reconstructed.**
 
 ---
 

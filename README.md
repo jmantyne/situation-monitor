@@ -26,6 +26,8 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 
 Situation Monitor has completed two governed multi-model AI delivery validations.
 
+**Current release:** v3.2.2 — release-coherence correction; runtime behavior is unchanged from v3.2.0.
+
 | Release | Validation Outcome |
 |---------|-------------------|
 | v3.1.0 | First end-to-end validation of the multi-model AI governance delivery pipeline (ADR-005) |
@@ -203,3 +205,5 @@ Expected (from official Leaflet 1.9.4 release):
 | v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
 | **v3.1.0** | **2026-06-05** | **Feat: temporary inspection overlay — click/tap any map location for live weather and AQI; ADR-005 governance validation; smoke tests 21/21; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
 | **v3.2.0** | **2026-06-23** | **Feat: configurable monitoring locations — map inspection Save, 0–6 configurable locations, v2 persistence, legacy v1 migration, duplicate prevention, Reset restore-default; ADR-006 governed repeatability validation; smoke tests 29/29; Playwright 24/24; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
+| v3.2.1 | 2026-08-24 | Governance baseline synchronization — ADR-006, README, Increment 002 closure artifacts, OD-001 boundary and regression guidance aligned; no runtime change from v3.2.0 |
+| **v3.2.2** | **2026-08-25** | **Release-coherence correction — tag/version/history/status truth aligned; four-model post-release review and synthesis preserved; role-based governance documentation updated; no runtime change from v3.2.0** |
