@@ -2,6 +2,7 @@
 
 **Date:** 2026-06-23
 **Added in:** v3.2.0
+**Current release:** v3.2.2 — governance/documentation coherence correction; runtime unchanged from v3.2.0
 **Author:** Jussi Mantynen
 
 A real-time weather and air quality dashboard for 11 curated cities across 4 continents, with support for additional configurable monitoring locations.

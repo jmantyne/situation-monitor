@@ -15,7 +15,7 @@ Martin Fowler formalized the key distinction in April 2026:
 
 > **Agent = Model + Harness**
 
-The model is the AI (Claude). The harness is everything built around it:
+The model is an AI participant (initially Claude; later multiple role-assigned models). The harness is everything built around it:
 prompts, rules, verification steps, error history, and recovery paths.
 
 Without a harness, an AI model is a capable tool that can fail silently.
@@ -60,6 +60,8 @@ a fail log with 8 documented errors, and a regression history spanning every ver
 | **Memory & Context** | `REGRESSION.md` — full QA history across sessions |
 | **Observability** | Version history in `README.md`, `AI-WORKFLOW.md`, `VERSION` file |
 | **Recovery** | Fail log in `AI-WORKFLOW.md` — each error added a new rule |
+| **Independent review** | Role-based ChatGPT, Codex, Claude Code and Grok review artifacts |
+| **Release coherence** | Tag, VERSION, package version, histories, evidence and Human-approved status must agree |
 
 ---
 
@@ -157,7 +159,7 @@ Documented in the AI-WORKFLOW.md fail log.
 | Pre-commit hook logic | Claude |
 | Architecture Decision Records | Claude (human reviewed and approved) |
 
-The human directed. Claude implemented. The harness enforced quality.
+The human directed. AI participants implemented and reviewed within assigned roles. The harness enforced quality.
 
 ---
 
@@ -172,6 +174,38 @@ AI-assisted development reliable enough to maintain a live public site from
 a phone.
 
 The model is powerful. The harness is why it is dependable.
+
+---
+
+## Current Multi-Model Governance Evolution (v3.2.2)
+
+The original single-model harness remains important historical context, but it is no longer the
+complete current operating model. Situation Monitor v3.1.0 and v3.2.0 exercised a role-based,
+multi-model governance chain:
+
+```text
+Human objective
+→ Architecture and governance reasoning
+→ Repository and execution analysis
+→ Documentation and governance audit
+→ Independent challenge
+→ Synthesis
+→ Human decision
+→ Implementation and validation
+→ Release coherence
+→ Human release approval
+```
+
+The v3.2.1 post-release review demonstrated that correct individual artifacts do not guarantee a
+coherent release. The v3.2.2 response adds the following permanent release invariant:
+
+```text
+tag = VERSION = package version = release-history entry
+```
+
+Release evidence and lifecycle status must identify the same release, and only the Human Operator
+may approve the Released state. Documentation-only patches use the same release identity and state
+explicitly that runtime behavior is unchanged.
 
 ---
 

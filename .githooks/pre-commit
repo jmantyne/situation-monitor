@@ -13,11 +13,20 @@ if [ -f "$VERSION_FILE" ]; then
   MINOR=$(echo "$CURRENT" | cut -d. -f2)
   PATCH=$(echo "$CURRENT" | cut -d. -f3)
 
-  # RELEASE_LEVEL env variable overrides auto-detection
-  # Usage: RELEASE_LEVEL=minor git commit / RELEASE_LEVEL=major git commit
+  # RELEASE_VERSION pins an explicitly reviewed release identity.
+  # RELEASE_LEVEL overrides auto-detection when a new version is being chosen.
+  # Usage: RELEASE_VERSION=3.2.2 git commit
+  #        RELEASE_LEVEL=minor git commit / RELEASE_LEVEL=major git commit
   STAGED=$(git diff --cached --name-only | grep -v "^VERSION$" | grep -v "^REGRESSION" | grep -v "^AI-WORKFLOW" | grep -v "^README" | wc -l | tr -d ' ')
 
-  if [ "${RELEASE_LEVEL:-}" = "major" ]; then
+  if [ -n "${RELEASE_VERSION:-}" ]; then
+    if ! echo "$RELEASE_VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+      echo "❌ RELEASE_VERSION must use X.Y.Z format (received: $RELEASE_VERSION)"
+      exit 1
+    fi
+    NEW_VERSION="$RELEASE_VERSION"
+    echo "📦 RELEASE_VERSION pinned: ${CURRENT} → ${NEW_VERSION}"
+  elif [ "${RELEASE_LEVEL:-}" = "major" ]; then
     NEW_VERSION="$((MAJOR + 1)).0.0"
     echo "📦 RELEASE_LEVEL=major: ${CURRENT} → ${NEW_VERSION}"
   elif [ "${RELEASE_LEVEL:-}" = "minor" ]; then
@@ -44,6 +53,29 @@ fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
 "
     git add "package.json"
     echo "📦 package.json synced to ${NEW_VERSION}"
+  fi
+
+  # An explicit release must already be represented in repository truth.
+  if [ -n "${RELEASE_VERSION:-}" ]; then
+    for DOC in README.md AI-WORKFLOW.md REGRESSION.md; do
+      if ! git diff --cached --name-only -- "$DOC" | grep -q .; then
+        echo "❌ ${DOC} must be staged for explicit release v${NEW_VERSION}"
+        exit 1
+      fi
+      if ! git show ":${DOC}" | grep -q "v${NEW_VERSION}"; then
+        echo "❌ Staged ${DOC} does not contain release v${NEW_VERSION}"
+        exit 1
+      fi
+    done
+    if ! git diff --cached --name-only -- docs/BACKLOG.md | grep -q .; then
+      echo "❌ docs/BACKLOG.md must be staged for explicit release v${NEW_VERSION}"
+      exit 1
+    fi
+    if ! git show :docs/BACKLOG.md | grep -q "Current version.*v${NEW_VERSION}"; then
+      echo "❌ Staged docs/BACKLOG.md does not declare v${NEW_VERSION} as the current version"
+      exit 1
+    fi
+    echo "✅ Repository truth represents v${NEW_VERSION}"
   fi
 fi
 

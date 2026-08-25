@@ -24,7 +24,10 @@ The hook lives in `.githooks/pre-commit` — it travels with the repo but must b
 3. Record results in `REGRESSION.md` as a new version entry
 4. Update `README.md` version history
 5. Update `AI-WORKFLOW.md` version history when the change affects release history or process memory
-6. Commit everything together — hook validates automatically
+6. Verify release coherence when preparing a release: tag = VERSION = package.json = release-history entry
+7. Commit everything together — hook validates automatically
+
+For documentation-only releases, keep one release identity and state explicitly that runtime behavior is unchanged. Repeated reading with the same method is not independent verification.
 
 **Regression automated checks:**
 ```bash
@@ -81,6 +84,8 @@ wc -c < $FILE
 | v3.0.3 | 2026-05-30 | Docs: VERSION loop documented in fail log and lessons learned |
 | **v3.1.0** | **2026-06-05** | **Feat: temporary inspection overlay — map click/tap opens runtime-only weather and AQI inspection; ADR-005 first end-to-end multi-model governance validation; smoke 21/21; Playwright 13/13; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
 | **v3.2.0** | **2026-06-23** | **Feat: configurable monitoring locations delivered in two increments — singleton saved point expanded to bounded 0–6 collection; v2 persistence, legacy v1 migration, duplicate prevention, Reset restore-default; ADR-006 governed repeatability and human decision authority validation; smoke 29/29; Playwright 24/24** |
+| v3.2.1 | 2026-08-24 | Governance baseline synchronization — ADR-006 and Increment 002 closure records aligned; no runtime change from v3.2.0 |
+| **v3.2.2** | **2026-08-25** | **Release-coherence correction — VERSION/package/history/status aligned; independent ChatGPT, Codex, Claude Code and Grok reviews synthesized; role-based governance views updated; no runtime change from v3.2.0** |
 
 ---
 
@@ -106,6 +111,7 @@ wc -c < $FILE
 | v2.11.0 | 2026-05-29 | 3rd party review (Gemini AI): valid finding — security controls not visible in stakeholder docs | Fixed v2.10.1: explicit Security section added to STAKEHOLDER-SUMMARY.md. One real finding among three hallucinations. |
 | v2.14.1 | 2026-05-29 | PR #5 merged while commits were still being pushed to the branch — 4 commits (version headers, version audit) left stranded without a PR | Fixed: PR #6 created for the stranded commits. Rule added: never merge a PR while the AI is still committing to that branch. Confirm "done?" before merging. |
 | v3.0.2 | 2026-05-30 | VERSION loop: dev branch was at v2.11.0 when MIT license committed; hook bumped to v2.11.1 instead of v3.0.1; correction commit bumped again to v3.0.2 | Fixed v3.0.3: all docs updated. Rule added: always rebase dev branch from main before committing, or predict the hook bump and write the correct version into docs before committing. |
+| v3.2.1 | 2026-08-25 | Release tag advanced to v3.2.1 while VERSION, package.json and histories remained at v3.2.0; closure records also retained pending-review language after production release | Fixed in v3.2.2: one release identity restored, human-confirmed status recorded, four-model review evidence preserved, and release-coherence invariant added |
 
 ---
 
