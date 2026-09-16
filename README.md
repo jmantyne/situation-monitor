@@ -15,6 +15,7 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
 | [ADR-005](docs/ADR-005.md) | First end-to-end validation of multi-model AI governance delivery pipeline |
 | [ADR-006](docs/ADR-006.md) | Governed repeatability and human decision authority — second validation of the multi-model AI pipeline |
+| [ADR-007](docs/ADR-007.md) | First Conductor-coordinated sequential ATR correction loop — v3.2.3 |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Agentic workflow diagram + runtime data architecture (Mermaid) |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
 | [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.0 harness, v3.1 temporary inspection, v3.2 configurable cities, v4.0+ native app |
@@ -217,3 +218,7 @@ The Human verified the local preview, reported that the correction works well an
 Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
 
 The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](docs/ATR-3.2.3-CLOSURE.json).
+
+### Development milestone: Conductor + ATR
+
+v3.2.3 was delivered through sequential **Codex → Claude → Grok** contributions, with implementation/correction between reviews and a final Claude recheck before Human acceptance. Later reviewers found defects that were corrected and regression-tested. [ADR-007](docs/ADR-007.md) records the decision, evidence and limitations in English and Finnish. This is an observed improvement-loop pilot, not a controlled proof that multiple models always outperform one model. Product release identity remains v3.2.3; GitHub publication is still pending.

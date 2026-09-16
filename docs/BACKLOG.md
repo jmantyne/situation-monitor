@@ -286,3 +286,7 @@ The Human verified the local preview, reported that the correction works well an
 Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
 
 The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](ATR-3.2.3-CLOSURE.json).
+
+### Delivery-method decision record
+
+[ADR-007](ADR-007.md) records the first Conductor-coordinated sequential ATR pilot in English and Finnish. README links the delivery milestone. This documentation update does not change the reviewed runtime or tests at bcd2481; existing 29/29 structural and 40/40 Chromium results remain applicable. Version stays v3.2.3; publication pending.
