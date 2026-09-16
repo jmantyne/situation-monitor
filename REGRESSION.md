@@ -857,9 +857,25 @@ No translation was needed. Process gap was the missing explicit audit step.
 
 ## Known limitations (not bugs)
 
-- Map colours cannot be customised without TopoJSON artefacts — CartoDB Voyager used as stable baseline
+- Map colours follow OSM Standard; custom styling requires another provider or local geographic assets
 - Hover tooltips do not work on touch screens — by design
 - Home city detection uses ipapi.co and requires network access
 - Configurable saved points use UTC clocks; no reverse geocoding or timezone lookup is performed
 - Tahoe City and San Jose share America/Los_Angeles — correct
 - Dubai is the only city with no DST (UTC+4 always) — use for UTC offset testing
+
+## v3.2.3 — accepted API compatibility repair
+
+The Human verified the local preview, reported that the correction works well and approved it. Sequential Codex diagnosis, Claude review, Grok challenge and final Claude recheck are complete. The final recheck confirmed all three Grok corrections with no actionable findings. Reviewed runtime commit: `bcd24818ac79c63c1610789f04fa1594dd3ad558`. This delivery update changes documentation only. GitHub publication and release tagging are separate from this acceptance record.
+
+Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
+
+The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](docs/ATR-3.2.3-CLOSURE.json).
+
+### Delivery-method decision record
+
+[ADR-007](docs/ADR-007.md) records the first Conductor-coordinated sequential ATR pilot in English and Finnish. README links the delivery milestone. This documentation update does not change the reviewed runtime or tests at bcd2481; existing 29/29 structural and 40/40 Chromium results remain applicable. Version stays v3.2.3; publication pending.
+
+### v3.2.3 final release preparation — 2026-09-16T06:19:43Z
+
+Human approved main integration and release. Re-ran structural checks: 29/29 passed. This commit changes documentation only; runtime and tests remain identical to the reviewed bcd2481 baseline, preserving the prior 40/40 Chromium result. VERSION and package.json are 3.2.3; release tag is v3.2.3. No new physical-device or Safari certification is claimed.

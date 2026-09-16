@@ -1,10 +1,15 @@
 # Backlog — Situation Monitor
 
 **Date:** 2026-06-23
-**Current version:** v3.2.2
+**Current version:** v3.2.3
 **Author:** Jussi Mantynen
 
 ---
+
+### Delivered scope — v3.2.3
+
+API compatibility repair: key-free HTTP/HTTPS OpenStreetMap basemap, explicit local-file limitation, unknown/partial data states, bounded requests and dependency failure tests. Final ATR recheck and Human acceptance complete; main integration and release authorized through PR #23.
+
 
 ## 🇬🇧 English
 
@@ -273,3 +278,17 @@ Nykyinen stack käyttää yksinomaan ilmaisia APItä. Maksullinen taso voisi ava
 11 kaupunkia pysyi tarkoituksella valittuna ja kiinnitettynä v3.1:ssä. Layout oli suunniteltu ja testattu nimenomaan 15" MacBook Pro -näytölle ja iPhone-näytölle — 11 korttia täytti gridin oikein molemmissa. Minua kiinnostavat henkilökohtaisesti juuri nämä 11 paikkaa.
 
 Kuratoitujen kaupunkien määrän kasvattaminen olisi rikkonut 6-sarakkeen desktop-gridin (11 kaupunkikorttia + 1 kartta = 12 solua), vaatinut responsiivisen layoutin uudelleensuunnittelun ja hajottanut dashboardin harkitun, kuratoidun ilmeen. v3.1 toimitti tarkoituksella vain väliaikaisen inspektion; muokattavat kaupungit siirrettiin v3.2:een ja toimitettiin v3.2 Increment 001:ssä ja Increment 002:ssa.
+
+## v3.2.3 — accepted API compatibility repair
+
+The Human verified the local preview, reported that the correction works well and approved it. Sequential Codex diagnosis, Claude review, Grok challenge and final Claude recheck are complete. The final recheck confirmed all three Grok corrections with no actionable findings. Reviewed runtime commit: `bcd24818ac79c63c1610789f04fa1594dd3ad558`. This delivery update changes documentation only. GitHub publication and release tagging are separate from this acceptance record.
+
+Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
+
+The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](ATR-3.2.3-CLOSURE.json).
+
+### Delivery-method decision record
+
+[ADR-007](ADR-007.md) records the first Conductor-coordinated sequential ATR pilot in English and Finnish. README links the delivery milestone. This documentation update does not change the reviewed runtime or tests at bcd2481; existing 29/29 structural and 40/40 Chromium results remain applicable. Version stays v3.2.3; publication pending.
+
+Release authorization update (2026-09-16 UTC): Human approved v3.2.3 main integration and release. Earlier publication-pending notes above are historical. Watch support and market research remain future scope.

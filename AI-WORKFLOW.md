@@ -45,6 +45,7 @@ wc -c < $FILE
 
 | Version | Date | Change |
 |---------|------|--------|
+| v3.2.3 | 2026-09-16 UTC | API compatibility and failure-state repair; sequential Conductor + ATR; Human authorized main integration and release via PR #23 |
 | v1.0 | 2026-05-27 | Initial release — 11 cities, Leaflet map, all APIs, responsive layouts |
 | v1.0.1 | 2026-05-27 | Turku → Nairobi (Kenya, UTC+3 no DST), HUM dry colour #88ccff |
 | v1.0.2 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
@@ -167,7 +168,7 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 | AQI, PM2.5, NO2 | air-quality-api.open-meteo.com |
 | Sunrise / sunset | api.sunrise-sunset.org |
 | Home city (IP) | ipapi.co (replaced ip-api.com v2.6.0 — free HTTPS endpoint) |
-| Map tiles | CartoDB Voyager (Leaflet) |
+| Map tiles | OpenStreetMap Standard (Leaflet), HTTP/HTTPS only; file:// retains markers and data |
 
 ---
 
@@ -220,3 +221,19 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 - 2026-05-27: Repo created — migrated from Harjoittelu/docs/ to standalone public repo
 - 2026-05-27: index.html experiment failed (wrong content) — reverted to situation-monitor.html
 - 2026-05-27: v2.0.0 — all documentation converted from Finnish to English; semver introduced
+
+## v3.2.3 — accepted API compatibility repair
+
+The Human verified the local preview, reported that the correction works well and approved it. Sequential Codex diagnosis, Claude review, Grok challenge and final Claude recheck are complete. The final recheck confirmed all three Grok corrections with no actionable findings. Reviewed runtime commit: `bcd24818ac79c63c1610789f04fa1594dd3ad558`. This delivery update changes documentation only. GitHub publication and release tagging are separate from this acceptance record.
+
+Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
+
+The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](docs/ATR-3.2.3-CLOSURE.json).
+
+### Delivery-method decision record
+
+[ADR-007](docs/ADR-007.md) records the first Conductor-coordinated sequential ATR pilot in English and Finnish. README links the delivery milestone. This documentation update does not change the reviewed runtime or tests at bcd2481; existing 29/29 structural and 40/40 Chromium results remain applicable. Version stays v3.2.3; publication pending.
+
+### v3.2.3 release preparation — 2026-09-16 UTC
+
+Human authorized PR #23 main integration and the v3.2.3 release. Documentation status is aligned; runtime and tests are unchanged from bcd2481. Structural checks passed 29/29 again; prior 40/40 Chromium results remain applicable. Use the existing SSH key with macOS Keychain for authenticated Git delivery. Earlier publication-pending entries are historical.

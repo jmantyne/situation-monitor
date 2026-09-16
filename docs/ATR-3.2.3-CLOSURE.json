@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-16T05:55:37.561115+00:00",
+  "reviewedRuntimeCommit": "bcd24818ac79c63c1610789f04fa1594dd3ad558",
+  "humanAcceptance": "Human reported correction works well and approved, then authorized proceeding.",
+  "publication": "Pending",
+  "verification": {
+    "structural": {
+      "passed": 29,
+      "total": 29
+    },
+    "chromium": {
+      "passed": 40,
+      "total": 40
+    }
+  },
+  "stages": [
+    {
+      "stage": "diagnosis",
+      "provider": "codex-subscription",
+      "candidateCommit": "8d4426eb5d0610a875b367ca5c0308001ae44b27",
+      "receiptSha256": "8187553070cab644d4e270e940d02242e2a7decb3fc8ec388de17e979f18b451",
+      "findings": [
+        {
+          "title": "Carto tile endpoint returns unusable watermarked map content despite HTTP 200",
+          "severity": "high",
+          "recommendation": "For v3.2.3, remove the affected tile layer and present Leaflet\u2019s existing neutral background with markers and click inspection intact. If a replacement is desired, evaluate key-free-compatible providers only as candidates and require current policy, quota, attribution, tile-content, CORS, CSP, desktop/mobile browser, and HTTP-body verification before selection. Update README and supersede or amend ADR-002; never treat status 200 alone as acceptance."
+        },
+        {
+          "title": "Missing environmental data is rendered as healthy green status",
+          "severity": "high",
+          "recommendation": "Add an explicit unknown/unavailable status with neutral styling. Return unknown when no score exists; disclose partial data when only some inputs succeed. Preserve em dashes for missing fields, but do not color missing observations green. Add tests for all-three failure, each single-source failure, malformed JSON, HTTP errors, and missing current fields."
+        },
+        {
+          "title": "Refresh indicator reports success even when every city dependency fails",
+          "severity": "medium",
+          "recommendation": "Track successful and failed source/city counts. Update the success timestamp only when useful data was accepted, or label the attempt distinctly, such as \u201cRefresh failed\u201d or \u201cPartial update.\u201d Test total failure, partial failure, recovery, and retention/clearing of previously displayed values."
+        },
+        {
+          "title": "Dependency tests exercise only successful mocked payloads and do not detect the observed tile failure",
+          "severity": "medium",
+          "recommendation": "Add Playwright cases for API 429/500, aborts, malformed/empty JSON, partial payloads, all-source failure, and subsequent recovery. For any selected basemap, assert that representative tile responses are actual usable images and perform a governed visual baseline check for provider error/watermark content; keep this distinct from simple HTTP status checks."
+        },
+        {
+          "title": "ipapi.co rate limiting makes home detection unreliable but runtime fallback is functional",
+          "severity": "medium",
+          "recommendation": "Keep the existing no-key fallback for v3.2.3, but expose when home selection is approximate/default rather than IP-derived. Avoid retry storms, and add tests for 429, invalid payloads, geolocation denial/timeouts, timezone matching, and final default selection. Treat replacement geolocation services only as candidates pending current live and policy verification."
+        },
+        {
+          "title": "Leaflet CDN failure prevents application bootstrap without a user-visible fallback",
+          "severity": "medium",
+          "recommendation": "For the minimal repair, guard map initialization with a typeof L check, render a clear map-unavailable message, and continue building/fetching city cards. Add a test that blocks unpkg and confirms environmental cards and clocks remain usable. Vendoring Leaflet is a broader option, not required for the smallest v3.2.3 fix."
+        },
+        {
+          "title": "Meta-delivered frame-ancestors directive does not provide the documented clickjacking control",
+          "severity": "low",
+          "recommendation": "Remove the unsupported claim from the meta-CSP documentation. If framing protection is required, configure an HTTP Content-Security-Policy response header through the hosting layer and verify it separately; otherwise document the static-host limitation."
+        },
+        {
+          "title": "External dependency inventory is broader than the documented four API domains",
+          "severity": "info",
+          "recommendation": "Add a concise dependency and browser-capability matrix to README, including purpose, failure behavior, fallback, CSP directive, SRI coverage, and test coverage. Record Google Fonts and unpkg explicitly, and distinguish supplied observations from repository-verified behavior."
+        }
+      ]
+    },
+    {
+      "stage": "review",
+      "provider": "claude-subscription",
+      "candidateCommit": "32e87de1948288f8868bf21abb659bcaab86d35c",
+      "receiptSha256": "9c0380b8934c5c3e9bb9d7c1997ec3d23018a01d26640c9960c26ee075ac47eb",
+      "findings": [
+        {
+          "title": "useDefault() CITIES[7] resolves to Istanbul but comment names it Helsinki",
+          "severity": "low",
+          "recommendation": "Change CITIES[7] to CITIES[6] in useDefault() if Helsinki is the intended final fallback, or update both the index and the comment if Istanbul is intentional. Add a test case that exercises the useDefault() path (geolocation denied, ipapi mocked 429, browser timezone unrecognized) and asserts the expected home city."
+        },
+        {
+          "title": "Home-detection source approximation not surfaced in user interface (deferred carry-forward)",
+          "severity": "info",
+          "recommendation": "Track as a deferred backlog item. When implementing, expose the detection method in the home-city card or a status indicator (e.g., 'home: GPS', 'home: timezone estimate', 'home: default') so users can assess reliability. Add a test asserting the displayed label for each detection path."
+        },
+        {
+          "title": "OSM tile policy is a runtime provider dependency that may change, as CARTO's did",
+          "severity": "info",
+          "recommendation": "Record in REGRESSION.md or ADR-002 that OSM tile policy should be re-verified at each major release, analogous to the CARTO check that triggered this fix cycle. No code change required for v3.2.3."
+        }
+      ]
+    },
+    {
+      "stage": "challenge",
+      "provider": "grok-subscription",
+      "candidateCommit": "90699fcfc081221b7496d3dd229bfdb0536da2af",
+      "receiptSha256": "6415dd8b287ec58c10bcb58dab7f8ddf988988fd1e7f3f77a757f47d917abc77",
+      "findings": [
+        {
+          "title": "Overlapping city refreshes can overwrite newer data with a later stale or failed response",
+          "severity": "medium",
+          "recommendation": "Give fetchCityData a monotonic generation (same pattern as inspectionGeneration). Ignore or drop responses whose generation is not current. Avoid the startup double-fetch by not calling fetchCityData from setConfigurableCities when fetchAllCities will load the same cities. Add a Playwright case that starts two overlapping refreshes and asserts the later-started success is not replaced by an earlier delayed failure."
+        },
+        {
+          "title": "tryIP() has no timeout, so a hung ipapi request never reaches the Helsinki fallback",
+          "severity": "medium",
+          "recommendation": "Route ipapi through the same timed fetchJson helper (or an equivalent 12s AbortController). On timeout, abort, or non-OK, call useDefault(). Extend the Helsinki test to deny geolocation, leave ipapi pending past the timeout, stub an unrecognized timezone, and assert homeCityId === 'helsinki' without stubbing useDefault()."
+        },
+        {
+          "title": "OSM tileerror notice stays visible after later tiles load",
+          "severity": "low",
+          "recommendation": "Clear or hide #map-notice when a tile loads successfully, or show it only after a sustained failure threshold. Add an HTTP-mode test that returns 503 for one tile then 200 for the rest and asserts the notice does not remain after successful tiles render."
+        }
+      ]
+    },
+    {
+      "stage": "recheck",
+      "provider": "claude-subscription",
+      "candidateCommit": "bcd24818ac79c63c1610789f04fa1594dd3ad558",
+      "receiptSha256": "2d7724183005810eb6a0d0044fa07325771c1130fd24a1999ffb909f1f017af9",
+      "findings": [
+        {
+          "title": "Grok finding 1 resolved \u2014 overlapping city refresh generation guard confirmed in source",
+          "severity": "info",
+          "recommendation": "No action required. Confirm test suite continues to pass on CI for this candidate. The overlap test resolves the older pending batch with {weather:null,air:null,sun:null} rather than non-null stale data; this is acceptable because the generation guard is data-agnostic \u2014 the check fires regardless of payload \u2014 but reviewers may wish to add a variant with non-null stale weather data for completeness in a future increment."
+        },
+        {
+          "title": "Grok finding 2 resolved \u2014 tryIP routed through fetchJson with 12 s AbortController confirmed",
+          "severity": "info",
+          "recommendation": "No action required. The fix is correct. The test adequately validates the GPS-deny plus hung-IP path to Helsinki. Live ipapi.co 429 behavior was not re-tested here and remains supplied evidence as noted by the conductor."
+        },
+        {
+          "title": "Grok finding 3 resolved \u2014 tileload handler hides #map-notice confirmed",
+          "severity": "info",
+          "recommendation": "No action required. The hide-on-any-tileload behavior is appropriate: a single success clears a transient-failure notice. The existing HTTP-mode tile-failure test (all 503) and the new recovery test together cover the material paths. Future reviewers may consider whether a sustained-failure threshold is preferred over immediate hide, but that is a product decision outside this audit scope."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Reviewers inspected source; live and test execution evidence supplied by Conductor.",
+    "Detailed home detection provenance deferred.",
+    "No physical device or Safari certification.",
+    "Local runtime evidence retained separately; full private provider transcripts not included."
+  ]
+}

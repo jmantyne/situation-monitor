@@ -15,6 +15,7 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-004](docs/ADR-004.md) | Security release — SRI, CSP, XSS audit, HTTPS |
 | [ADR-005](docs/ADR-005.md) | First end-to-end validation of multi-model AI governance delivery pipeline |
 | [ADR-006](docs/ADR-006.md) | Governed repeatability and human decision authority — second validation of the multi-model AI pipeline |
+| [ADR-007](docs/ADR-007.md) | First Conductor-coordinated sequential ATR correction loop — v3.2.3 |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Agentic workflow diagram + runtime data architecture (Mermaid) |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
 | [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.0 harness, v3.1 temporary inspection, v3.2 configurable cities, v4.0+ native app |
@@ -26,7 +27,9 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 
 Situation Monitor has completed two governed multi-model AI delivery validations.
 
-**Current release:** v3.2.2 — release-coherence correction; runtime behavior is unchanged from v3.2.0.
+**Current release:** v3.2.3 — API compatibility and failure-state repair, delivered through the Human-approved sequential Conductor + ATR loop.
+
+The CARTO basemap now requires an API key. This release uses key-free OpenStreetMap tiles when opened over HTTP/HTTPS. Direct file opening retains data and markers but shows a basemap notice; use the web version for the basemap. See [API audit](docs/API-AUDIT-3.2.3.md).
 
 | Release | Validation Outcome |
 |---------|-------------------|
@@ -55,7 +58,7 @@ npm run test:e2e
 ## How to open
 
 Download `situation-monitor.html` and open it in any modern browser (Safari, Chrome, Firefox).
-Requires an internet connection for map tiles, weather data and fonts.
+Requires an internet connection for map tiles, weather data and fonts. For the basemap, open the [web version](https://jmantyne.github.io/situation-monitor/situation-monitor.html), or serve the file locally over HTTP. Direct file:// opening intentionally makes no OpenStreetMap tile requests because it cannot supply the required HTTP Referer.
 
 ## What it shows
 
@@ -98,7 +101,7 @@ Temporary inspections can also be saved as configurable monitoring locations. Th
 | 10 | 🇦🇪 Dubai | Asia/Dubai | UTC+4 (no DST) |
 | 11 | 🇦🇺 Sydney | Australia/Sydney | UTC+10/+11 |
 
-## Data sources (all free, no API key required)
+## Data sources (key-free personal-use configuration; provider limits apply)
 
 | Data | Source |
 |------|--------|
@@ -106,21 +109,21 @@ Temporary inspections can also be saved as configurable monitoring locations. Th
 | Air quality (AQI, PM2.5, NO₂) | [Open-Meteo AQI](https://air-quality-api.open-meteo.com) |
 | Sunrise / sunset | [Sunrise-Sunset.org](https://sunrise-sunset.org) |
 | Home city detection | [ipapi.co](https://ipapi.co) |
-| Map tiles | [CartoDB Voyager](https://carto.com) |
+| Map tiles | [OpenStreetMap Standard](https://www.openstreetmap.org) — HTTP/HTTPS viewing, visible attribution and provider caching/usage policy |
 
 ## Security (v2.1.0)
 
 | Feature | Status | Detail |
 |---------|--------|--------|
 | Subresource Integrity (SRI) | ✅ | Leaflet CSS + JS integrity-verified via SHA-256 |
-| Content Security Policy (CSP) | ✅ | `connect-src` locks API calls to known domains; `frame-ancestors 'none'` blocks clickjacking |
+| Content Security Policy (CSP) | ✅ | `connect-src` limits API calls to known domains. Meta CSP cannot enforce frame-ancestors; framing protection requires an HTTP response header and is not claimed here |
 | XSS audit | ✅ | Dynamic values are rendered from API numbers, coordinates, or hardcoded labels; no free-form user text is inserted |
 | Secret scanning | ✅ | GitHub automatic scanning active (public repo); no API keys in codebase |
 | HTTPS | ✅ | GitHub Pages enforces HTTPS |
 
 ### Privacy note
 
-Home city detection uses [ipapi.co](https://ipapi.co) — your IP address is sent to this service once on page load to determine the nearest city. No other personal data is transmitted. All other APIs receive only coordinates (lat/lon), not identity.
+Home city detection uses [ipapi.co](https://ipapi.co) — your IP address is sent to this service once on page load to determine the nearest city. All network providers also see the connecting IP address and request metadata. Environmental APIs receive queried coordinates; the tile service receives tile coordinates and, in the web version, the browser Referer. IP lookup can be rate-limited; the app then falls back to browser timezone or its default city.
 
 ### SRI hash verification
 
@@ -207,3 +210,19 @@ Expected (from official Leaflet 1.9.4 release):
 | **v3.2.0** | **2026-06-23** | **Feat: configurable monitoring locations — map inspection Save, 0–6 configurable locations, v2 persistence, legacy v1 migration, duplicate prevention, Reset restore-default; ADR-006 governed repeatability validation; smoke tests 29/29; Playwright 24/24; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
 | v3.2.1 | 2026-08-24 | Governance baseline synchronization — ADR-006, README, Increment 002 closure artifacts, OD-001 boundary and regression guidance aligned; no runtime change from v3.2.0 |
 | **v3.2.2** | **2026-08-25** | **Release-coherence correction — tag/version/history/status truth aligned; four-model post-release review and synthesis preserved; role-based governance documentation updated; no runtime change from v3.2.0** |
+
+## v3.2.3 — accepted API compatibility repair
+
+The Human verified the local preview, reported that the correction works well and approved it. Sequential Codex diagnosis, Claude review, Grok challenge and final Claude recheck are complete. The final recheck confirmed all three Grok corrections with no actionable findings. Reviewed runtime commit: `bcd24818ac79c63c1610789f04fa1594dd3ad558`. This delivery update changes documentation only. GitHub publication and release tagging are separate from this acceptance record.
+
+Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
+
+The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](docs/ATR-3.2.3-CLOSURE.json).
+
+### Development milestone: Conductor + ATR
+
+v3.2.3 was delivered through sequential **Codex → Claude → Grok** contributions, with implementation/correction between reviews and a final Claude recheck before Human acceptance. Later reviewers found defects that were corrected and regression-tested. [ADR-007](docs/ADR-007.md) records the decision, evidence and limitations in English and Finnish. This is an observed improvement-loop pilot, not a controlled proof that multiple models always outperform one model. Product release identity remains v3.2.3; Human authorized main integration and the v3.2.3 release on 2026-09-16 UTC.
+
+### v3.2.3 release authorization — 2026-09-16 UTC
+
+Human approved main integration and release through [PR #23](https://github.com/jmantyne/situation-monitor/pull/23). Release tag: `v3.2.3`; VERSION and package.json: `3.2.3`. Final release preparation changes documentation only; the reviewed runtime and tests remain identical to bcd2481. Earlier publication-pending notes record the historical acceptance stage.
