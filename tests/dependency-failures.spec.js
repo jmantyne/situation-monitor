@@ -95,3 +95,34 @@ test('unknown home status has a neutral border',async({page})=>{
   await page.evaluate(()=>markHome(CITIES.find(c=>c.id==='san-jose')));
   await expect(page.locator('#card-san-jose')).toHaveCSS('border-top-color','rgb(135, 148, 170)');
 });
+
+test('older refresh failure cannot replace a newer successful batch',async({page})=>{
+ await setup(page);await page.goto(FILE_URL);await expect(page.locator('#refresh-info')).toContainText('Updated');
+ const result=await page.evaluate(async()=>{
+  const original=fetchEnvironmentalData;const pending=[];
+  fetchEnvironmentalData=()=>new Promise(resolve=>pending.push(resolve));
+  const older=fetchAllCities();fetchEnvironmentalData=original;
+  await fetchAllCities();const banner=document.getElementById('refresh-info').textContent;
+  pending.forEach(resolve=>resolve({weather:null,air:null,sun:null}));await older;
+  return {banner,after:document.getElementById('refresh-info').textContent,temp:cityData['san-jose'].weather?.temp};
+ });
+ expect(result.temp).toBe(21);expect(result.after).toBe(result.banner);
+});
+test('denied GPS and hung IP request reach named fallback',async({page})=>{
+ await setup(page);await page.addInitScript(()=>{
+  navigator.geolocation.getCurrentPosition=(_success,failure)=>failure({code:1});
+  const realFetch=window.fetch;window.fetch=(url,options)=>String(url).includes('ipapi.co')?new Promise((resolve,reject)=>options.signal.addEventListener('abort',()=>reject(new DOMException('Aborted','AbortError')))):realFetch(url,options);
+  const timer=window.setTimeout;window.setTimeout=(fn,ms,...args)=>timer(fn,ms===12000?50:ms,...args);
+  const original=Intl.DateTimeFormat;Intl.DateTimeFormat=function(...args){const format=new original(...args);format.resolvedOptions=()=>({timeZone:'Unrecognized/Zone'});return format;};
+ });
+ await page.goto(FILE_URL);await expect.poll(()=>page.evaluate(()=>homeCityId)).toBe('helsinki');
+});
+test('basemap notice clears when a later tile succeeds',async({page})=>{
+ const fs=require('node:fs');await setup(page);
+ await page.route('http://127.0.0.1:49199/app.html',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync(path.resolve(__dirname,'../situation-monitor.html'),'utf8')}));
+ await page.route('https://tile.openstreetmap.org/**',r=>r.fulfill({status:503,body:'Unavailable'}));
+ await page.goto('http://127.0.0.1:49199/app.html');await expect(page.locator('#map-notice')).toBeVisible();
+ await page.route('https://tile.openstreetmap.org/**',r=>r.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aL1sAAAAASUVORK5CYII=','base64')}));
+ await page.evaluate(()=>map.eachLayer(layer=>{if(layer instanceof L.TileLayer)layer.redraw();}));
+ await expect(page.locator('#map-notice')).toBeHidden();
+});

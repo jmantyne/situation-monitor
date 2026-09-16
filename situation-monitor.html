@@ -1356,7 +1356,7 @@ if (location.protocol === 'https:' || location.protocol === 'http:') {
   }).on('tileerror', () => {
     mapNotice.hidden = false;
     mapNotice.textContent = 'Basemap unavailable. Location markers and data remain available.';
-  }).addTo(map);
+  }).on('tileload', () => { mapNotice.hidden = true; }).addTo(map);
 } else {
   mapNotice.hidden = false;
   mapNotice.textContent = 'Open the web version for the basemap. Local markers and data still work.';
@@ -1577,18 +1577,19 @@ function clearConfigurableCityRender() {
       mapMarkers[city.id].remove();
       delete mapMarkers[city.id];
     }
+    cityFetchGenerations.set(city.id, (cityFetchGenerations.get(city.id) || 0) + 1);
     delete cityData[city.id];
   });
 }
 
-function setConfigurableCities(cities) {
+function setConfigurableCities(cities, fetchNow = true) {
   clearConfigurableCityRender();
   configurableCities = cities.map((city, index) => createConfigurableCity(city.lat, city.lon, index));
   configurableCities.forEach(city => {
     cityData[city.id] = { weather: null, air: null, sun: null };
     buildCityCard(city);
     addMapMarker(city);
-    fetchCityData(city);
+    if (fetchNow) fetchCityData(city);
   });
 }
 
@@ -1775,8 +1776,14 @@ function renderCityData(city) {
 }
 
 // ── Data fetching ──────────────────────────────────────────────────────────
+const cityFetchGenerations = new Map();
+let refreshGeneration = 0;
+
 async function fetchCityData(city) {
+  const generation = (cityFetchGenerations.get(city.id) || 0) + 1;
+  cityFetchGenerations.set(city.id, generation);
   const data = await fetchEnvironmentalData(city.lat, city.lon, true);
+  if (cityFetchGenerations.get(city.id) !== generation) return { usable: false, complete: false, stale: true };
   cityData[city.id] = data;
   renderCityData(city);
   return { usable: !!(data.weather || data.air), complete: !!(data.weather && data.air && data.sun)
@@ -1863,8 +1870,10 @@ async function fetchEnvironmentalData(lat, lon, includeSun) {
 }
 
 async function fetchAllCities() {
+  const generation = ++refreshGeneration;
   // Fetch all cities in parallel; one failure doesn't block others
   const results = await Promise.allSettled(allDisplayCities().map(city => fetchCityData(city)));
+  if (generation !== refreshGeneration) return;
   const usable = results.filter(r => r.status === 'fulfilled' && r.value.usable).length;
   const complete = results.filter(r => r.status === 'fulfilled' && r.value.complete).length;
   const el = document.getElementById('refresh-info');
@@ -1939,8 +1948,7 @@ function tryGPS() {
 }
 
 function tryIP() {
-  fetch('https://ipapi.co/json/')
-    .then(r => { if (!r.ok) throw new Error(`ip ${r.status}`); return r.json(); })
+  return fetchJson('https://ipapi.co/json/')
     .then(d => {
       let city = null;
       if (d.timezone) city = cityByTimezone(d.timezone);
@@ -2097,7 +2105,7 @@ restoreDefault.addEventListener('click', restoreDefaultConfiguration);
 
 // ── Start ──────────────────────────────────────────────────────────────────
 const storedConfigurableCities = loadConfigurableCities();
-if (storedConfigurableCities.length > 0) setConfigurableCities(storedConfigurableCities);
+if (storedConfigurableCities.length > 0) setConfigurableCities(storedConfigurableCities, false);
 
 tick();
 setInterval(tick, 1000);

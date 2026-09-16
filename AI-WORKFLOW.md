@@ -225,3 +225,7 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 ### Sequential ATR review correction — 2026-09-16 UTC
 
 Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.
+
+### Grok challenge corrections — 2026-09-16 UTC
+
+Grok completed a source-based challenge and found three actionable issues. City requests now discard superseded responses, obsolete refresh batches cannot change the refresh banner, and restored saved cities are fetched once at startup. Removed configurable cities invalidate in-flight requests. IP location lookup now uses the bounded 12-second request helper and reaches the named fallback on timeout. The HTTP basemap failure notice clears when later tiles load. All 29 structural checks and 40 Chromium tests pass, including overlapping refresh, denied GPS/hung IP fallback, and tile failure/recovery. Final Claude recheck awaits explicit payload-transmission permission after automatic approval review blocked it. Human acceptance is pending; no release has been published.
