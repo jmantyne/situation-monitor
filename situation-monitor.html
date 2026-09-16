@@ -836,7 +836,7 @@
     <div class="leg-row">
       <div class="leg-group">
         <span class="leg-title">MAP PIN</span>
-        <span class="leg-item">avg(UV·AQI·WIND):</span>
+        <span class="leg-item">avg(UV·AQI·WIND), gray = incomplete:</span>
         <span style="color:#00ff88">● green ≤0.4</span>
         <span style="color:#ffc107">● yellow 0.5–1.4</span>
         <span style="color:#ff6600">● orange 1.5–2.4</span>
@@ -1085,7 +1085,7 @@ function windLabel(kmh) {
 }
 
 function scoreToStatus(score) {
-  if (score === null) return 'green';
+  if (!Number.isFinite(score)) return 'unknown';
   if (score < 0.5)  return 'green';
   if (score < 1.5)  return 'yellow';
   if (score < 2.5)  return 'orange';
@@ -1108,12 +1108,12 @@ function computeStatus(city) {
 }
 
 function computeStatusFromData(d) {
-  if (!d) return 'green';
+  if (!d) return 'unknown';
   const uv   = d.weather ? uvScore(d.weather.uv)        : null;
   const aqi  = d.air     ? aqiScore(d.air.us_aqi)       : null;
   const wind = d.weather ? windScore(d.weather.windSpeed): null;
   const scores = [uv, aqi, wind].filter(s => s !== null);
-  if (scores.length === 0) return 'green';
+  if (scores.length !== 3) return 'unknown';
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   return scoreToStatus(avg);
 }
@@ -1260,7 +1260,7 @@ function buildCityCard(city) {
   const card = document.createElement('div');
   card.className = 'city-card' + (city.configurable ? ' configurable' : '');
   card.id = 'card-' + city.id;
-  card.dataset.status = 'green';
+  card.dataset.status = 'unknown';
   const removeButton = city.configurable
     ? '<button class="config-remove" type="button" aria-label="Remove saved city">X</button>'
     : '';
@@ -1335,20 +1335,25 @@ function buildCityCard(city) {
 CITIES.forEach(buildCityCard);
 
 // ── Leaflet map ────────────────────────────────────────────────────────────
-const map = L.map('map', {
+const map = typeof L === 'undefined' ? null : L.map('map', {
   zoomControl: false,
   attributionControl: false,
 });
 
+if (map) {
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
   subdomains: 'abcd',
   maxZoom: 19
 }).addTo(map);
 
 map.fitBounds(L.latLngBounds(CITIES.map(c => [c.lat, c.lon])), { padding: [12, 12] });
+} else {
+  document.getElementById('map').textContent = 'Map unavailable. City data remains available.';
+}
 
 // Create circle markers for all cities
 function addMapMarker(city) {
+  if (!map) return;
   const marker = L.circleMarker([city.lat, city.lon], {
     radius: city.configurable ? 8 : 6,
     color: '#080816',
@@ -1379,7 +1384,7 @@ function addMapMarker(city) {
 
 CITIES.forEach(addMapMarker);
 
-map.on('click', handleMapInspectionClick);
+if (map) map.on('click', handleMapInspectionClick);
 
 function updateMapMarker(city, isHome) {
   const marker = mapMarkers[city.id];
@@ -1402,7 +1407,7 @@ function handleMapInspectionClick(e) {
   inspectionState = { location, data: null, loading: true, error: null };
   showInspectionOverlay(location);
   setInspectionLoading(location);
-  updateInspectionMarker(location, 'green');
+  updateInspectionMarker(location, 'unknown');
   fetchInspectionData(location, generation);
 }
 
@@ -1596,6 +1601,7 @@ function formatInspectionCoords(lat, lon) {
 }
 
 function updateInspectionMarker(location, status) {
+  if (!map) return;
   if (inspectionMarker) inspectionMarker.remove();
   inspectionMarker = L.circleMarker([location.lat, location.lon], {
     radius: 8,
@@ -1757,7 +1763,21 @@ async function fetchCityData(city) {
   const data = await fetchEnvironmentalData(city.lat, city.lon, true);
   cityData[city.id] = data;
   renderCityData(city);
+  return { usable: !!(data.weather || data.air), complete: !!(data.weather && data.air && data.sun)
+    && Object.values(data.weather).every(Number.isFinite) && Object.values(data.air).every(Number.isFinite) };
 }
+
+async function fetchJson(url) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } finally { clearTimeout(timeout); }
+}
+
+function reading(value) { return Number.isFinite(value) ? value : null; }
 
 async function fetchEnvironmentalData(lat, lon, includeSun) {
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,uv_index,surface_pressure,wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`;
@@ -1765,11 +1785,11 @@ async function fetchEnvironmentalData(lat, lon, includeSun) {
   const sunUrl     = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0`;
 
   const requests = [
-    fetch(weatherUrl).then(r => { if (!r.ok) throw new Error(`weather ${r.status}`); return r.json(); }),
-    fetch(airUrl).then(r => { if (!r.ok) throw new Error(`air ${r.status}`); return r.json(); })
+    fetchJson(weatherUrl),
+    fetchJson(airUrl)
   ];
   if (includeSun) {
-    requests.push(fetch(sunUrl).then(r => { if (!r.ok) throw new Error(`sun ${r.status}`); return r.json(); }));
+    requests.push(fetchJson(sunUrl));
   }
 
   const [weatherRes, airRes, sunRes] = await Promise.allSettled(requests);
@@ -1780,15 +1800,17 @@ async function fetchEnvironmentalData(lat, lon, includeSun) {
     const j = weatherRes.value;
     if (j && j.current) {
       weather = {
-        temp:      j.current.temperature_2m        ?? null,
-        hum:       j.current.relative_humidity_2m  ?? null,
-        uv:        j.current.uv_index              ?? null,
-        pres:      j.current.surface_pressure      ?? null,
-        windSpeed: j.current.wind_speed_10m        ?? null,
-        windDir:   j.current.wind_direction_10m    ?? null,
+        temp:      reading(j.current.temperature_2m),
+        hum:       reading(j.current.relative_humidity_2m),
+        uv:        reading(j.current.uv_index),
+        pres:      reading(j.current.surface_pressure),
+        windSpeed: reading(j.current.wind_speed_10m),
+        windDir:   reading(j.current.wind_direction_10m),
       };
     }
   }
+
+  if (weather && !Object.values(weather).some(Number.isFinite)) weather = null;
 
   // Parse air
   let air = null;
@@ -1796,14 +1818,16 @@ async function fetchEnvironmentalData(lat, lon, includeSun) {
     const j = airRes.value;
     if (j && j.current) {
       air = {
-        us_aqi: j.current.us_aqi          ?? null,
-        pm25:   j.current.pm2_5           ?? null,
-        pm10:   j.current.pm10            ?? null,
-        no2:    j.current.nitrogen_dioxide ?? null,
-        ozone:  j.current.ozone           ?? null
+        us_aqi: reading(j.current.us_aqi),
+        pm25:   reading(j.current.pm2_5),
+        pm10:   reading(j.current.pm10),
+        no2:    reading(j.current.nitrogen_dioxide),
+        ozone:  reading(j.current.ozone)
       };
     }
   }
+
+  if (air && !Object.values(air).some(Number.isFinite)) air = null;
 
   // Parse sun
   let sun = null;
@@ -1822,9 +1846,17 @@ async function fetchEnvironmentalData(lat, lon, includeSun) {
 
 async function fetchAllCities() {
   // Fetch all cities in parallel; one failure doesn't block others
-  await Promise.allSettled(allDisplayCities().map(city => fetchCityData(city)));
+  const results = await Promise.allSettled(allDisplayCities().map(city => fetchCityData(city)));
+  const usable = results.filter(r => r.status === 'fulfilled' && r.value.usable).length;
+  const complete = results.filter(r => r.status === 'fulfilled' && r.value.complete).length;
+  const el = document.getElementById('refresh-info');
+  if (!usable) {
+    if (el) el.textContent = 'Refresh failed - data unavailable';
+    return;
+  }
   lastUpdated = new Date();
   updateRefreshInfo();
+  if (el && complete !== results.length) el.textContent = 'Partial update ' + el.textContent.replace('Updated ', '');
 }
 
 function updateRefreshInfo() {

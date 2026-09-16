@@ -863,3 +863,7 @@ No translation was needed. Process gap was the missing explicit audit step.
 - Configurable saved points use UTC clocks; no reverse geocoding or timezone lookup is performed
 - Tahoe City and San Jose share America/Los_Angeles — correct
 - Dubai is the only city with no DST (UTC+4 always) — use for UTC offset testing
+
+## v3.2.3 — API repair candidate, 2026-09-16 UTC
+
+Status: in review, not released. Structural smoke: 29/29. Chromium browser suite: 32/32 (24 existing + 8 dependency failure/recovery tests). Mocked API cases are distinguished from live checks. Live baseline reproduced CARTO API-key watermark despite HTTP 200; weather, air quality, sun and static dependency checks returned data. ipapi returned HTTP 429 and is handled through existing fallback. Map provider choice and final live repaired-map validation remain pending. No Safari/physical-device acceptance claimed.

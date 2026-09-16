@@ -26,7 +26,9 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 
 Situation Monitor has completed two governed multi-model AI delivery validations.
 
-**Current release:** v3.2.2 — release-coherence correction; runtime behavior is unchanged from v3.2.0.
+**Released baseline:** v3.2.2. **Current candidate:** v3.2.3 — API compatibility and failure-state repair, under ATR review; not released.
+
+The CARTO basemap now requires an API key. The final replacement/configuration decision is pending; this candidate does not yet claim the map repair complete. See [API audit](docs/API-AUDIT-3.2.3.md).
 
 | Release | Validation Outcome |
 |---------|-------------------|
@@ -207,3 +209,7 @@ Expected (from official Leaflet 1.9.4 release):
 | **v3.2.0** | **2026-06-23** | **Feat: configurable monitoring locations — map inspection Save, 0–6 configurable locations, v2 persistence, legacy v1 migration, duplicate prevention, Reset restore-default; ADR-006 governed repeatability validation; smoke tests 29/29; Playwright 24/24; Desktop Safari, iPhone Portrait, and iPhone Landscape validated** |
 | v3.2.1 | 2026-08-24 | Governance baseline synchronization — ADR-006, README, Increment 002 closure artifacts, OD-001 boundary and regression guidance aligned; no runtime change from v3.2.0 |
 | **v3.2.2** | **2026-08-25** | **Release-coherence correction — tag/version/history/status truth aligned; four-model post-release review and synthesis preserved; role-based governance documentation updated; no runtime change from v3.2.0** |
+
+### v3.2.3 — API compatibility candidate (not released)
+
+Unknown/partial environmental inputs no longer display healthy green status. Environmental requests time out after 12 seconds; failed refreshes do not advertise success. Missing Leaflet leaves city data operational. Adds HTTP/rate-limit/abort/malformed/empty data, recovery and CDN-loss browser tests. Map provider decision remains open.

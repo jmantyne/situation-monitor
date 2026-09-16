@@ -1,7 +1,7 @@
 # Backlog — Situation Monitor
 
 **Date:** 2026-06-23
-**Current version:** v3.2.2
+**Current version:** v3.2.3 candidate — released baseline remains v3.2.2
 **Author:** Jussi Mantynen
 
 ---

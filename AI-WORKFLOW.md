@@ -45,6 +45,7 @@ wc -c < $FILE
 
 | Version | Date | Change |
 |---------|------|--------|
+| v3.2.3 (candidate) | 2026-09-16 UTC | ATR API diagnosis; dependency failure states and tests; map provider decision pending; not released |
 | v1.0 | 2026-05-27 | Initial release — 11 cities, Leaflet map, all APIs, responsive layouts |
 | v1.0.1 | 2026-05-27 | Turku → Nairobi (Kenya, UTC+3 no DST), HUM dry colour #88ccff |
 | v1.0.2 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
