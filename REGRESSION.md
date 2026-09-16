@@ -857,7 +857,7 @@ No translation was needed. Process gap was the missing explicit audit step.
 
 ## Known limitations (not bugs)
 
-- Map colours cannot be customised without TopoJSON artefacts — CartoDB Voyager used as stable baseline
+- Map colours follow OSM Standard; custom styling requires another provider or local geographic assets
 - Hover tooltips do not work on touch screens — by design
 - Home city detection uses ipapi.co and requires network access
 - Configurable saved points use UTC clocks; no reverse geocoding or timezone lookup is performed
@@ -869,3 +869,7 @@ No translation was needed. Process gap was the missing explicit audit step.
 Status: in review, not released. Structural smoke: 29/29. Chromium browser suite: 32/32 (24 existing + 8 dependency failure/recovery tests). Mocked API cases are distinguished from live checks. Live baseline reproduced CARTO API-key watermark despite HTTP 200; weather, air quality, sun and static dependency checks returned data. ipapi returned HTTP 429 and is handled through existing fallback. OSM Standard is now configured for HTTP/HTTPS with local-file notice. Final live repaired-map validation and independent review remain pending. No Safari/physical-device acceptance claimed.
 
 Second candidate: 34/34 Chromium tests passed, including no OSM request from file:// and valid Referer/tile failure behavior from HTTP. One live HTTP initial viewport returned OSM z=0 tile HTTP 200, rendered a clean map without watermark, no page errors, and populated city data. No bulk/zoom scan performed. Attribution contrast was then raised for readability.
+
+### Sequential ATR review correction — 2026-09-16 UTC
+
+Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.

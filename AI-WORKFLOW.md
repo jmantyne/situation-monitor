@@ -221,3 +221,7 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 - 2026-05-27: Repo created — migrated from Harjoittelu/docs/ to standalone public repo
 - 2026-05-27: index.html experiment failed (wrong content) — reverted to situation-monitor.html
 - 2026-05-27: v2.0.0 — all documentation converted from Finnish to English; semver introduced
+
+### Sequential ATR review correction — 2026-09-16 UTC
+
+Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.

@@ -278,3 +278,7 @@ Nykyinen stack käyttää yksinomaan ilmaisia APItä. Maksullinen taso voisi ava
 11 kaupunkia pysyi tarkoituksella valittuna ja kiinnitettynä v3.1:ssä. Layout oli suunniteltu ja testattu nimenomaan 15" MacBook Pro -näytölle ja iPhone-näytölle — 11 korttia täytti gridin oikein molemmissa. Minua kiinnostavat henkilökohtaisesti juuri nämä 11 paikkaa.
 
 Kuratoitujen kaupunkien määrän kasvattaminen olisi rikkonut 6-sarakkeen desktop-gridin (11 kaupunkikorttia + 1 kartta = 12 solua), vaatinut responsiivisen layoutin uudelleensuunnittelun ja hajottanut dashboardin harkitun, kuratoidun ilmeen. v3.1 toimitti tarkoituksella vain väliaikaisen inspektion; muokattavat kaupungit siirrettiin v3.2:een ja toimitettiin v3.2 Increment 001:ssä ja Increment 002:ssa.
+
+### Sequential ATR review correction — 2026-09-16 UTC
+
+Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.

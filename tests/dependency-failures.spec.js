@@ -76,3 +76,22 @@ test('HTTP mode requests OSM with real origin Referer and displays tile failure'
   expect(requests.every(r=>r.referer==='http://127.0.0.1:49199/' && !r.url.includes('@2x'))).toBeTruthy();
   await expect(page.locator('#refresh-info')).toContainText('Updated');
 });
+
+test('invalid solar times produce partial refresh',async({page})=>{
+  await setup(page);
+  await page.route('https://api.sunrise-sunset.org/**',r=>r.fulfill({json:{status:'OK',results:{sunrise:'invalid',sunset:null}}}));
+  await page.goto(FILE_URL);
+  await expect(page.locator('#refresh-info')).toContainText('Partial update');
+  expect(await page.evaluate(()=>cityData['san-jose'].sun.sunrise)).toBeNull();
+});
+test('unrecognized timezone falls back to Helsinki after location failure',async({page})=>{
+  await setup(page);await page.goto(FILE_URL);
+  await page.evaluate(()=>{cityByTimezone=()=>null;useDefault();});
+  expect(await page.evaluate(()=>homeCityId)).toBe('helsinki');
+});
+test('unknown home status has a neutral border',async({page})=>{
+  await setup(page,{air:500});await page.goto(FILE_URL);
+  await expect(page.locator('#refresh-info')).toContainText('Partial update');
+  await page.evaluate(()=>markHome(CITIES.find(c=>c.id==='san-jose')));
+  await expect(page.locator('#card-san-jose')).toHaveCSS('border-top-color','rgb(135, 148, 170)');
+});

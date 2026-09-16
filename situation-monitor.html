@@ -802,6 +802,8 @@
 #map-notice[hidden] { display:none; }
 #map-attr { color:#c0cfe8; font-size:10px; line-height:1.3; background:#080816e8; padding:3px; z-index:450; }
 #map-attr a { color:#c0cfe8; text-decoration:underline; }
+.city-card[data-status="unknown"], .city-card.home[data-status="unknown"], .city-card.configurable[data-status="unknown"] { border-top-color:#8794aa; }
+.status-unknown { color:#8794aa; }
 </style>
 </head>
 <body>
@@ -1104,7 +1106,7 @@ function statusColor(status) {
     case 'yellow': return '#ffc107';
     case 'orange': return '#ff6600';
     case 'red':    return '#ff3355';
-    default:       return '#2a2a5a';
+    default:       return '#8794aa';
   }
 }
 
@@ -1485,7 +1487,7 @@ function renderInspectionOverlay(location, dataState) {
   }
 
   if (statusEl) statusEl.textContent = status.toUpperCase();
-  setBadge(document.getElementById('inspection-status-badge'), '●', status === 'green' ? 'uv-low' : status === 'yellow' ? 'uv-mod' : status === 'orange' ? 'uv-high' : 'uv-vhigh');
+  setBadge(document.getElementById('inspection-status-badge'), '●', status === 'green' ? 'uv-low' : status === 'yellow' ? 'uv-mod' : status === 'orange' ? 'uv-high' : status === 'red' ? 'uv-vhigh' : 'status-unknown');
 
   const uvVal = w ? w.uv : null;
   if (uvVal !== null && uvVal !== undefined) {
@@ -1778,7 +1780,7 @@ async function fetchCityData(city) {
   cityData[city.id] = data;
   renderCityData(city);
   return { usable: !!(data.weather || data.air), complete: !!(data.weather && data.air && data.sun)
-    && Object.values(data.weather).every(Number.isFinite) && Object.values(data.air).every(Number.isFinite) };
+    && Object.values(data.weather).every(Number.isFinite) && Object.values(data.air).every(Number.isFinite) && !!data.sun.sunrise && !!data.sun.sunset };
 }
 
 async function fetchJson(url) {
@@ -1790,6 +1792,8 @@ async function fetchJson(url) {
     return await response.json();
   } finally { clearTimeout(timeout); }
 }
+
+function validSunTime(value) { return typeof value === 'string' && Number.isFinite(Date.parse(value)) ? value : null; }
 
 function reading(value) { return Number.isFinite(value) ? value : null; }
 
@@ -1849,8 +1853,8 @@ async function fetchEnvironmentalData(lat, lon, includeSun) {
     const j = sunRes.value;
     if (j && j.results && j.status === 'OK') {
       sun = {
-        sunrise: j.results.sunrise ?? null,
-        sunset:  j.results.sunset  ?? null
+        sunrise: validSunTime(j.results.sunrise),
+        sunset:  validSunTime(j.results.sunset)
       };
     }
   }
@@ -1949,7 +1953,7 @@ function tryIP() {
 
 function useDefault() {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const city = cityByTimezone(tz) || CITIES[7]; // Helsinki as fallback
+  const city = cityByTimezone(tz) || CITIES.find(c => c.id === 'helsinki'); // Stable named fallback
   markHome(city);
 }
 

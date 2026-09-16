@@ -46,3 +46,7 @@ These links support provider contracts; supplied live observations are distinct 
 Provider implementation: https://tile.openstreetmap.org/{z}/{x}/{y}.png, no retina suffix, browser caching unchanged, strict-origin-when-cross-origin Referer policy, visible copyright attribution, no bulk/offline download. A tile failure gives a visible notice. Direct file opening sends no tile request. Browser tests use mocked OSM tiles.
 
 Second candidate verification: 34/34 Chromium tests passed. Live OSM /0/0/0.png returned HTTP 200 and a 256x256 map; browser screenshot visibly has no API-key watermark. No browser page errors. API 200 probes at other tile coordinates were never accepted as contradicting the original visual failure. The first Claude attempt could not inspect code because it used unsupported git command prefixes; its error-bearing report was rejected, retained and scheduled for a fresh confined review.
+
+### Sequential ATR review correction — 2026-09-16 UTC
+
+Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.

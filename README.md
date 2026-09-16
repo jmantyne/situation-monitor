@@ -213,3 +213,7 @@ Expected (from official Leaflet 1.9.4 release):
 ### v3.2.3 — API compatibility candidate (not released)
 
 Unknown/partial environmental inputs no longer display healthy green status. Environmental requests time out after 12 seconds; failed refreshes do not advertise success. Missing Leaflet leaves city data operational. Adds HTTP/rate-limit/abort/malformed/empty data, recovery and CDN-loss browser tests. OpenStreetMap replaces the key-required CARTO basemap on HTTP/HTTPS; file:// mode discloses that its basemap is unavailable. Final ATR and Human review remain pending.
+
+### Sequential ATR review correction — 2026-09-16 UTC
+
+Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.
