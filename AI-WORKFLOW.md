@@ -45,7 +45,7 @@ wc -c < $FILE
 
 | Version | Date | Change |
 |---------|------|--------|
-| v3.2.3 (accepted) | 2026-09-16 UTC | ATR API diagnosis; dependency failure states and tests; OpenStreetMap HTTP/HTTPS basemap replacement; Human accepted, publication pending |
+| v3.2.3 | 2026-09-16 UTC | API compatibility and failure-state repair; sequential Conductor + ATR; Human authorized main integration and release via PR #23 |
 | v1.0 | 2026-05-27 | Initial release — 11 cities, Leaflet map, all APIs, responsive layouts |
 | v1.0.1 | 2026-05-27 | Turku → Nairobi (Kenya, UTC+3 no DST), HUM dry colour #88ccff |
 | v1.0.2 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
@@ -233,3 +233,7 @@ The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Refere
 ### Delivery-method decision record
 
 [ADR-007](docs/ADR-007.md) records the first Conductor-coordinated sequential ATR pilot in English and Finnish. README links the delivery milestone. This documentation update does not change the reviewed runtime or tests at bcd2481; existing 29/29 structural and 40/40 Chromium results remain applicable. Version stays v3.2.3; publication pending.
+
+### v3.2.3 release preparation — 2026-09-16 UTC
+
+Human authorized PR #23 main integration and the v3.2.3 release. Documentation status is aligned; runtime and tests are unchanged from bcd2481. Structural checks passed 29/29 again; prior 40/40 Chromium results remain applicable. Use the existing SSH key with macOS Keychain for authenticated Git delivery. Earlier publication-pending entries are historical.

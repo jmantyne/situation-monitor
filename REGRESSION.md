@@ -875,3 +875,7 @@ The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Refere
 ### Delivery-method decision record
 
 [ADR-007](docs/ADR-007.md) records the first Conductor-coordinated sequential ATR pilot in English and Finnish. README links the delivery milestone. This documentation update does not change the reviewed runtime or tests at bcd2481; existing 29/29 structural and 40/40 Chromium results remain applicable. Version stays v3.2.3; publication pending.
+
+### v3.2.3 final release preparation — 2026-09-16T06:19:43Z
+
+Human approved main integration and release. Re-ran structural checks: 29/29 passed. This commit changes documentation only; runtime and tests remain identical to the reviewed bcd2481 baseline, preserving the prior 40/40 Chromium result. VERSION and package.json are 3.2.3; release tag is v3.2.3. No new physical-device or Safari certification is claimed.

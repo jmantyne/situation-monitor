@@ -1,14 +1,14 @@
 # Backlog — Situation Monitor
 
 **Date:** 2026-06-23
-**Current version:** v3.2.3 candidate — released baseline remains v3.2.2
+**Current version:** v3.2.3
 **Author:** Jussi Mantynen
 
 ---
 
-### Accepted, delivery pending — v3.2.3
+### Delivered scope — v3.2.3
 
-API compatibility repair: key-free HTTP/HTTPS OpenStreetMap basemap, explicit local-file limitation, unknown/partial data states, bounded requests and dependency failure tests. Final ATR recheck and Human acceptance complete; publication pending.
+API compatibility repair: key-free HTTP/HTTPS OpenStreetMap basemap, explicit local-file limitation, unknown/partial data states, bounded requests and dependency failure tests. Final ATR recheck and Human acceptance complete; main integration and release authorized through PR #23.
 
 
 ## 🇬🇧 English
@@ -290,3 +290,5 @@ The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Refere
 ### Delivery-method decision record
 
 [ADR-007](ADR-007.md) records the first Conductor-coordinated sequential ATR pilot in English and Finnish. README links the delivery milestone. This documentation update does not change the reviewed runtime or tests at bcd2481; existing 29/29 structural and 40/40 Chromium results remain applicable. Version stays v3.2.3; publication pending.
+
+Release authorization update (2026-09-16 UTC): Human approved v3.2.3 main integration and release. Earlier publication-pending notes above are historical. Watch support and market research remain future scope.

@@ -27,9 +27,9 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 
 Situation Monitor has completed two governed multi-model AI delivery validations.
 
-**Released baseline:** v3.2.2. **Current candidate:** v3.2.3 — API compatibility and failure-state repair, Human accepted; publication pending.
+**Current release:** v3.2.3 — API compatibility and failure-state repair, delivered through the Human-approved sequential Conductor + ATR loop.
 
-The CARTO basemap now requires an API key. This candidate uses key-free OpenStreetMap tiles when opened over HTTP/HTTPS. Direct file opening retains data and markers but shows a basemap notice; use the web version for the basemap. See [API audit](docs/API-AUDIT-3.2.3.md).
+The CARTO basemap now requires an API key. This release uses key-free OpenStreetMap tiles when opened over HTTP/HTTPS. Direct file opening retains data and markers but shows a basemap notice; use the web version for the basemap. See [API audit](docs/API-AUDIT-3.2.3.md).
 
 | Release | Validation Outcome |
 |---------|-------------------|
@@ -58,7 +58,7 @@ npm run test:e2e
 ## How to open
 
 Download `situation-monitor.html` and open it in any modern browser (Safari, Chrome, Firefox).
-Requires an internet connection for map tiles, weather data and fonts. For the basemap, open the [web version](https://jmantyne.github.io/situation-monitor/situation-monitor.html) after this candidate is released, or serve the file locally over HTTP. Direct file:// opening intentionally makes no OpenStreetMap tile requests because it cannot supply the required HTTP Referer.
+Requires an internet connection for map tiles, weather data and fonts. For the basemap, open the [web version](https://jmantyne.github.io/situation-monitor/situation-monitor.html), or serve the file locally over HTTP. Direct file:// opening intentionally makes no OpenStreetMap tile requests because it cannot supply the required HTTP Referer.
 
 ## What it shows
 
@@ -221,4 +221,8 @@ The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Refere
 
 ### Development milestone: Conductor + ATR
 
-v3.2.3 was delivered through sequential **Codex → Claude → Grok** contributions, with implementation/correction between reviews and a final Claude recheck before Human acceptance. Later reviewers found defects that were corrected and regression-tested. [ADR-007](docs/ADR-007.md) records the decision, evidence and limitations in English and Finnish. This is an observed improvement-loop pilot, not a controlled proof that multiple models always outperform one model. Product release identity remains v3.2.3; GitHub publication is still pending.
+v3.2.3 was delivered through sequential **Codex → Claude → Grok** contributions, with implementation/correction between reviews and a final Claude recheck before Human acceptance. Later reviewers found defects that were corrected and regression-tested. [ADR-007](docs/ADR-007.md) records the decision, evidence and limitations in English and Finnish. This is an observed improvement-loop pilot, not a controlled proof that multiple models always outperform one model. Product release identity remains v3.2.3; Human authorized main integration and the v3.2.3 release on 2026-09-16 UTC.
+
+### v3.2.3 release authorization — 2026-09-16 UTC
+
+Human approved main integration and release through [PR #23](https://github.com/jmantyne/situation-monitor/pull/23). Release tag: `v3.2.3`; VERSION and package.json: `3.2.3`. Final release preparation changes documentation only; the reviewed runtime and tests remain identical to bcd2481. Earlier publication-pending notes record the historical acceptance stage.

@@ -1,6 +1,6 @@
-# API audit — v3.2.3 candidate
+# API audit — v3.2.3
 
-Date: 2026-09-16 UTC. Status: in progress, not released.
+Date: 2026-09-16 UTC. Status: audit and sequential ATR review complete; Human accepted and authorized release. The entries below preserve investigation history; final closure is recorded in ATR-3.2.3-CLOSURE.json.
 Target baseline: 8d4426eb5d0610a875b367ca5c0308001ae44b27.
 Conductor chain: SM-20260916-API-001.
 
