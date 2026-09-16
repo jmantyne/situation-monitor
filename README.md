@@ -28,7 +28,7 @@ Situation Monitor has completed two governed multi-model AI delivery validations
 
 **Released baseline:** v3.2.2. **Current candidate:** v3.2.3 — API compatibility and failure-state repair, under ATR review; not released.
 
-The CARTO basemap now requires an API key. The final replacement/configuration decision is pending; this candidate does not yet claim the map repair complete. See [API audit](docs/API-AUDIT-3.2.3.md).
+The CARTO basemap now requires an API key. This candidate uses key-free OpenStreetMap tiles when opened over HTTP/HTTPS. Direct file opening retains data and markers but shows a basemap notice; use the web version for the basemap. See [API audit](docs/API-AUDIT-3.2.3.md).
 
 | Release | Validation Outcome |
 |---------|-------------------|
@@ -57,7 +57,7 @@ npm run test:e2e
 ## How to open
 
 Download `situation-monitor.html` and open it in any modern browser (Safari, Chrome, Firefox).
-Requires an internet connection for map tiles, weather data and fonts.
+Requires an internet connection for map tiles, weather data and fonts. For the basemap, open the [web version](https://jmantyne.github.io/situation-monitor/situation-monitor.html) after this candidate is released, or serve the file locally over HTTP. Direct file:// opening intentionally makes no OpenStreetMap tile requests because it cannot supply the required HTTP Referer.
 
 ## What it shows
 
@@ -100,7 +100,7 @@ Temporary inspections can also be saved as configurable monitoring locations. Th
 | 10 | 🇦🇪 Dubai | Asia/Dubai | UTC+4 (no DST) |
 | 11 | 🇦🇺 Sydney | Australia/Sydney | UTC+10/+11 |
 
-## Data sources (all free, no API key required)
+## Data sources (key-free personal-use configuration; provider limits apply)
 
 | Data | Source |
 |------|--------|
@@ -108,21 +108,21 @@ Temporary inspections can also be saved as configurable monitoring locations. Th
 | Air quality (AQI, PM2.5, NO₂) | [Open-Meteo AQI](https://air-quality-api.open-meteo.com) |
 | Sunrise / sunset | [Sunrise-Sunset.org](https://sunrise-sunset.org) |
 | Home city detection | [ipapi.co](https://ipapi.co) |
-| Map tiles | [CartoDB Voyager](https://carto.com) |
+| Map tiles | [OpenStreetMap Standard](https://www.openstreetmap.org) — HTTP/HTTPS viewing, visible attribution and provider caching/usage policy |
 
 ## Security (v2.1.0)
 
 | Feature | Status | Detail |
 |---------|--------|--------|
 | Subresource Integrity (SRI) | ✅ | Leaflet CSS + JS integrity-verified via SHA-256 |
-| Content Security Policy (CSP) | ✅ | `connect-src` locks API calls to known domains; `frame-ancestors 'none'` blocks clickjacking |
+| Content Security Policy (CSP) | ✅ | `connect-src` limits API calls to known domains. Meta CSP cannot enforce frame-ancestors; framing protection requires an HTTP response header and is not claimed here |
 | XSS audit | ✅ | Dynamic values are rendered from API numbers, coordinates, or hardcoded labels; no free-form user text is inserted |
 | Secret scanning | ✅ | GitHub automatic scanning active (public repo); no API keys in codebase |
 | HTTPS | ✅ | GitHub Pages enforces HTTPS |
 
 ### Privacy note
 
-Home city detection uses [ipapi.co](https://ipapi.co) — your IP address is sent to this service once on page load to determine the nearest city. No other personal data is transmitted. All other APIs receive only coordinates (lat/lon), not identity.
+Home city detection uses [ipapi.co](https://ipapi.co) — your IP address is sent to this service once on page load to determine the nearest city. All network providers also see the connecting IP address and request metadata. Environmental APIs receive queried coordinates; the tile service receives tile coordinates and, in the web version, the browser Referer. IP lookup can be rate-limited; the app then falls back to browser timezone or its default city.
 
 ### SRI hash verification
 
@@ -212,4 +212,4 @@ Expected (from official Leaflet 1.9.4 release):
 
 ### v3.2.3 — API compatibility candidate (not released)
 
-Unknown/partial environmental inputs no longer display healthy green status. Environmental requests time out after 12 seconds; failed refreshes do not advertise success. Missing Leaflet leaves city data operational. Adds HTTP/rate-limit/abort/malformed/empty data, recovery and CDN-loss browser tests. Map provider decision remains open.
+Unknown/partial environmental inputs no longer display healthy green status. Environmental requests time out after 12 seconds; failed refreshes do not advertise success. Missing Leaflet leaves city data operational. Adds HTTP/rate-limit/abort/malformed/empty data, recovery and CDN-loss browser tests. OpenStreetMap replaces the key-required CARTO basemap on HTTP/HTTPS; file:// mode discloses that its basemap is unavailable. Final ATR and Human review remain pending.

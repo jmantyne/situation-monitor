@@ -12,7 +12,7 @@ Conductor chain: SM-20260916-API-001.
 | Open-Meteo air quality | HTTP 200, useful current fields | Keep endpoint; partial/unknown status and failure tests |
 | Sunrise-Sunset | HTTP 200 and status OK | Keep endpoint; explicit request timeout |
 | ipapi.co | HTTP 429 RateLimited in separate approved live check | Existing timezone/default fallback retained; browser suite mocks rate limit |
-| CARTO raster tiles | HTTP 200 and valid-sized PNG, but visually watermarked API KEY REQUIRED | Proven defect; provider choice pending Human decision |
+| CARTO raster tiles | HTTP 200 and valid-sized PNG, but visually watermarked API KEY REQUIRED | Proven defect; replaced with OSM Standard on HTTP/HTTPS; file:// clearly disclosed |
 | Leaflet JS/CSS (unpkg) | HTTP 200; existing SRI; map rendered | Keep pinned dependency; city cards continue if map library is unavailable |
 | Google Fonts CSS/font files | CSS HTTP 200; browser rendered fonts | Optional appearance dependency; native CSS fallback remains |
 
@@ -20,13 +20,13 @@ Baseline map inspection produced real weather/AQI data. The defect concerns base
 
 ## Codex diagnosis dispositions
 
-1. CARTO watermark: open, blocked on key-free hosted versus keyed local-file compatibility choice.
+1. CARTO watermark: corrected by key-free OSM Standard for HTTP/HTTPS, consistent with ADR-002 and existing GitHub Pages deployment. Optional Human preference for CARTO remains open until final acceptance.
 2. Missing data rendered green: corrected; incomplete scoring inputs now produce unknown.
 3. Failed refresh advertises success: corrected; failed/partial update is explicit.
-4. Success-only dependency tests: corrected with eight failure/recovery cases; map content validation still pending.
+4. Success-only dependency tests: corrected with eight failure/recovery cases; single initial HTTP viewport visually verified with a clean OSM map.
 5. ipapi limit: fallback retained and rate-limit case exercised; more detailed home-location provenance UI deferred from compatibility patch.
 6. Leaflet failure stops bootstrap: corrected; environmental cards remain functional without Leaflet.
-7. Meta frame-ancestors claim: documentation correction still pending final candidate.
+7. Meta frame-ancestors claim: unsupported meta directive removed; README corrected and historical ADR annotated.
 8. Incomplete dependency inventory: recorded in this table.
 
 ## Current official references
@@ -41,4 +41,8 @@ These links support provider contracts; supplied live observations are distinct 
 
 ## Verification
 
-29/29 structural tests; 32/32 Chromium browser tests. API responses in regression tests are mocked. Live checks and visual baseline reproduced the reported failure. Corrected map visual validation and final Human review remain pending.
+29/29 structural tests; 32/32 Chromium browser tests. API responses in regression tests are mocked. Live checks and visual baseline reproduced the reported failure. Corrected map initial-viewport visual validation passed; final independent and Human review remain pending.
+
+Provider implementation: https://tile.openstreetmap.org/{z}/{x}/{y}.png, no retina suffix, browser caching unchanged, strict-origin-when-cross-origin Referer policy, visible copyright attribution, no bulk/offline download. A tile failure gives a visible notice. Direct file opening sends no tile request. Browser tests use mocked OSM tiles.
+
+Second candidate verification: 34/34 Chromium tests passed. Live OSM /0/0/0.png returned HTTP 200 and a 256x256 map; browser screenshot visibly has no API-key watermark. No browser page errors. API 200 probes at other tile coordinates were never accepted as contradicting the original visual failure. The first Claude attempt could not inspect code because it used unsupported git command prefixes; its error-bearing report was rejected, retained and scheduled for a fresh confined review.

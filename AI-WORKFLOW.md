@@ -45,7 +45,7 @@ wc -c < $FILE
 
 | Version | Date | Change |
 |---------|------|--------|
-| v3.2.3 (candidate) | 2026-09-16 UTC | ATR API diagnosis; dependency failure states and tests; map provider decision pending; not released |
+| v3.2.3 (candidate) | 2026-09-16 UTC | ATR API diagnosis; dependency failure states and tests; OpenStreetMap HTTP/HTTPS basemap replacement; not released |
 | v1.0 | 2026-05-27 | Initial release — 11 cities, Leaflet map, all APIs, responsive layouts |
 | v1.0.1 | 2026-05-27 | Turku → Nairobi (Kenya, UTC+3 no DST), HUM dry colour #88ccff |
 | v1.0.2 | 2026-05-27 | Pre-commit hook: file size + duplicate city ID checks |
@@ -168,7 +168,7 @@ Hook location: `.githooks/pre-commit`. Runs when `situation-monitor.html` is sta
 | AQI, PM2.5, NO2 | air-quality-api.open-meteo.com |
 | Sunrise / sunset | api.sunrise-sunset.org |
 | Home city (IP) | ipapi.co (replaced ip-api.com v2.6.0 — free HTTPS endpoint) |
-| Map tiles | CartoDB Voyager (Leaflet) |
+| Map tiles | OpenStreetMap Standard (Leaflet), HTTP/HTTPS only; file:// retains markers and data |
 
 ---
 

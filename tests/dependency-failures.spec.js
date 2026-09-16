@@ -57,3 +57,22 @@ test('hung environmental request times out rather than hanging refresh',async({p
   });
   await expect(page.locator('#refresh-info')).toHaveText('Refresh failed - data unavailable');
 });
+test('file opening makes no OSM requests and discloses basemap limitation',async({page})=>{
+  let requests=0;await setup(page);
+  await page.route('https://tile.openstreetmap.org/**',r=>{requests++;return r.abort();});
+  await page.goto(FILE_URL);
+  await expect(page.locator('#map-notice')).toContainText('Open the web version');
+  expect(requests).toBe(0);
+  await expect(page.locator('#map-attr')).toContainText('OpenStreetMap contributors');
+});
+test('HTTP mode requests OSM with real origin Referer and displays tile failure',async({page})=>{
+  const fs=require('node:fs');let requests=[];
+  await setup(page);
+  await page.route('http://127.0.0.1:49199/app.html',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync(path.resolve(__dirname,'../situation-monitor.html'),'utf8')}));
+  await page.route('https://tile.openstreetmap.org/**',r=>{requests.push({url:r.request().url(),referer:r.request().headers().referer});return r.fulfill({status:503,body:'Unavailable'});});
+  await page.goto('http://127.0.0.1:49199/app.html');
+  await expect(page.locator('#map-notice')).toContainText('Basemap unavailable');
+  expect(requests.length).toBeGreaterThan(0);
+  expect(requests.every(r=>r.referer==='http://127.0.0.1:49199/' && !r.url.includes('@2x'))).toBeTruthy();
+  await expect(page.locator('#refresh-info')).toContainText('Updated');
+});

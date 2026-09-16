@@ -6,6 +6,11 @@
 
 ---
 
+### In review — v3.2.3
+
+API compatibility repair: key-free HTTP/HTTPS OpenStreetMap basemap, explicit local-file limitation, unknown/partial data states, bounded requests and dependency failure tests. Not released; final ATR and Human acceptance pending.
+
+
 ## 🇬🇧 English
 
 ### Delivered — v3.0
