@@ -864,16 +864,10 @@ No translation was needed. Process gap was the missing explicit audit step.
 - Tahoe City and San Jose share America/Los_Angeles — correct
 - Dubai is the only city with no DST (UTC+4 always) — use for UTC offset testing
 
-## v3.2.3 — API repair candidate, 2026-09-16 UTC
+## v3.2.3 — accepted API compatibility repair
 
-Status: in review, not released. Structural smoke: 29/29. Chromium browser suite: 32/32 (24 existing + 8 dependency failure/recovery tests). Mocked API cases are distinguished from live checks. Live baseline reproduced CARTO API-key watermark despite HTTP 200; weather, air quality, sun and static dependency checks returned data. ipapi returned HTTP 429 and is handled through existing fallback. OSM Standard is now configured for HTTP/HTTPS with local-file notice. Final live repaired-map validation and independent review remain pending. No Safari/physical-device acceptance claimed.
+The Human verified the local preview, reported that the correction works well and approved it. Sequential Codex diagnosis, Claude review, Grok challenge and final Claude recheck are complete. The final recheck confirmed all three Grok corrections with no actionable findings. Reviewed runtime commit: `bcd24818ac79c63c1610789f04fa1594dd3ad558`. This delivery update changes documentation only. GitHub publication and release tagging are separate from this acceptance record.
 
-Second candidate: 34/34 Chromium tests passed, including no OSM request from file:// and valid Referer/tile failure behavior from HTTP. One live HTTP initial viewport returned OSM z=0 tile HTTP 200, rendered a clean map without watermark, no page errors, and populated city data. No bulk/zoom scan performed. Attribution contrast was then raised for readability.
+Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
 
-### Sequential ATR review correction — 2026-09-16 UTC
-
-Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.
-
-### Grok challenge corrections — 2026-09-16 UTC
-
-Grok completed a source-based challenge and found three actionable issues. City requests now discard superseded responses, obsolete refresh batches cannot change the refresh banner, and restored saved cities are fetched once at startup. Removed configurable cities invalidate in-flight requests. IP location lookup now uses the bounded 12-second request helper and reaches the named fallback on timeout. The HTTP basemap failure notice clears when later tiles load. All 29 structural checks and 40 Chromium tests pass, including overlapping refresh, denied GPS/hung IP fallback, and tile failure/recovery. Final Claude recheck awaits explicit payload-transmission permission after automatic approval review blocked it. Human acceptance is pending; no release has been published.
+The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](docs/ATR-3.2.3-CLOSURE.json).

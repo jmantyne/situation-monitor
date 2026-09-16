@@ -6,9 +6,9 @@
 
 ---
 
-### In review — v3.2.3
+### Accepted, delivery pending — v3.2.3
 
-API compatibility repair: key-free HTTP/HTTPS OpenStreetMap basemap, explicit local-file limitation, unknown/partial data states, bounded requests and dependency failure tests. Not released; final ATR and Human acceptance pending.
+API compatibility repair: key-free HTTP/HTTPS OpenStreetMap basemap, explicit local-file limitation, unknown/partial data states, bounded requests and dependency failure tests. Final ATR recheck and Human acceptance complete; publication pending.
 
 
 ## 🇬🇧 English
@@ -279,10 +279,10 @@ Nykyinen stack käyttää yksinomaan ilmaisia APItä. Maksullinen taso voisi ava
 
 Kuratoitujen kaupunkien määrän kasvattaminen olisi rikkonut 6-sarakkeen desktop-gridin (11 kaupunkikorttia + 1 kartta = 12 solua), vaatinut responsiivisen layoutin uudelleensuunnittelun ja hajottanut dashboardin harkitun, kuratoidun ilmeen. v3.1 toimitti tarkoituksella vain väliaikaisen inspektion; muokattavat kaupungit siirrettiin v3.2:een ja toimitettiin v3.2 Increment 001:ssä ja Increment 002:ssa.
 
-### Sequential ATR review correction — 2026-09-16 UTC
+## v3.2.3 — accepted API compatibility repair
 
-Claude verified the corrected source and found the final home fallback used Istanbul instead of the intended Helsinki. The fallback now selects Helsinki by stable city ID. Conductor also corrected neutral unknown-status styling and invalid solar-time completeness. Smoke checks passed 29/29 and Chromium checks passed 37/37, including the fallback, invalid solar times and neutral unknown home border. Detailed home-location provenance remains a deferred UI item; OSM availability/policy remains an external dependency. Grok challenge and Human acceptance remain pending.
+The Human verified the local preview, reported that the correction works well and approved it. Sequential Codex diagnosis, Claude review, Grok challenge and final Claude recheck are complete. The final recheck confirmed all three Grok corrections with no actionable findings. Reviewed runtime commit: `bcd24818ac79c63c1610789f04fa1594dd3ad558`. This delivery update changes documentation only. GitHub publication and release tagging are separate from this acceptance record.
 
-### Grok challenge corrections — 2026-09-16 UTC
+Verification: 29/29 structural checks and 40/40 Chromium tests (24 existing plus 16 new failure/recovery tests). Tests cover missing and malformed data, partial/failed refresh, request timeouts, Leaflet loss, overlapping requests, location fallback, map tile recovery and existing configurable-location behavior. Bounded live observations are separate from mocked tests. No physical-device or Safari certification is claimed.
 
-Grok completed a source-based challenge and found three actionable issues. City requests now discard superseded responses, obsolete refresh batches cannot change the refresh banner, and restored saved cities are fetched once at startup. Removed configurable cities invalidate in-flight requests. IP location lookup now uses the bounded 12-second request helper and reaches the named fallback on timeout. The HTTP basemap failure notice clears when later tiles load. All 29 structural checks and 40 Chromium tests pass, including overlapping refresh, denied GPS/hung IP fallback, and tile failure/recovery. Final Claude recheck awaits explicit payload-transmission permission after automatic approval review blocked it. Human acceptance is pending; no release has been published.
+The map now uses OSM Standard over HTTP/HTTPS with attribution and origin Referer. Direct file opening shows a basemap limitation notice. Missing data no longer implies healthy status or successful refresh. Named Helsinki fallback, stale-response protection and bounded IP lookup are included. Home-location provenance remains a deferred UI enhancement; external provider availability remains a dependency. See [ATR closure evidence](ATR-3.2.3-CLOSURE.json).
