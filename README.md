@@ -3,6 +3,12 @@
 Real-time environmental dashboard for 11 cities across the world.
 Built as a single self-contained HTML file — no build step, no server required.
 
+## Native Apple Watch development
+
+The product now has a separate native path in the private [situation-monitor-watchOS](https://github.com/jmantyne/situation-monitor-watchOS) repository (access required). Its imported baseline is **4.0.0 build 34**, built with Swift/SwiftUI. This repository remains the **MIT web/browser product, v3.2.3**; the native version does not replace the browser release.
+
+[ADR-008](docs/ADR-008.md) explains how the Watch work grew from this project through AI-Development-Platform, the repository boundaries and remaining validation. Native architecture, source, tests and diagrams live in the Watch repository. Future Watch changes should be made there; browser fixes stay here. No native macOS or iPhone target or App Store release is implied.
+
 ## Architecture Decision Records
 
 Design rationale and trade-offs are documented in [`docs/`](docs/):
@@ -16,6 +22,7 @@ Design rationale and trade-offs are documented in [`docs/`](docs/):
 | [ADR-005](docs/ADR-005.md) | First end-to-end validation of multi-model AI governance delivery pipeline |
 | [ADR-006](docs/ADR-006.md) | Governed repeatability and human decision authority — second validation of the multi-model AI pipeline |
 | [ADR-007](docs/ADR-007.md) | First Conductor-coordinated sequential ATR correction loop — v3.2.3 |
+| [ADR-008](docs/ADR-008.md) | Separate native watchOS product path and repository ownership |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Agentic workflow diagram + runtime data architecture (Mermaid) |
 | [HARNESS](docs/HARNESS.md) | Show Me Your Harness — how the AI workflow harness was built |
 | [BACKLOG](docs/BACKLOG.md) | Product roadmap — v3.0 harness, v3.1 temporary inspection, v3.2 configurable cities, v4.0+ native app |
@@ -226,3 +233,7 @@ v3.2.3 was delivered through sequential **Codex → Claude → Grok** contributi
 ### v3.2.3 release authorization — 2026-09-16 UTC
 
 Human approved main integration and release through [PR #23](https://github.com/jmantyne/situation-monitor/pull/23). Release tag: `v3.2.3`; VERSION and package.json: `3.2.3`. Final release preparation changes documentation only; the reviewed runtime and tests remain identical to bcd2481. Earlier publication-pending notes record the historical acceptance stage.
+
+## Suomeksi
+
+Situation Monitor jatkuu kahdella tuotepolulla: tämä repositorio säilyy MIT-lisensoituna selainversiona, ja Apple Watchin natiivi sovellus kehittyy erillisessä yksityisessä situation-monitor-watchOS-repositoriossa. AI Development Platform sisältää kehitysmenetelmän ja orkestroinnin. Uusi ADR-008 kuvaa siirtymän; kellon lähtöversio on 4.0.0 build 34. Tuotteiden testitulokset ja julkaisut pidetään erillään.
